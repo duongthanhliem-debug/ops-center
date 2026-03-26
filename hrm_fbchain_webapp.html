@@ -1,0 +1,750 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary);color:var(--color-text-primary)}
+.app{display:flex;height:100vh;min-height:600px}
+.sidebar{width:220px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;flex-shrink:0}
+.logo{padding:16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:#16a34a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:11px;color:var(--color-text-secondary)}
+.nav{flex:1;padding:8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;color:var(--color-text-secondary);transition:background 0.1s}
+.nav-item:hover{background:var(--color-background-secondary)}
+.nav-item.active{background:#dcfce7;color:#15803d}
+.nav-icon{font-size:15px;width:18px;text-align:center}
+.nav-footer{padding:8px;border-top:0.5px solid var(--color-border-tertiary)}
+.user-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--border-radius-md)}
+.avatar{width:28px;height:28px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#15803d;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:48px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0}
+.page-title{font-size:15px;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.badge-notif{background:#fee2e2;color:#dc2626;font-size:10px;padding:2px 6px;border-radius:10px;font-weight:500}
+.content{flex:1;overflow-y:auto;padding:20px}
+.page{display:none}
+.page.active{display:block}
+.stat-grid{display:grid;grid-cols:repeat(4,1fr);grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:500}
+.stat-sub{font-size:11px;color:var(--color-text-secondary);margin-top:4px}
+.stat-icon{font-size:20px;margin-bottom:8px}
+.section-title{font-size:14px;font-weight:500;margin-bottom:12px;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:16px}
+.card-header{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.card-body{padding:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+td{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--color-background-secondary)}
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:3px 8px;border-radius:10px;font-weight:500}
+.badge-green{background:#dcfce7;color:#15803d}
+.badge-yellow{background:#fef9c3;color:#854d0e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);transition:background 0.1s}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-primary{background:#16a34a;color:#fff;border-color:#15803d}
+.btn-primary:hover{background:#15803d}
+.input{width:100%;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);outline:none}
+.input:focus{border-color:#22c55e;box-shadow:0 0 0 2px #dcfce7}
+.label{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row{margin-bottom:12px}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);width:500px;max-width:90%;max-height:80vh;overflow-y:auto}
+.modal-header{padding:14px 18px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.modal-body{padding:18px}
+.modal-footer{padding:12px 18px;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:flex-end;gap:8px}
+.close-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--color-text-secondary);line-height:1}
+.emp-avatar{width:30px;height:30px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#15803d}
+.flex{display:flex}.gap-2{gap:8px}.items-center{align-items:center}
+.progress-bar{height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#22c55e;border-radius:3px}
+.mini-chart{height:60px;display:flex;align-items:flex-end;gap:3px;padding-top:8px}
+.bar{flex:1;background:#bbf7d0;border-radius:2px 2px 0 0;transition:height 0.3s}
+.bar:hover{background:#22c55e}
+.checkin-card{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:0.5px solid #bbf7d0;border-radius:var(--border-radius-lg);padding:16px;margin-bottom:16px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-right:4px}
+.shift-cell{border-radius:6px;padding:4px 6px;font-size:11px;color:#fff;margin-bottom:2px;cursor:default}
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.select{padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);outline:none}
+</style>
+
+<div class="app" id="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🧋</div>
+      <div><div class="logo-text">HRM F&B</div><div class="logo-sub">Chain Manager</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span> Tổng quan</div>
+      <div class="nav-item" data-page="employees"><span class="nav-icon">👥</span> Nhân viên</div>
+      <div class="nav-item" data-page="attendance"><span class="nav-icon">⏰</span> Chấm công</div>
+      <div class="nav-item" data-page="shifts"><span class="nav-icon">📅</span> Quản lý ca</div>
+      <div class="nav-item" data-page="payroll"><span class="nav-icon">💰</span> Bảng lương</div>
+      <div class="nav-item" data-page="violations"><span class="nav-icon">⚠️</span> Vi phạm</div>
+      <div class="nav-item" data-page="kpi"><span class="nav-icon">📈</span> KPI</div>
+      <div class="nav-item" data-page="stores"><span class="nav-icon">🏪</span> Cửa hàng</div>
+    </nav>
+    <div class="nav-footer">
+      <div class="user-row">
+        <div class="avatar">AD</div>
+        <div>
+          <div style="font-size:12px;font-weight:500">Admin</div>
+          <div style="font-size:11px;color:var(--color-text-secondary)">admin@demo.vn</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Tổng quan</div>
+      <div class="topbar-right">
+        <span style="font-size:12px;color:var(--color-text-secondary)" id="topbar-date"></span>
+        <button class="btn" onclick="showNotif()">🔔 <span class="badge-notif">3</span></button>
+      </div>
+    </div>
+
+    <div class="content" id="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-label">Nhân viên đang làm</div><div class="stat-value">47</div><div class="stat-sub">+3 thử việc</div></div>
+          <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-label">Check-in hôm nay</div><div class="stat-value">32</div><div class="stat-sub" style="color:#dc2626">5 đi trễ</div></div>
+          <div class="stat-card"><div class="stat-icon">💵</div><div class="stat-label">Lương tháng này</div><div class="stat-value" style="font-size:17px">142.6M</div><div class="stat-sub">47 nhân viên</div></div>
+          <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-label">Vi phạm tháng này</div><div class="stat-value" style="color:#dc2626">8</div><div class="stat-sub">Cần xem xét</div></div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><span style="font-size:13px;font-weight:500">Chấm công 7 ngày gần nhất</span></div>
+            <div class="card-body">
+              <div class="mini-chart" id="att-chart"></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px">
+                <span id="att-labels" style="display:flex;justify-content:space-between;width:100%;font-size:10px;color:var(--color-text-secondary)"></span>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:10px">
+                <span style="font-size:11px;color:var(--color-text-secondary)"><span style="color:#22c55e">■</span> Có mặt</span>
+                <span style="font-size:11px;color:var(--color-text-secondary)"><span style="color:#fbbf24">■</span> Đi trễ</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span style="font-size:13px;font-weight:500">Chi phí lương 6 tháng (triệu ₫)</span></div>
+            <div class="card-body">
+              <div class="mini-chart" id="pay-chart"></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--color-text-secondary)" id="pay-labels"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span style="font-size:13px;font-weight:500">Top nhân viên tháng này</span></div>
+          <table>
+            <thead><tr><th>#</th><th>Nhân viên</th><th>Cửa hàng</th><th>Ca đúng giờ</th><th>Vi phạm</th><th>Điểm</th></tr></thead>
+            <tbody id="top-performers"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMPLOYEES -->
+      <div class="page" id="page-employees">
+        <div class="filter-row">
+          <input class="input" style="width:220px" placeholder="🔍 Tìm tên, SĐT, mã NV..." id="emp-search" oninput="renderEmployees()">
+          <select class="select" id="emp-status" onchange="renderEmployees()">
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Đang làm</option>
+            <option value="probation">Thử việc</option>
+            <option value="terminated">Nghỉ việc</option>
+          </select>
+          <button class="btn btn-primary" onclick="openEmpModal()">+ Thêm nhân viên</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Mã NV</th><th>Họ tên</th><th>SĐT</th><th>Vị trí</th><th>Cửa hàng</th><th>Ngày vào</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody id="emp-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ATTENDANCE -->
+      <div class="page" id="page-attendance">
+        <div class="checkin-card">
+          <div style="font-size:13px;font-weight:500;margin-bottom:10px">⏱ Check-in / Check-out hôm nay</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="doCheckIn()">📍 Check-in GPS</button>
+            <button class="btn" onclick="doCheckIn()">📷 Check-in QR</button>
+            <button class="btn" style="background:#1e293b;color:#fff;border-color:#1e293b" onclick="doCheckOut()">🚪 Check-out</button>
+          </div>
+          <div id="checkin-msg" style="margin-top:8px;font-size:12px;color:#15803d"></div>
+        </div>
+        <div class="filter-row">
+          <input type="date" class="input" style="width:150px" id="att-start">
+          <input type="date" class="input" style="width:150px" id="att-end">
+          <select class="select" id="att-store"><option value="">Tất cả cửa hàng</option><option>Quận 1</option><option>Ninh Kiều</option><option>Bình Thạnh</option></select>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Ngày</th><th>Nhân viên</th><th>Cửa hàng</th><th>Check-in</th><th>Check-out</th><th>Giờ làm</th><th>OT</th><th>Trễ</th><th>Trạng thái</th></tr></thead>
+            <tbody id="att-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHIFTS -->
+      <div class="page" id="page-shifts">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn" onclick="prevWeek()">‹</button>
+            <span style="font-size:13px;font-weight:500" id="week-label"></span>
+            <button class="btn" onclick="nextWeek()">›</button>
+          </div>
+          <button class="btn btn-primary" onclick="openShiftModal()">+ Thêm ca</button>
+        </div>
+        <div class="card">
+          <div id="shift-calendar"></div>
+        </div>
+      </div>
+
+      <!-- PAYROLL -->
+      <div class="page" id="page-payroll">
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header"><span style="font-size:13px;font-weight:500">🧮 Tính lương</span></div>
+          <div class="card-body">
+            <div class="filter-row" style="margin:0">
+              <select class="select" id="pay-store"><option value="">Chọn cửa hàng</option><option>Quận 1</option><option>Ninh Kiều</option><option>Bình Thạnh</option></select>
+              <select class="select" id="pay-month"><option value="3">Tháng 3</option><option value="2">Tháng 2</option><option value="1">Tháng 1</option></select>
+              <input class="input" style="width:80px" value="2026" id="pay-year">
+              <button class="btn btn-primary" onclick="calcPayroll()">🧮 Tính lương</button>
+              <button class="btn" onclick="exportPayroll()">📥 Xuất Excel</button>
+            </div>
+          </div>
+        </div>
+        <div id="payroll-summary" style="display:none" class="three-col" style="margin-bottom:16px">
+          <div class="stat-card"><div class="stat-label">Số nhân viên</div><div class="stat-value" id="pay-count">—</div></div>
+          <div class="stat-card"><div class="stat-label">Tổng gross</div><div class="stat-value" id="pay-gross">—</div></div>
+          <div class="stat-card"><div class="stat-label">Thực trả</div><div class="stat-value" style="color:#15803d" id="pay-net">—</div></div>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Nhân viên</th><th>Ngày công</th><th>Giờ làm</th><th>OT</th><th>Lương CB</th><th>Trừ phạt</th><th>Gross</th><th>Thực nhận</th></tr></thead>
+            <tbody id="pay-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIOLATIONS -->
+      <div class="page" id="page-violations">
+        <div class="filter-row">
+          <select class="select" id="viol-month"><option>Tháng 3/2026</option><option>Tháng 2/2026</option></select>
+          <select class="select"><option>Tất cả cửa hàng</option><option>Quận 1</option><option>Ninh Kiều</option></select>
+          <button class="btn btn-primary" onclick="openViolModal()">+ Ghi nhận vi phạm</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Ngày</th><th>Nhân viên</th><th>Cửa hàng</th><th>Loại vi phạm</th><th>Mức độ</th><th>Phạt (₫)</th><th>Mô tả</th></tr></thead>
+            <tbody id="viol-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="page" id="page-kpi">
+        <div class="filter-row">
+          <select class="select" id="kpi-emp"><option value="">Tất cả nhân viên</option></select>
+          <select class="select"><option>Tháng 3/2026</option><option>Tháng 2/2026</option></select>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><span style="font-size:13px;font-weight:500">Radar KPI</span></div>
+            <div class="card-body" style="display:flex;align-items:center;justify-content:center">
+              <canvas id="kpi-radar" width="220" height="200"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span style="font-size:13px;font-weight:500">Bảng điểm KPI</span></div>
+            <table>
+              <thead><tr><th>Nhân viên</th><th>Tiêu chí</th><th>Thực tế</th><th>Mục tiêu</th><th>Điểm</th></tr></thead>
+              <tbody id="kpi-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- STORES -->
+      <div class="page" id="page-stores">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn btn-primary" onclick="openStoreModal()">+ Thêm cửa hàng</button>
+        </div>
+        <div id="store-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal container -->
+  <div id="modal-container"></div>
+</div>
+
+<script>
+const EMPLOYEES = [
+  {id:1,code:'NV00001',name:'Nguyễn Thị Lan',phone:'0901234567',position:'Trưởng ca',store:'Quận 1',hire:'2023-05-01',status:'active',salary:8000000,hours:160},
+  {id:2,code:'NV00002',name:'Trần Văn Hùng',phone:'0912345678',position:'Nhân viên',store:'Ninh Kiều',hire:'2024-01-15',status:'active',salary:0,hours:120,hourly:35000},
+  {id:3,code:'NV00003',name:'Lê Minh Châu',phone:'0923456789',position:'Nhân viên',store:'Quận 1',hire:'2024-03-01',status:'probation',salary:0,hours:130,hourly:30000},
+  {id:4,code:'NV00004',name:'Phạm Thu Hà',phone:'0934567890',position:'Quản lý',store:'Bình Thạnh',hire:'2022-11-20',status:'active',salary:15000000,hours:176},
+  {id:5,code:'NV00005',name:'Đỗ Quốc Bảo',phone:'0945678901',position:'Nhân viên',store:'Ninh Kiều',hire:'2024-06-01',status:'active',salary:0,hours:140,hourly:32000},
+  {id:6,code:'NV00006',name:'Võ Thanh Thảo',phone:'0956789012',position:'Trưởng ca',store:'Bình Thạnh',hire:'2023-08-15',status:'active',salary:9000000,hours:165},
+  {id:7,code:'NV00007',name:'Bùi Văn Nam',phone:'0967890123',position:'Nhân viên',store:'Quận 1',hire:'2025-01-10',status:'terminated',salary:0,hours:0,hourly:28000},
+];
+
+const ATTENDANCE = [
+  {date:'2026-03-26',emp:'Nguyễn Thị Lan',store:'Quận 1',in:'07:58',out:'16:05',hours:8.1,ot:0,late:0,status:'present'},
+  {date:'2026-03-26',emp:'Trần Văn Hùng',store:'Ninh Kiều',in:'08:12',out:'16:00',hours:7.8,ot:0,late:12,status:'late'},
+  {date:'2026-03-26',emp:'Lê Minh Châu',store:'Quận 1',in:'08:00',out:'—',hours:0,ot:0,late:0,status:'present'},
+  {date:'2026-03-25',emp:'Phạm Thu Hà',store:'Bình Thạnh',in:'07:55',out:'17:10',hours:9.2,ot:1.2,late:0,status:'present'},
+  {date:'2026-03-25',emp:'Đỗ Quốc Bảo',store:'Ninh Kiều',in:'13:15',out:'21:00',hours:7.75,ot:0,late:15,status:'late'},
+  {date:'2026-03-24',emp:'Võ Thanh Thảo',store:'Bình Thạnh',in:'08:01',out:'16:00',hours:8,ot:0,late:0,status:'present'},
+];
+
+const VIOLATIONS = [
+  {date:'2026-03-25',emp:'Trần Văn Hùng',store:'Ninh Kiều',type:'Đi trễ ca sáng',severity:'warning',penalty:20000,desc:'Đến trễ 12 phút'},
+  {date:'2026-03-24',emp:'Đỗ Quốc Bảo',store:'Ninh Kiều',type:'Đi trễ ca chiều',severity:'warning',penalty:20000,desc:'Đến trễ 15 phút'},
+  {date:'2026-03-20',emp:'Lê Minh Châu',store:'Quận 1',type:'Không mặc đồng phục',severity:'minor',penalty:50000,desc:'Quên mang áo đồng phục'},
+  {date:'2026-03-18',emp:'Bùi Văn Nam',store:'Quận 1',type:'Thái độ phục vụ kém',severity:'major',penalty:100000,desc:'Khách phản ánh'},
+  {date:'2026-03-15',emp:'Trần Văn Hùng',store:'Ninh Kiều',type:'Đi trễ ca sáng',severity:'warning',penalty:20000,desc:'Đến trễ 8 phút'},
+];
+
+const STORES = [
+  {name:'TraSua Quận 1',code:'TS-HCM-Q1',address:'123 Nguyễn Huệ, Q.1, TP.HCM',region:'Hồ Chí Minh',lat:10.7731,lng:106.7031,active:true,staff:15},
+  {name:'TraSua Ninh Kiều',code:'TS-CT-NK',address:'45 Hai Bà Trưng, Ninh Kiều, Cần Thơ',region:'Đồng bằng SCL',lat:10.0302,lng:105.7469,active:true,staff:12},
+  {name:'TraSua Bình Thạnh',code:'TS-HCM-BT',address:'78 Đinh Bộ Lĩnh, Bình Thạnh',region:'Hồ Chí Minh',lat:10.8116,lng:106.7090,active:true,staff:13},
+  {name:'TraSua Gò Vấp',code:'TS-HCM-GV',address:'201 Quang Trung, Gò Vấp',region:'Hồ Chí Minh',lat:10.8380,lng:106.6722,active:false,staff:0},
+];
+
+const SHIFTS_DATA = {};
+const DAYS = ['T2','T3','T4','T5','T6','T7','CN'];
+const SHIFT_COLORS = ['#22c55e','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#14b8a6'];
+let currentWeek = 0;
+
+function getWeekDates(offset=0) {
+  const now = new Date('2026-03-26');
+  const day = now.getDay() || 7;
+  const mon = new Date(now); mon.setDate(now.getDate() - day + 1 + offset*7);
+  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d;});
+}
+
+function fmt(d){return d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'});}
+function fmtVND(n){return new Intl.NumberFormat('vi-VN').format(Math.round(n));}
+
+// Nav
+document.getElementById('nav').addEventListener('click',e=>{
+  const item = e.target.closest('.nav-item'); if(!item) return;
+  const page = item.dataset.page;
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  item.classList.add('active');
+  document.getElementById('page-'+page).classList.add('active');
+  const titles = {dashboard:'Tổng quan',employees:'Quản lý nhân viên',attendance:'Chấm công',shifts:'Quản lý ca làm',payroll:'Bảng lương',violations:'Vi phạm',kpi:'KPI & Đánh giá',stores:'Chuỗi cửa hàng'};
+  document.getElementById('topbar-title').textContent = titles[page]||page;
+  if(page==='shifts') renderShifts();
+  if(page==='kpi') renderKpiRadar();
+  if(page==='stores') renderStores();
+});
+
+// Date
+const d = new Date('2026-03-26');
+document.getElementById('topbar-date').textContent = d.toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+
+// Att date defaults
+document.getElementById('att-start').value = '2026-03-01';
+document.getElementById('att-end').value = '2026-03-26';
+
+// Dashboard charts
+function renderDashboard(){
+  const attChart = document.getElementById('att-chart');
+  const labels = document.getElementById('att-labels');
+  const vals = [32,28,35,30,33,29,32];
+  const days2 = ['T2','T3','T4','T5','T6','T7','CN'];
+  const max = Math.max(...vals);
+  attChart.innerHTML = vals.map((v,i)=>`<div class="bar" style="height:${Math.round(v/max*100)}%;background:${i===6?'#22c55e':'#86efac'}" title="${v} NV"></div>`).join('');
+  labels.innerHTML = `<div style="display:flex;justify-content:space-between;width:100%">${days2.map(d=>`<span>${d}</span>`).join('')}</div>`;
+  
+  const payChart = document.getElementById('pay-chart');
+  const payVals = [128,135,142,138,145,143];
+  const payMonths = ['T10','T11','T12','T1','T2','T3'];
+  const pmax = Math.max(...payVals);
+  payChart.innerHTML = payVals.map((v,i)=>`<div class="bar" style="height:${Math.round(v/pmax*100)}%;background:${i===5?'#3b82f6':'#93c5fd'}" title="${v}M"></div>`).join('');
+  document.getElementById('pay-labels').innerHTML = payMonths.map(m=>`<span>${m}</span>`).join('');
+
+  const top = [
+    {name:'Phạm Thu Hà',pos:'Quản lý',store:'Bình Thạnh',days:22,viol:0,score:98},
+    {name:'Nguyễn Thị Lan',pos:'Trưởng ca',store:'Quận 1',days:21,viol:0,score:95},
+    {name:'Võ Thanh Thảo',pos:'Trưởng ca',store:'Bình Thạnh',days:21,viol:1,score:90},
+    {name:'Đỗ Quốc Bảo',pos:'Nhân viên',store:'Ninh Kiều',days:20,viol:1,score:85},
+  ];
+  document.getElementById('top-performers').innerHTML = top.map((e,i)=>`
+    <tr>
+      <td><b style="color:${i<3?'#ca8a04':'var(--color-text-secondary)'}">#${i+1}</b></td>
+      <td><div class="flex items-center gap-2"><div class="emp-avatar">${e.name.charAt(0)}</div><div><div style="font-weight:500">${e.name}</div><div style="font-size:11px;color:var(--color-text-secondary)">${e.pos}</div></div></div></td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${e.store}</td>
+      <td><span class="badge badge-green">${e.days} ca</span></td>
+      <td><span class="badge ${e.viol>0?'badge-red':'badge-green'}">${e.viol}</span></td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${e.score}%"></div></div><span style="font-size:12px;font-weight:500">${e.score}%</span></div></td>
+    </tr>`).join('');
+}
+
+// Employees
+function renderEmployees(){
+  const search = document.getElementById('emp-search').value.toLowerCase();
+  const status = document.getElementById('emp-status').value;
+  const filtered = EMPLOYEES.filter(e=>
+    (!search || e.name.toLowerCase().includes(search) || e.phone.includes(search) || e.code.includes(search)) &&
+    (!status || e.status===status)
+  );
+  const STATUS = {active:'badge-green',probation:'badge-yellow',terminated:'badge-red'};
+  const SLABEL = {active:'Đang làm',probation:'Thử việc',terminated:'Nghỉ việc'};
+  document.getElementById('emp-table').innerHTML = filtered.map(e=>`
+    <tr>
+      <td><code style="font-size:11px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px">${e.code}</code></td>
+      <td><div class="flex items-center gap-2"><div class="emp-avatar">${e.name.charAt(0)}</div><span style="font-weight:500">${e.name}</span></div></td>
+      <td style="color:var(--color-text-secondary)">${e.phone}</td>
+      <td>${e.position}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${e.store}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${e.hire}</td>
+      <td><span class="badge ${STATUS[e.status]}">${SLABEL[e.status]}</span></td>
+      <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="editEmp(${e.id})">✏️</button></td>
+    </tr>`).join('');
+}
+
+// Attendance
+function renderAttendance(){
+  const SM = {present:'badge-green',late:'badge-yellow',absent:'badge-red'};
+  const SL = {present:'Có mặt',late:'Đi trễ',absent:'Vắng'};
+  document.getElementById('att-table').innerHTML = ATTENDANCE.map(a=>`
+    <tr>
+      <td style="font-weight:500">${a.date}</td>
+      <td>${a.emp}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${a.store}</td>
+      <td><span style="${a.late>0?'color:#d97706;font-weight:500':''}">${a.in}</span>${a.late>0?` <span style="font-size:11px;color:#d97706">(+${a.late}p)</span>`:''}</td>
+      <td>${a.out}</td>
+      <td>${a.hours?a.hours.toFixed(1)+'h':'—'}</td>
+      <td>${a.ot>0?`<span class="badge badge-blue">${a.ot.toFixed(1)}h</span>`:'—'}</td>
+      <td>${a.late>0?`<span class="badge badge-yellow">${a.late}p</span>`:'—'}</td>
+      <td><span class="badge ${SM[a.status]}">${SL[a.status]}</span></td>
+    </tr>`).join('');
+}
+
+// Shifts
+function renderShifts(){
+  const dates = getWeekDates(currentWeek);
+  document.getElementById('week-label').textContent = `${fmt(dates[0])} – ${fmt(dates[6])} 2026`;
+  const EMP_SHIFTS = {
+    'NV00001':{0:'Ca sáng',2:'Ca sáng',4:'Ca sáng'},
+    'NV00002':{1:'Ca chiều',3:'Ca chiều',5:'Ca chiều'},
+    'NV00003':{0:'Ca tối',1:'Ca tối',4:'Ca tối'},
+    'NV00004':{0:'Ca sáng',1:'Ca sáng',2:'Ca sáng',3:'Ca sáng',4:'Ca sáng'},
+    'NV00005':{2:'Ca chiều',3:'Ca chiều',5:'Ca sáng'},
+    'NV00006':{0:'Ca sáng',2:'Ca sáng',3:'Ca tối',5:'Ca sáng'},
+  };
+  const SHIFT_CLR = {'Ca sáng':'#22c55e','Ca chiều':'#3b82f6','Ca tối':'#8b5cf6'};
+  let html = `<table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="padding:10px 12px;text-align:left;font-size:11px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;color:var(--color-text-secondary)">Nhân viên</th>`;
+  dates.forEach((d,i)=>{
+    const isToday = fmt(d)===fmt(new Date('2026-03-26'));
+    html+=`<th style="padding:10px 8px;text-align:center;font-size:11px;background:${isToday?'#f0fdf4':'var(--color-background-secondary)'};border-bottom:0.5px solid var(--color-border-tertiary);color:${isToday?'#15803d':'var(--color-text-secondary)'};font-weight:500">${DAYS[i]}<br><span style="font-size:13px;font-weight:500;color:${isToday?'#15803d':'var(--color-text-primary)'}">${d.getDate()}</span></th>`;
+  });
+  html+=`</tr></thead><tbody>`;
+  EMPLOYEES.filter(e=>e.status!=='terminated').slice(0,6).forEach(e=>{
+    html+=`<tr><td style="padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary)"><div class="flex items-center gap-2"><div class="emp-avatar" style="width:22px;height:22px;font-size:10px">${e.name.charAt(0)}</div><span style="font-size:12px">${e.name.split(' ').pop()}</span></div></td>`;
+    const shifts = EMP_SHIFTS[e.code]||{};
+    dates.forEach((_,i)=>{
+      const sh = shifts[i];
+      html+=`<td style="padding:4px 6px;text-align:center;border-bottom:0.5px solid var(--color-border-tertiary)">
+        ${sh?`<div class="shift-cell" style="background:${SHIFT_CLR[sh]||'#64748b'}">${sh}</div>`:
+        `<span style="color:var(--color-border-secondary);font-size:18px;cursor:pointer" onclick="quickAddShift('${e.name}',${i})">+</span>`}
+      </td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody></table>`;
+  document.getElementById('shift-calendar').innerHTML = html;
+}
+
+function prevWeek(){currentWeek--;renderShifts();}
+function nextWeek(){currentWeek++;renderShifts();}
+
+// Payroll
+function calcPayroll(){
+  const store = document.getElementById('pay-store').value;
+  if(!store){alert('Vui lòng chọn cửa hàng');return;}
+  const rows = EMPLOYEES.filter(e=>e.status!=='terminated'&&(e.store===store||!store));
+  const data = rows.map(e=>{
+    const base = e.salary||0;
+    const hourly = (e.hourly||0)*e.hours;
+    const ot = (e.hourly||0)*1.5*(e.hours>160?e.hours-160:0);
+    const gross = base+hourly+ot;
+    const tax = gross>11000000?(gross-11000000)*0.05:0;
+    const ins = Math.min(gross*0.105,2000000);
+    return {...e,gross,tax,ins,net:Math.max(0,gross-tax-ins),ot};
+  });
+  const totalNet = data.reduce((s,d)=>s+d.net,0);
+  const totalGross = data.reduce((s,d)=>s+d.gross,0);
+  document.getElementById('payroll-summary').style.display='grid';
+  document.getElementById('pay-count').textContent = data.length;
+  document.getElementById('pay-gross').textContent = fmtVND(totalGross)+' ₫';
+  document.getElementById('pay-net').textContent = fmtVND(totalNet)+' ₫';
+  document.getElementById('pay-table').innerHTML = data.map(d=>`
+    <tr>
+      <td><div style="font-weight:500">${d.name}</div><div style="font-size:11px;color:var(--color-text-secondary)">${d.position}</div></td>
+      <td>${Math.round(d.hours/8)}</td>
+      <td>${d.hours}</td>
+      <td>${d.ot>0?d.ot.toFixed(1):0}</td>
+      <td>${fmtVND(d.salary||d.hourly*d.hours)}</td>
+      <td style="color:#dc2626">0</td>
+      <td style="font-weight:500">${fmtVND(d.gross)}</td>
+      <td style="font-weight:500;color:#15803d">${fmtVND(d.net)} ₫</td>
+    </tr>`).join('');
+}
+
+function exportPayroll(){
+  const store = document.getElementById('pay-store').value;
+  if(!store){calcPayroll();}
+  showToast('✅ Đã xuất file luong-3-2026.xlsx (demo)');
+}
+
+// Violations
+function renderViolations(){
+  const SEV = {warning:'badge-yellow',minor:'badge-blue',major:'badge-red',critical:'badge-red'};
+  const SL = {warning:'Cảnh báo',minor:'Nhẹ',major:'Nghiêm trọng',critical:'Rất nghiêm trọng'};
+  document.getElementById('viol-table').innerHTML = VIOLATIONS.map(v=>`
+    <tr>
+      <td>${v.date}</td>
+      <td style="font-weight:500">${v.emp}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${v.store}</td>
+      <td>${v.type}</td>
+      <td><span class="badge ${SEV[v.severity]}">${SL[v.severity]}</span></td>
+      <td style="color:#dc2626;font-weight:500">-${fmtVND(v.penalty)}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${v.desc}</td>
+    </tr>`).join('');
+}
+
+// KPI
+function renderKpiTable(){
+  const rows = [
+    {emp:'Phạm Thu Hà',metric:'Số ca đúng giờ',actual:22,target:20,score:100},
+    {emp:'Nguyễn Thị Lan',metric:'Tỷ lệ đúng giờ',actual:95,target:95,score:95},
+    {emp:'Võ Thanh Thảo',metric:'Số ca đúng giờ',actual:19,target:20,score:90},
+    {emp:'Đỗ Quốc Bảo',metric:'Vi phạm trong tháng',actual:1,target:0,score:75},
+  ];
+  document.getElementById('kpi-table').innerHTML = rows.map(r=>`
+    <tr>
+      <td style="font-weight:500">${r.emp}</td>
+      <td style="font-size:12px">${r.metric}</td>
+      <td>${r.actual}</td>
+      <td style="color:var(--color-text-secondary)">${r.target}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${r.score}%"></div></div><span style="font-size:12px;font-weight:500">${r.score}</span></div></td>
+    </tr>`).join('');
+}
+
+function renderKpiRadar(){
+  renderKpiTable();
+  const c = document.getElementById('kpi-radar');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const cx=110,cy=100,R=70;
+  const labels=['Đúng giờ','Giờ công','Vi phạm','Doanh thu'];
+  const scores=[0.95,0.88,0.75,0.80];
+  ctx.clearRect(0,0,220,200);
+  for(let r=1;r<=4;r++){
+    ctx.beginPath();
+    for(let i=0;i<4;i++){
+      const a=Math.PI*2*i/4-Math.PI/2;
+      const x=cx+r*R/4*Math.cos(a), y=cy+r*R/4*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle='rgba(128,128,128,0.2)';ctx.stroke();
+  }
+  for(let i=0;i<4;i++){
+    const a=Math.PI*2*i/4-Math.PI/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='rgba(128,128,128,0.25)';ctx.stroke();
+    ctx.fillStyle='var(--color-text-secondary)';ctx.font='11px var(--font-sans)';
+    ctx.textAlign='center';
+    const lx=cx+(R+14)*Math.cos(a), ly=cy+(R+14)*Math.sin(a);
+    ctx.fillText(labels[i],lx,ly+4);
+  }
+  ctx.beginPath();
+  for(let i=0;i<4;i++){
+    const a=Math.PI*2*i/4-Math.PI/2;
+    const x=cx+R*scores[i]*Math.cos(a), y=cy+R*scores[i]*Math.sin(a);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(34,197,94,0.25)';ctx.fill();
+  ctx.strokeStyle='#16a34a';ctx.lineWidth=2;ctx.stroke();
+}
+
+// Stores
+function renderStores(){
+  document.getElementById('store-grid').innerHTML = STORES.map(s=>`
+    <div class="card" style="padding:16px">
+      <div class="flex items-center gap-3" style="margin-bottom:10px">
+        <div style="width:36px;height:36px;background:#dcfce7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🏪</div>
+        <div style="flex:1">
+          <div style="font-weight:500;font-size:13px">${s.name}</div>
+          <code style="font-size:11px;background:var(--color-background-secondary);padding:1px 6px;border-radius:4px;color:var(--color-text-secondary)">${s.code}</code>
+        </div>
+        <span class="badge ${s.active?'badge-green':'badge-gray'}">${s.active?'Hoạt động':'Tạm đóng'}</span>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">📍 ${s.address}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">GPS: ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}</div>
+      <div style="font-size:12px;margin-top:8px"><span class="badge badge-blue">${s.staff} nhân viên</span> <span class="badge badge-gray">${s.region}</span></div>
+    </div>`).join('');
+}
+
+// Modals
+function openEmpModal(data=null){
+  const mc = document.getElementById('modal-container');
+  mc.innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header"><span style="font-size:14px;font-weight:500">${data?'Chỉnh sửa':'Thêm nhân viên mới'}</span><button class="close-btn" onclick="closeModal()">×</button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-row"><label class="label">Email *</label><input class="input" type="email" placeholder="nhanvien@demo.vn" value="${data?data.email||'':''}"></div>
+          <div class="form-row"><label class="label">Mật khẩu</label><input class="input" type="password" placeholder="Mặc định: 123456"></div>
+          <div class="form-row" style="grid-column:1/-1"><label class="label">Họ và tên *</label><input class="input" placeholder="Nguyễn Văn A" value="${data?data.name:''}"></div>
+          <div class="form-row"><label class="label">Số điện thoại</label><input class="input" placeholder="0901234567" value="${data?data.phone:''}"></div>
+          <div class="form-row"><label class="label">CCCD</label><input class="input" placeholder="0xxxxxxxxx"></div>
+          <div class="form-row"><label class="label">Vị trí *</label><select class="input"><option>Nhân viên</option><option>Trưởng ca</option><option>Quản lý cửa hàng</option></select></div>
+          <div class="form-row"><label class="label">Cửa hàng</label><select class="input"><option>-- Chọn --</option>${STORES.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
+          <div class="form-row"><label class="label">Ngày vào làm *</label><input class="input" type="date" value="${data?data.hire:'2026-03-26'}"></div>
+          <div class="form-row"><label class="label">Lương cơ bản (₫)</label><input class="input" type="number" placeholder="0" value="${data?data.salary||'':''}"></div>
+          <div class="form-row"><label class="label">Lương theo giờ (₫/h)</label><input class="input" type="number" placeholder="0" value="${data?data.hourly||'':''}"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Hủy</button>
+        <button class="btn btn-primary" onclick="saveEmp()">✓ ${data?'Cập nhật':'Tạo nhân viên'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function editEmp(id){
+  const e = EMPLOYEES.find(x=>x.id===id);
+  openEmpModal(e);
+}
+
+function openShiftModal(){
+  const mc = document.getElementById('modal-container');
+  mc.innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header"><span style="font-size:14px;font-weight:500">Thêm ca làm</span><button class="close-btn" onclick="closeModal()">×</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label class="label">Nhân viên</label><select class="input">${EMPLOYEES.filter(e=>e.status!=='terminated').map(e=>`<option>${e.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label class="label">Cửa hàng</label><select class="input">${STORES.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label class="label">Ngày làm</label><input class="input" type="date" value="2026-03-27"></div>
+        <div class="form-grid">
+          <div class="form-row"><label class="label">Giờ bắt đầu</label><input class="input" type="time" value="08:00"></div>
+          <div class="form-row"><label class="label">Giờ kết thúc</label><input class="input" type="time" value="16:00"></div>
+        </div>
+        <div class="form-row"><label class="label">Ca mẫu</label>
+          <select class="input" onchange="applyShiftTemplate(this.value)">
+            <option value="">-- Chọn ca mẫu --</option>
+            <option value="08:00-16:00">Ca sáng (08:00–16:00)</option>
+            <option value="13:00-21:00">Ca chiều (13:00–21:00)</option>
+            <option value="16:00-22:00">Ca tối (16:00–22:00)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Hủy</button>
+        <button class="btn btn-primary" onclick="saveShift()">✓ Thêm ca</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openViolModal(){
+  const mc = document.getElementById('modal-container');
+  mc.innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header"><span style="font-size:14px;font-weight:500">⚠️ Ghi nhận vi phạm</span><button class="close-btn" onclick="closeModal()">×</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label class="label">Nhân viên *</label><select class="input"><option value="">-- Chọn NV --</option>${EMPLOYEES.map(e=>`<option>${e.name} (${e.code})</option>`).join('')}</select></div>
+        <div class="form-row"><label class="label">Cửa hàng *</label><select class="input">${STORES.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label class="label">Loại vi phạm *</label>
+          <select class="input">
+            <option>Đi trễ ca sáng (Cảnh báo – 20.000₫)</option>
+            <option>Không mặc đồng phục (Nhẹ – 50.000₫)</option>
+            <option>Thái độ phục vụ kém (Nghiêm trọng – 100.000₫)</option>
+            <option>Vắng mặt không báo (Rất nghiêm trọng – 200.000₫)</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="label">Ngày vi phạm *</label><input class="input" type="date" value="2026-03-26"></div>
+        <div class="form-row"><label class="label">Mô tả thêm</label><textarea class="input" rows="3" placeholder="Ghi chú thêm..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Hủy</button>
+        <button class="btn" style="background:#dc2626;color:#fff;border-color:#dc2626" onclick="saveViol()">Ghi nhận</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openStoreModal(){
+  const mc = document.getElementById('modal-container');
+  mc.innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header"><span style="font-size:14px;font-weight:500">Thêm cửa hàng</span><button class="close-btn" onclick="closeModal()">×</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label class="label">Tên cửa hàng *</label><input class="input" placeholder="TraSua Quận X"></div>
+        <div class="form-row"><label class="label">Mã cửa hàng *</label><input class="input" placeholder="TS-HCM-QX"></div>
+        <div class="form-row"><label class="label">Địa chỉ</label><input class="input" placeholder="123 Đường ABC, Quận X, TP.HCM"></div>
+        <div class="form-grid">
+          <div class="form-row"><label class="label">GPS Lat</label><input class="input" type="number" step="0.000001" placeholder="10.7731"></div>
+          <div class="form-row"><label class="label">GPS Lng</label><input class="input" type="number" step="0.000001" placeholder="106.7031"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Hủy</button>
+        <button class="btn btn-primary" onclick="saveStore()">✓ Tạo cửa hàng</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function closeModal(){document.getElementById('modal-container').innerHTML='';}
+function saveEmp(){closeModal();showToast('✅ Đã lưu nhân viên thành công');}
+function saveShift(){closeModal();showToast('✅ Đã thêm ca làm');renderShifts();}
+function saveViol(){closeModal();showToast('✅ Đã ghi nhận vi phạm');}
+function saveStore(){closeModal();showToast('✅ Đã tạo cửa hàng');renderStores();}
+function quickAddShift(name,day){showToast(`➕ Thêm ca cho ${name} ngày thứ ${day+2}`);}
+function doCheckIn(){document.getElementById('checkin-msg').textContent='✅ Check-in thành công lúc '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});}
+function doCheckOut(){document.getElementById('checkin-msg').textContent='🚪 Check-out lúc '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' — Tổng: 8.0h';}
+function showNotif(){showToast('🔔 3 thông báo mới: 2 nhân viên đi trễ, 1 yêu cầu đổi ca');}
+
+let toastTimer;
+function showToast(msg){
+  let t = document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:9999;transition:opacity 0.3s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity=1;
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.opacity=0,3000);
+}
+
+// Init
+renderDashboard();
+renderEmployees();
+renderAttendance();
+renderViolations();
+</script>

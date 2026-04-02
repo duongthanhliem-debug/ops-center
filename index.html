@@ -25,24 +25,20 @@
 html{scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
-::-webkit-scrollbar-track{background:transparent}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(--brown)}
 
-/* LOADING */
 .load{display:none;position:fixed;inset:0;background:rgba(250,247,242,.92);z-index:900;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .load.on{display:flex}
 .spin{width:42px;height:42px;border:4px solid var(--border);border-top:4px solid var(--gold);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .load-msg{font-size:13px;color:var(--gray);font-weight:500}
 
-/* TOAST */
 .toast{position:fixed;bottom:22px;right:22px;padding:12px 17px;border-radius:var(--r);font-size:13px;font-weight:600;z-index:1100;transform:translateY(80px);opacity:0;transition:all .3s;max-width:340px;box-shadow:var(--shm)}
 .toast.on{transform:translateY(0);opacity:1}
 .tok{background:var(--green);color:#fff}.terr{background:var(--red);color:#fff}.twarn{background:var(--gold);color:var(--brown)}
 
-/* NAV */
 .nav{background:var(--brown);position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
-.nav-top{display:flex;align-items:center;padding:0 18px;gap:8px}
+.nav-top{display:flex;align-items:center;padding:0 18px;gap:8px;flex-wrap:wrap}
 .nbrand{display:flex;align-items:center;gap:9px;padding:11px 0;flex-shrink:0}
 .nlogo{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--brown);font-weight:700}
 .ntitle{font-size:13px;font-weight:700;color:#fff}.ntitle span{color:var(--gold)}
@@ -51,22 +47,18 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(-
 .nbtn{background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.75);padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
 .nbtn:hover{border-color:var(--gold);color:var(--gold)}
 .nbtn-gold{border-color:rgba(245,166,35,.5);color:var(--gold-m)}
-/* PL Link button */
 .npl{background:var(--gold);color:var(--brown);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
 .npl:hover{background:var(--gold-m)}
-/* Tabs */
-.ntabs{display:flex;flex-wrap:wrap;padding:0 18px;border-top:1px solid rgba(255,255,255,.07);gap:0}
+.ntabs{display:flex;flex-wrap:wrap;padding:0 18px;border-top:1px solid rgba(255,255,255,.07)}
 .ntab{padding:9px 11px;font-size:12px;font-weight:500;color:rgba(255,255,255,.58);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;transition:color .15s,border-color .15s}
 .ntab:hover{color:rgba(255,255,255,.9)}
 .ntab.on{color:var(--gold);border-bottom-color:var(--gold)}
 
-/* SYNC DOT */
 .sdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;flex-shrink:0}
 .sdot.on{background:var(--green);animation:pulse 2s infinite}
 .sdot.off{background:var(--gray)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* PAGE */
 .page{display:none;padding:20px 20px 80px;max-width:1380px;margin:0 auto}
 .page.on{display:block}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
@@ -74,15 +66,15 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(-
 .ps{font-size:13px;color:var(--gray);margin-top:3px}
 .fb{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 
-/* BUTTONS */
 .btn{font-family:inherit;font-size:13px;font-weight:600;padding:7px 13px;border-radius:var(--rs);cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
 .bp{background:var(--gold);color:var(--brown)}.bp:hover{background:var(--gold-m)}
 .bo{background:var(--white);color:var(--brown-m);border:1.5px solid var(--border)}.bo:hover{border-color:var(--gold);color:var(--gold)}
 .bg{background:var(--green);color:#fff}.bg:hover{filter:brightness(1.1)}
+.bd{background:var(--red-l);color:var(--red);border:1.5px solid var(--red)}.bd:hover{background:var(--red);color:#fff}
 .bsm{padding:5px 10px;font-size:12px}
 .bfull{width:100%;justify-content:center}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* KPI */
 .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px;margin-bottom:18px}
 .kpi{background:var(--white);border-radius:var(--r);padding:16px;border:1.5px solid var(--border);box-shadow:var(--sh)}
 .kl{font-size:11px;font-weight:600;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;margin-bottom:7px}
@@ -92,18 +84,15 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(-
 .kc.dn{background:var(--red-l);color:var(--red)}
 .kc.warn{background:var(--gold-l);color:var(--brown-m)}
 
-/* GRID */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:15px}
 @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
 
-/* CARD */
 .card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;margin-bottom:15px;box-shadow:var(--sh)}
 .ch{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .ct{font-size:13px;font-weight:700;color:var(--brown)}
 .cb{padding:16px}
 
-/* TABLE */
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
 .tbl th{padding:8px 11px;text-align:left;font-size:11px;font-weight:600;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;background:var(--gray-l);border-bottom:1px solid var(--border)}
 .tbl td{padding:10px 11px;border-bottom:1px solid var(--border);color:var(--brown);vertical-align:middle}
@@ -111,29 +100,24 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(-
 .tbl tr:hover td{background:var(--gold-l)}
 .tbl-wrap{overflow-x:auto}
 
-/* BADGE */
 .bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
 .bg2{background:var(--green-l);color:var(--green)}
 .br2{background:var(--red-l);color:var(--red)}
 .by2{background:var(--gold-l);color:var(--brown-m)}
 .bb2{background:var(--blue-l);color:var(--blue)}
 .bt2{background:var(--teal-l);color:var(--teal)}
-.bp2{background:var(--purple-l);color:var(--purple)}
 
-/* ALERTS */
 .alert{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border-radius:var(--rs);margin-bottom:9px;font-size:13px;line-height:1.5}
 .ar{background:var(--red-l);border-left:3px solid var(--red);color:var(--red)}
 .ay{background:var(--gold-l);border-left:3px solid var(--gold);color:var(--brown-m)}
 .ag{background:var(--green-l);border-left:3px solid var(--green);color:var(--green)}
 .ab{background:var(--blue-l);border-left:3px solid var(--blue);color:var(--blue)}
 
-/* AI BOX */
 .ai-box{background:linear-gradient(135deg,var(--brown) 0%,var(--brown-m) 100%);border-radius:var(--r);padding:16px;color:#fff;margin-bottom:15px;box-shadow:var(--shm)}
 .aitag{background:var(--gold);color:var(--brown);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.06em;display:inline-block;margin-bottom:7px}
 .ait{font-size:13px;font-weight:600;color:var(--gold-m);margin-bottom:5px}
 .aii{font-size:13px;line-height:1.75;color:rgba(255,255,255,.9);padding-left:10px;border-left:2px solid var(--gold)}
 
-/* FORM */
 .fg{margin-bottom:12px}
 .fl{display:block;font-size:11px;font-weight:600;color:var(--brown-m);margin-bottom:4px;letter-spacing:.03em;text-transform:uppercase}
 .fc{width:100%;font-family:inherit;font-size:13px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--brown);transition:border-color .15s}
@@ -142,14 +126,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(-
 @media(max-width:580px){.fr{grid-template-columns:1fr}}
 textarea.fc{resize:vertical;min-height:90px;line-height:1.6}
 
-/* PROGRESS */
 .prog-item{margin-bottom:13px}
 .prog-hd{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;align-items:center}
 .prog-bg{height:6px;background:var(--gray-l);border-radius:99px;overflow:hidden;border:1px solid var(--border)}
 .prog-bar{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
-/* CHECKLIST */
-.chk-item{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.chk-item{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .chk-item:last-child{border-bottom:none}
 .chk-item:hover{background:var(--gold-l);margin:0 -4px;padding:9px 4px;border-radius:6px}
 .chk-box{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s;font-size:11px}
@@ -158,21 +140,18 @@ textarea.fc{resize:vertical;min-height:90px;line-height:1.6}
 .chk-text{font-size:13px;line-height:1.5;flex:1}
 .chk-sub{font-size:11px;color:var(--gray);margin-top:2px}
 
-/* TIMELINE */
 .tl-item{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--border)}
 .tl-item:last-child{border-bottom:none}
 .tl-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .tl-txt{font-size:13px;line-height:1.5;flex:1}
 .tl-time{font-size:11px;color:var(--gray);margin-top:2px}
 
-/* STORE ROW */
 .store-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
 .store-item:last-child{border-bottom:none}
 .store-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .store-name{font-size:13px;font-weight:500;flex:1}
 .store-score{font-size:14px;font-weight:700}
 
-/* AUDIT FORM */
 .audit-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border)}
 .audit-row:last-child{border-bottom:none}
 .audit-name{flex:1;font-size:13px}
@@ -181,29 +160,21 @@ textarea.fc{resize:vertical;min-height:90px;line-height:1.6}
 .audit-inp:focus{outline:none;border-color:var(--gold)}
 .audit-score-box{background:var(--gray-l);border-radius:var(--r);padding:18px;text-align:center;margin-top:14px;border:1.5px solid var(--border)}
 
-/* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(61,43,31,.72);z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
 .overlay.on{display:flex}
 .modal{background:var(--white);border-radius:16px;padding:22px;max-width:540px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:var(--shm)}
 .modal-lg{max-width:700px}
-.modal-xl{max-width:860px}
 .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .mt{font-size:16px;font-weight:700;color:var(--brown)}
 .mx{background:none;border:none;font-size:22px;color:var(--gray);cursor:pointer;line-height:1;padding:2px 5px}
 .mx:hover{color:var(--brown)}
 
-/* SETUP CONFIG MODAL (Phúc Tea P&L style) */
-.cfg-modal-logo{text-align:center;margin-bottom:18px}
-.cfg-modal-brand{font-size:20px;font-weight:700;color:var(--gold);margin-top:6px}
-.cfg-modal-sub{font-size:12px;color:var(--gray);margin-top:2px}
 .cfg-step{font-size:11px;font-weight:700;color:var(--brown);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .cfg-desc{font-size:11px;color:var(--gray);margin-bottom:5px;line-height:1.5}
 code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brown-m);font-size:11px}
 
-/* SETUP CARD (store timeline) */
 .setup-card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
 
-/* AI CHAT */
 .ai-msgs{max-height:300px;overflow-y:auto;padding:12px;background:var(--gray-l);border-radius:var(--rs);border:1.5px solid var(--border);margin-bottom:11px}
 .ai-msg{margin-bottom:11px}
 .ai-msg-user{text-align:right}
@@ -214,16 +185,15 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
 .ai-input{flex:1;font-family:inherit;font-size:13px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--brown)}
 .ai-input:focus{outline:none;border-color:var(--gold)}
 
-/* AUDIT REPORT */
 .audit-report-box{background:var(--gray-l);border-radius:var(--rs);padding:16px;font-size:13px;line-height:1.85;color:var(--brown);border:1.5px solid var(--border);white-space:pre-wrap;max-height:420px;overflow-y:auto}
 
-/* TABS WITHIN PAGE */
 .ptabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
 .ptab{font-family:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--gray);transition:all .2s}
 .ptab.on{background:var(--gold);color:var(--brown);border-color:var(--gold)}
 
-/* SECTION DIVIDER */
 .sdiv{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;padding:10px 0 6px;border-top:1px solid var(--border);margin-top:4px;margin-bottom:10px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--gray)}
+.empty-state .ei{font-size:36px;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -231,7 +201,7 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
 <div class="load" id="loadEl"><div class="spin"></div><div class="load-msg" id="loadMsg">Đang xử lý...</div></div>
 <div class="toast" id="toastEl"></div>
 
-<!-- ====== NAV ====== -->
+<!-- NAV -->
 <nav class="nav">
   <div class="nav-top">
     <div class="nbrand">
@@ -242,56 +212,59 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
       <span style="font-size:11px;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:4px" id="sync-label">
         <span class="sdot off" id="sync-dot"></span><span id="sync-text">Chưa kết nối</span>
       </span>
-      <button class="nbtn" onclick="syncSheets()">🔄 Đồng bộ</button>
+      <button class="nbtn" onclick="syncAll()">🔄 Đồng bộ</button>
       <button class="nbtn nbtn-gold" onclick="openSetup()">⚙️ Cài đặt</button>
-      <a href="https://phuctea-pl.vercel.app" target="_blank" class="npl" title="Mở Phúc Tea P&L">📊 P&L Hub</a>
+      <a href="https://phuctea-pl.vercel.app" target="_blank" class="npl">📊 P&L Hub</a>
       <div class="navatar">DL</div>
     </div>
   </div>
   <div class="ntabs">
     <button class="ntab on"  onclick="goPage('dashboard',this)">📊 Dashboard</button>
-    <button class="ntab" onclick="goPage('setup',this)">🏪 Setup & Khai trương</button>
+    <button class="ntab" onclick="goPage('stores',this)">🏬 Cửa hàng</button>
+    <button class="ntab" onclick="goPage('setup',this)">🏪 Setup & KT</button>
     <button class="ntab" onclick="goPage('audit',this)">✅ Audit</button>
     <button class="ntab" onclick="goPage('nhansu',this)">👥 Nhân sự</button>
     <button class="ntab" onclick="goPage('baocao',this)">📋 Báo cáo</button>
     <button class="ntab" onclick="goPage('kehoach',this)">🎯 Kế hoạch</button>
-    <button class="ntab" onclick="goPage('ai',this)">🤖 AI Phân tích</button>
+    <button class="ntab" onclick="goPage('ai',this)">🤖 AI</button>
   </div>
 </nav>
 
-<!-- ============================= DASHBOARD ============================= -->
+<!-- ==================== DASHBOARD ==================== -->
 <div class="page on" id="pg-dashboard">
   <div class="ph">
-    <div><div class="pt" id="greeting">Chào Liêm 👋</div><div class="ps" id="today-str">Đang tải...</div></div>
+    <div><div class="pt" id="greeting">Xin chào 👋</div><div class="ps" id="today-str"></div></div>
     <div class="fb">
-      <button class="btn bo bsm" onclick="syncSheets()">🔄 Đồng bộ Sheets</button>
-      <a href="https://docs.google.com/spreadsheets/d/1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo" target="_blank" class="btn bo bsm">📊 Mở Sheets</a>
-      <a href="https://phuctea-pl.vercel.app" target="_blank" class="btn bp bsm">💰 P&L Hub</a>
+      <button class="btn bo bsm" onclick="syncAll()">🔄 Đồng bộ Sheets</button>
+      <a id="sheet-link" href="#" target="_blank" class="btn bo bsm">📊 Mở Sheets</a>
     </div>
   </div>
+  <div id="cfg-alert" class="alert ay" style="display:none">
+    ⚙️ <span>Chưa cấu hình Apps Script URL. <button onclick="openSetup()" style="background:none;border:none;color:var(--brown-m);font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;text-decoration:underline">Cài đặt ngay →</button></span>
+  </div>
   <div class="kgrid">
-    <div class="kpi"><div class="kl">Cửa hàng hoạt động</div><div class="kv" id="kpi-stores">14</div><div class="kc up">+2 tháng này</div></div>
-    <div class="kpi"><div class="kl">Tiến độ mở mới 2026</div><div class="kv" id="kpi-new">8/30</div><div class="kc warn" id="kpi-new-sub">27% mục tiêu</div></div>
-    <div class="kpi"><div class="kl">Điểm audit TB</div><div class="kv" id="kpi-audit">87</div><div class="kc up" id="kpi-audit-sub">↑ Đạt mục tiêu ≥85</div></div>
-    <div class="kpi"><div class="kl">Cần tái audit</div><div class="kv" id="kpi-reaudit" style="color:var(--red)">3</div><div class="kc dn">Dưới 85 điểm</div></div>
+    <div class="kpi"><div class="kl">Cửa hàng hoạt động</div><div class="kv" id="kpi-stores">–</div><div class="kc warn" id="kpi-stores-sub">Đang tải...</div></div>
+    <div class="kpi"><div class="kl">Tiến độ mở mới 2026</div><div class="kv" id="kpi-new">–</div><div class="kc warn" id="kpi-new-sub">–</div></div>
+    <div class="kpi"><div class="kl">Điểm audit TB</div><div class="kv" id="kpi-audit">–</div><div class="kc warn" id="kpi-audit-sub">–</div></div>
+    <div class="kpi"><div class="kl">Cần tái audit</div><div class="kv" id="kpi-reaudit" style="color:var(--red)">–</div><div class="kc dn">Dưới 85 điểm</div></div>
   </div>
   <div id="alerts-container"></div>
   <div class="g2">
     <div class="card">
-      <div class="ch"><span class="ct">Tiến độ khai trương</span><button class="btn bo bsm" onclick="goPage('setup',document.querySelectorAll('.ntab')[1])">Chi tiết →</button></div>
-      <div class="cb" id="setup-progress-dash"><div class="prog-item"><div class="prog-hd"><span>Ninh Kiều 3</span><span style="color:var(--gold);font-weight:700">75%</span></div><div class="prog-bg"><div class="prog-bar" style="width:75%;background:var(--gold)"></div></div></div><div class="prog-item"><div class="prog-hd"><span>Bình Thủy</span><span style="color:var(--blue);font-weight:700">40%</span></div><div class="prog-bg"><div class="prog-bar" style="width:40%;background:var(--blue)"></div></div></div></div>
+      <div class="ch"><span class="ct">Tiến độ khai trương</span><button class="btn bo bsm" onclick="goPage('setup',document.querySelectorAll('.ntab')[2])">Chi tiết →</button></div>
+      <div class="cb" id="setup-progress-dash"><div class="empty-state"><div class="ei">🏪</div>Chưa có dữ liệu setup</div></div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">Điểm audit cửa hàng</span><button class="btn bo bsm" onclick="goPage('audit',document.querySelectorAll('.ntab')[2])">Chi tiết →</button></div>
-      <div class="cb" id="audit-list-dash"></div>
+      <div class="ch"><span class="ct">Điểm audit cửa hàng</span><button class="btn bo bsm" onclick="goPage('audit',document.querySelectorAll('.ntab')[3])">Chi tiết →</button></div>
+      <div class="cb" id="audit-list-dash"><div class="empty-state"><div class="ei">✅</div>Chưa có dữ liệu audit</div></div>
     </div>
   </div>
   <div class="g2">
-    <div class="card"><div class="ch"><span class="ct">Hoạt động gần đây</span></div><div class="cb" id="timeline-dash"></div></div>
+    <div class="card"><div class="ch"><span class="ct">Hoạt động gần đây</span></div><div class="cb" id="timeline-dash"><div class="empty-state"><div class="ei">📅</div>Đồng bộ để xem lịch sử</div></div></div>
     <div class="card">
       <div class="ch"><span class="ct">OKR tháng – Ngân sách</span></div>
       <div class="cb">
-        <div class="prog-item"><div class="prog-hd"><span>Setup & Mở mới (20tr)</span><span style="color:var(--gold);font-weight:700">30%</span></div><div class="prog-bg"><div class="prog-bar" style="width:30%;background:var(--gold)"></div></div></div>
+        <div class="prog-item"><div class="prog-hd"><span>Setup & Mở mới (20tr)</span><span style="color:var(--gold);font-weight:700" id="okr1-pct">30%</span></div><div class="prog-bg"><div class="prog-bar" style="width:30%;background:var(--gold)"></div></div></div>
         <div class="prog-item"><div class="prog-hd"><span>Audit & Tái audit (1.7tr)</span><span style="color:var(--blue);font-weight:700">60%</span></div><div class="prog-bg"><div class="prog-bar" style="width:60%;background:var(--blue)"></div></div></div>
         <div class="prog-item"><div class="prog-hd"><span>Đào tạo (2.2tr)</span><span style="color:var(--teal);font-weight:700">20%</span></div><div class="prog-bg"><div class="prog-bar" style="width:20%;background:var(--teal)"></div></div></div>
         <div class="prog-item"><div class="prog-hd"><span>AI & Reporting (1tr)</span><span style="color:var(--green);font-weight:700">85%</span></div><div class="prog-bg"><div class="prog-bar" style="width:85%;background:var(--green)"></div></div></div>
@@ -301,182 +274,127 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
   <div class="ai-box" id="ai-insight-dash">
     <span class="aitag">✨ AI PHÂN TÍCH</span>
     <div class="ait">Đang chờ dữ liệu...</div>
-    <div class="aii" style="color:rgba(255,255,255,.55)">Nhấn "Đồng bộ" hoặc "AI Phân tích" để nhận báo cáo thông minh.</div>
+    <div class="aii" style="color:rgba(255,255,255,.55)">Nhấn "Đồng bộ" để tải dữ liệu thực, sau đó AI sẽ phân tích.</div>
     <button class="btn bsm" style="background:var(--gold);color:var(--brown);margin-top:11px" onclick="loadAIDashInsight()">🤖 Phân tích ngay</button>
   </div>
 </div>
 
-<!-- ============================= SETUP ============================= -->
+<!-- ==================== QUẢN LÝ CỬA HÀNG ==================== -->
+<div class="page" id="pg-stores">
+  <div class="ph">
+    <div><div class="pt">Quản lý Cửa hàng</div><div class="ps">Danh sách trung tâm – tất cả module đều lấy dữ liệu từ đây</div></div>
+    <button class="btn bp" onclick="openModal('modal-new-store')">+ Thêm cửa hàng</button>
+  </div>
+  <div class="alert ab">💡 <span>Đây là danh sách trung tâm. Mọi dropdown cửa hàng trong hệ thống đều được cập nhật từ đây.</span></div>
+  <div class="card">
+    <div class="ch"><span class="ct">Danh sách cửa hàng</span><button class="btn bo bsm" onclick="loadStores()">🔄 Tải lại</button></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Tên cửa hàng</th><th>Thương hiệu</th><th>Đối tác NQ</th><th>Địa chỉ</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody id="stores-tbody"><tr><td colspan="6"><div class="empty-state"><div class="ei">🏬</div>Chưa có dữ liệu. Đồng bộ hoặc thêm cửa hàng.</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SETUP ==================== -->
 <div class="page" id="pg-setup">
   <div class="ph">
-    <div><div class="pt">Setup & Khai trương</div><div class="ps">Quản lý tiến độ mở cửa hàng mới theo mẫu timeline</div></div>
+    <div><div class="pt">Setup & Khai trương</div><div class="ps">Tiến độ mở cửa hàng theo mẫu timeline từ Google Sheets</div></div>
     <div class="fb">
       <button class="btn bo bsm" onclick="loadSetupFromSheets()">🔄 Tải từ Sheets</button>
       <button class="btn bp" onclick="openModal('modal-new-store')">+ Thêm cửa hàng</button>
     </div>
   </div>
   <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="kpi"><div class="kl">Đang setup</div><div class="kv" id="s-setting">2</div><div class="kc warn">Đang triển khai</div></div>
-    <div class="kpi"><div class="kl">Khai trương tháng này</div><div class="kv">2</div><div class="kc up">Dự kiến</div></div>
-    <div class="kpi"><div class="kl">Mục tiêu 2026</div><div class="kv">30</div><div class="kc warn">8/30 đã đạt</div></div>
+    <div class="kpi"><div class="kl">Đang setup</div><div class="kv" id="s-setting">–</div></div>
+    <div class="kpi"><div class="kl">Khai trương tháng này</div><div class="kv" id="s-launched">–</div></div>
+    <div class="kpi"><div class="kl">Mục tiêu 2026</div><div class="kv" id="s-target">–</div></div>
   </div>
-  <div class="alert ab">💡 <span>Timeline setup được tải tự động từ sheet <strong>MẪU TIMELINE SETUP</strong> trong Google Sheets. Mỗi cửa hàng sẽ có checklist đầy đủ theo mẫu.</span></div>
-  <div id="setup-stores-list">
-    <!-- Rendered by JS from Sheets MẪU TIMELINE SETUP -->
-    <div class="setup-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-wrap:wrap;gap:8px">
-        <div><div style="font-weight:700;font-size:15px">Phúc Tea – Ninh Kiều 3</div><div style="font-size:12px;color:var(--gray);margin-top:2px">Dự kiến: 05/04/2026 · Đối tác: Nguyễn Văn A · Mẫu: Phúc Tea Standard</div></div>
-        <span class="bdg by2">Đang setup · 75%</span>
-      </div>
-      <div class="prog-item"><div class="prog-hd"><span style="font-size:12px">Tiến độ tổng thể</span><span style="color:var(--gold);font-weight:700">75%</span></div><div class="prog-bg"><div class="prog-bar" style="width:75%;background:var(--gold)"></div></div></div>
-      <div class="sdiv">Checklist theo Mẫu Timeline Setup</div>
-      <div id="cl-nk3">
-        <div class="chk-item done" onclick="toggleCheck(this,'nk3','1')"><div class="chk-box">✓</div><div><div class="chk-text">Xác nhận mặt bằng & ký hợp đồng</div><div class="chk-sub">Giai đoạn 1 · Kết quả: Hợp đồng đã ký 01/03/2026</div></div></div>
-        <div class="chk-item done" onclick="toggleCheck(this,'nk3','2')"><div class="chk-box">✓</div><div><div class="chk-text">Giao đồng phục nhân viên</div><div class="chk-sub">Giai đoạn 1 · Bàn giao: 18/11/2025</div></div></div>
-        <div class="chk-item done" onclick="toggleCheck(this,'nk3','3')"><div class="chk-box">✓</div><div><div class="chk-text">Lắp đặt thiết bị & bàn giao dụng cụ</div><div class="chk-sub">Giai đoạn 2</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'nk3','4')"><div class="chk-box"></div><div><div class="chk-text">Đào tạo nhân viên công thức & quy trình</div><div class="chk-sub">Giai đoạn 2</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'nk3','5')"><div class="chk-box"></div><div><div class="chk-text">Soft opening & kiểm tra vận hành</div><div class="chk-sub">Giai đoạn 3</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'nk3','6')"><div class="chk-box"></div><div><div class="chk-text">Khai trương chính thức & giám sát ngày đầu</div><div class="chk-sub">Giai đoạn 3 · Kết quả: —</div></div></div>
-      </div>
-      <div style="margin-top:13px">
-        <div class="fg"><label class="fl">Kết quả / ghi chú</label><textarea class="fc" rows="2" placeholder="Nhập kết quả hoặc ghi chú..." id="note-nk3"></textarea></div>
-        <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button class="btn bp bsm" onclick="saveSetupProgress('Ninh Kiều 3','nk3')">💾 Lưu lên Sheets</button>
-          <button class="btn bo bsm" onclick="aiSetupAdvice('Ninh Kiều 3',75)">🤖 AI gợi ý</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="setup-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-wrap:wrap;gap:8px">
-        <div><div style="font-weight:700;font-size:15px">Phúc Tea – Bình Thủy</div><div style="font-size:12px;color:var(--gray);margin-top:2px">Dự kiến: 20/04/2026 · Đối tác: Trần Thị B · Mẫu: Phúc Tea Standard</div></div>
-        <span class="bdg bb2">Mới bắt đầu · 40%</span>
-      </div>
-      <div class="prog-item"><div class="prog-hd"><span style="font-size:12px">Tiến độ tổng thể</span><span style="color:var(--blue);font-weight:700">40%</span></div><div class="prog-bg"><div class="prog-bar" style="width:40%;background:var(--blue)"></div></div></div>
-      <div class="sdiv">Checklist theo Mẫu Timeline Setup</div>
-      <div id="cl-bt">
-        <div class="chk-item done" onclick="toggleCheck(this,'bt','1')"><div class="chk-box">✓</div><div><div class="chk-text">Xác nhận mặt bằng & ký hợp đồng</div><div class="chk-sub">Giai đoạn 1</div></div></div>
-        <div class="chk-item done" onclick="toggleCheck(this,'bt','2')"><div class="chk-box">✓</div><div><div class="chk-text">Giao đồng phục nhân viên</div><div class="chk-sub">Giai đoạn 1</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'bt','3')"><div class="chk-box"></div><div><div class="chk-text">Lắp đặt thiết bị & bàn giao dụng cụ</div><div class="chk-sub">Giai đoạn 2</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'bt','4')"><div class="chk-box"></div><div><div class="chk-text">Đào tạo nhân viên công thức & quy trình</div><div class="chk-sub">Giai đoạn 2</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'bt','5')"><div class="chk-box"></div><div><div class="chk-text">Soft opening & kiểm tra vận hành</div><div class="chk-sub">Giai đoạn 3</div></div></div>
-        <div class="chk-item" onclick="toggleCheck(this,'bt','6')"><div class="chk-box"></div><div><div class="chk-text">Khai trương chính thức & giám sát ngày đầu</div><div class="chk-sub">Giai đoạn 3</div></div></div>
-      </div>
-      <div style="margin-top:13px">
-        <div class="fg"><label class="fl">Kết quả / ghi chú</label><textarea class="fc" rows="2" placeholder="Nhập kết quả..." id="note-bt"></textarea></div>
-        <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button class="btn bp bsm" onclick="saveSetupProgress('Bình Thủy','bt')">💾 Lưu lên Sheets</button>
-          <button class="btn bo bsm" onclick="aiSetupAdvice('Bình Thủy',40)">🤖 AI gợi ý</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="alert ab" id="setup-template-alert">💡 <span>Timeline setup được tải tự động từ sheet <strong>MẪU TIMELINE SETUP</strong>. Cập nhật mẫu trong Sheets → nhấn "Tải từ Sheets" để áp dụng ngay.</span></div>
+  <div id="setup-stores-list"><div class="empty-state"><div class="ei">🏪</div>Đồng bộ để tải danh sách cửa hàng đang setup</div></div>
 </div>
 
-<!-- ============================= AUDIT ============================= -->
+<!-- ==================== AUDIT ==================== -->
 <div class="page" id="pg-audit">
-  <div class="ph">
-    <div><div class="pt">Audit & Tái Audit</div><div class="ps">Kết quả từ Google Form audit tự động cập nhật</div></div>
-    <div class="fb">
-      <button class="btn bo bsm" onclick="loadAuditData()">🔄 Tải kết quả Form</button>
-      <button class="btn bp" onclick="openModal('modal-new-audit')">+ Tạo phiên audit</button>
-    </div>
-  </div>
-
+  <div class="ph"><div><div class="pt">Audit & Kiểm soát chất lượng</div><div class="ps">Dữ liệu từ Google Form và form nhập nhanh</div></div></div>
   <div class="ptabs">
-    <button class="ptab on" onclick="showAuditTab('truc-tiep',this)">👤 Audit Trực tiếp</button>
+    <button class="ptab on" onclick="showAuditTab('truc-tiep',this)">📋 Audit trực tiếp</button>
     <button class="ptab" onclick="showAuditTab('bi-an',this)">🕵️ Khách hàng bí ẩn</button>
     <button class="ptab" onclick="showAuditTab('ket-qua',this)">📊 Kết quả & Biên bản</button>
   </div>
 
-  <!-- Tab: Audit trực tiếp -->
+  <!-- Trực tiếp -->
   <div id="tab-truc-tiep">
-    <div class="alert ay">⚠️ <span id="audit-alert-msg"><strong>3 cửa hàng</strong> dưới 85 điểm cần tái audit: Hà Lam (74đ), Vĩnh Cửu (78đ), Thới Lai (81đ)</span></div>
+    <div id="audit-alerts-container"></div>
     <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
-      <div class="kpi"><div class="kl">Điểm TB hệ thống</div><div class="kv" style="color:var(--green)" id="audit-avg">87</div><div class="kc up">Mục tiêu ≥85 ✓</div></div>
-      <div class="kpi"><div class="kl">Audit tháng này</div><div class="kv" id="audit-done">4/4</div><div class="kc up">Đạt kế hoạch</div></div>
-      <div class="kpi"><div class="kl">Cần tái audit</div><div class="kv" style="color:var(--red)" id="audit-reaudit-cnt">3</div><div class="kc dn">Deadline 15 ngày</div></div>
+      <div class="kpi"><div class="kl">Điểm TB hệ thống</div><div class="kv" style="color:var(--green)" id="audit-avg">–</div><div class="kc up" id="audit-avg-sub">–</div></div>
+      <div class="kpi"><div class="kl">Audit tháng này</div><div class="kv" id="audit-done">–</div></div>
+      <div class="kpi"><div class="kl">Cần tái audit</div><div class="kv" style="color:var(--red)" id="audit-reaudit-cnt">–</div><div class="kc dn">Deadline 15 ngày</div></div>
     </div>
     <div class="g2">
       <div class="card">
-        <div class="ch"><span class="ct">Danh sách từ Google Form Audit TT</span><button class="btn bo bsm" onclick="loadAuditData()">🔄 Làm mới</button></div>
-        <div class="tbl-wrap"><table class="tbl" id="audit-table-direct">
+        <div class="ch"><span class="ct">Kết quả từ Google Form Audit TT</span><button class="btn bo bsm" onclick="loadAuditData()">🔄 Làm mới</button></div>
+        <div class="tbl-wrap"><table class="tbl">
           <thead><tr><th>Cửa hàng</th><th>Điểm</th><th>Ngày</th><th>Trạng thái</th><th></th></tr></thead>
-          <tbody id="audit-body-direct">
-            <tr><td>Ninh Kiều 1</td><td style="color:var(--green);font-weight:700">92</td><td>15/03</td><td><span class="bdg bg2">Đạt</span></td><td><button class="btn bo bsm" onclick="viewAuditReport('Ninh Kiều 1',92)">📋 Biên bản</button></td></tr>
-            <tr><td>Ninh Kiều 2</td><td style="color:var(--green);font-weight:700">88</td><td>16/03</td><td><span class="bdg bg2">Đạt</span></td><td><button class="btn bo bsm" onclick="viewAuditReport('Ninh Kiều 2',88)">📋 Biên bản</button></td></tr>
-            <tr><td>Hà Lam</td><td style="color:var(--red);font-weight:700">74</td><td>18/03</td><td><span class="bdg br2">Tái audit</span></td><td><button class="btn bo bsm" onclick="viewAuditReport('Hà Lam',74)">📋 Biên bản</button></td></tr>
-            <tr><td>Vĩnh Cửu</td><td style="color:var(--red);font-weight:700">78</td><td>20/03</td><td><span class="bdg br2">Tái audit</span></td><td><button class="btn bo bsm" onclick="viewAuditReport('Vĩnh Cửu',78)">📋 Biên bản</button></td></tr>
-          </tbody>
+          <tbody id="audit-body-direct"><tr><td colspan="5"><div class="empty-state" style="padding:20px">Đồng bộ để tải dữ liệu audit</div></td></tr></tbody>
         </table></div>
       </div>
       <div class="card">
         <div class="ch"><span class="ct">Form Audit Nhanh</span></div>
         <div class="cb">
-          <div class="fg"><label class="fl">Cửa hàng</label><select class="fc" id="audit-store"><option>Phúc Tea – Ninh Kiều 1</option><option>Phúc Tea – Ninh Kiều 2</option><option>Phúc Tea – Hà Lam</option><option>Phúc Tea – Vĩnh Cửu</option><option>The Hoa – Bình Thủy</option><option>Phúc Tea – Thới Lai</option></select></div>
+          <div class="fg"><label class="fl">Cửa hàng</label><select class="fc" id="audit-store"><option value="">-- Chọn cửa hàng --</option></select></div>
           <div class="fr">
             <div class="fg"><label class="fl">Ngày audit</label><input type="date" class="fc" id="audit-date"></div>
             <div class="fg"><label class="fl">Loại</label><select class="fc" id="audit-type"><option>Audit trực tiếp</option><option>Tái audit</option><option>Audit định kỳ</option></select></div>
           </div>
           <div class="sdiv">Tiêu chí chấm điểm</div>
-          <div class="audit-row"><div class="audit-name">Vệ sinh & ATTP</div><div class="audit-max">/25</div><input class="audit-inp" type="number" min="0" max="25" value="22" oninput="calcAudit()"></div>
-          <div class="audit-row"><div class="audit-name">Chất lượng sản phẩm</div><div class="audit-max">/25</div><input class="audit-inp" type="number" min="0" max="25" value="20" oninput="calcAudit()"></div>
-          <div class="audit-row"><div class="audit-name">Dịch vụ khách hàng</div><div class="audit-max">/20</div><input class="audit-inp" type="number" min="0" max="20" value="18" oninput="calcAudit()"></div>
-          <div class="audit-row"><div class="audit-name">Đồng phục & thương hiệu</div><div class="audit-max">/15</div><input class="audit-inp" type="number" min="0" max="15" value="13" oninput="calcAudit()"></div>
-          <div class="audit-row"><div class="audit-name">Vận hành & quy trình</div><div class="audit-max">/15</div><input class="audit-inp" type="number" min="0" max="15" value="12" oninput="calcAudit()"></div>
+          <div class="audit-row"><div class="audit-name">Vệ sinh & ATTP</div><div class="audit-max">/25</div><input class="audit-inp" id="a1" type="number" min="0" max="25" value="20" oninput="calcAudit()"></div>
+          <div class="audit-row"><div class="audit-name">Chất lượng sản phẩm</div><div class="audit-max">/25</div><input class="audit-inp" id="a2" type="number" min="0" max="25" value="20" oninput="calcAudit()"></div>
+          <div class="audit-row"><div class="audit-name">Dịch vụ khách hàng</div><div class="audit-max">/20</div><input class="audit-inp" id="a3" type="number" min="0" max="20" value="16" oninput="calcAudit()"></div>
+          <div class="audit-row"><div class="audit-name">Đồng phục & thương hiệu</div><div class="audit-max">/15</div><input class="audit-inp" id="a4" type="number" min="0" max="15" value="12" oninput="calcAudit()"></div>
+          <div class="audit-row"><div class="audit-name">Vận hành & quy trình</div><div class="audit-max">/15</div><input class="audit-inp" id="a5" type="number" min="0" max="15" value="12" oninput="calcAudit()"></div>
           <div class="audit-score-box">
             <div style="font-size:12px;color:var(--gray);margin-bottom:3px">Tổng điểm</div>
-            <div id="audit-total" style="font-size:38px;font-weight:700;color:var(--green)">85</div>
-            <div id="audit-status" style="font-size:12px;margin-top:3px;color:var(--green)">✓ Đạt tiêu chuẩn</div>
+            <div id="audit-total" style="font-size:38px;font-weight:700;color:var(--green)">80</div>
+            <div id="audit-status" style="font-size:12px;margin-top:3px;color:var(--green)">⚠ Cần tái audit trong 15 ngày</div>
           </div>
-          <div class="fg" style="margin-top:13px"><label class="fl">Action Plan</label><textarea class="fc" id="action-plan" placeholder="Hành động cần thực hiện..."></textarea></div>
+          <div class="fg" style="margin-top:13px"><label class="fl">Action Plan</label><textarea class="fc" id="action-plan" placeholder="Hành động cần thực hiện trong 48h..."></textarea></div>
           <div style="display:flex;gap:7px;flex-wrap:wrap">
             <button class="btn bp" style="flex:1" onclick="saveAudit()">💾 Lưu lên Sheets</button>
-            <button class="btn bo" onclick="aiAuditAdvice()">🤖 AI đề xuất</button>
+            <button class="btn bo" onclick="aiAuditAdvice()">🤖 AI đề xuất AP</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Tab: Khách hàng bí ẩn -->
+  <!-- Bí ẩn -->
   <div id="tab-bi-an" style="display:none">
-    <div class="alert ab">🕵️ <span>Dữ liệu từ <strong>Google Form Khách hàng bí ẩn</strong> tự động cập nhật vào sheet <em>"Data Audit khách hàng bí ẩn"</em>. Nhấn "Tải kết quả Form" để lấy data mới nhất.</span></div>
+    <div class="alert ab">🕵️ <span>Dữ liệu từ <strong>Google Form Khách hàng bí ẩn</strong> tự động vào sheet <em>"Data Audit khách hàng bí ẩn"</em>.</span></div>
     <div class="card">
       <div class="ch"><span class="ct">Kết quả Audit Khách hàng bí ẩn</span><button class="btn bo bsm" onclick="loadSecretAuditData()">🔄 Tải từ Form</button></div>
       <div class="tbl-wrap"><table class="tbl">
-        <thead><tr><th>Thời gian</th><th>Cửa hàng</th><th>Điểm</th><th>Nhận xét tổng</th><th>Trạng thái</th><th></th></tr></thead>
-        <tbody id="audit-body-secret">
-          <tr><td>28/03 14:30</td><td>Ninh Kiều 1</td><td style="color:var(--green);font-weight:700">89</td><td>Phục vụ nhanh, đồ uống đúng công thức</td><td><span class="bdg bg2">Tốt</span></td><td><button class="btn bo bsm" onclick="viewSecretAuditReport('Ninh Kiều 1',89)">📋 Chi tiết</button></td></tr>
-          <tr><td>27/03 10:15</td><td>Hà Lam</td><td style="color:var(--red);font-weight:700">71</td><td>Nhân viên thiếu đồng phục, vệ sinh kém</td><td><span class="bdg br2">Cần cải thiện</span></td><td><button class="btn bo bsm" onclick="viewSecretAuditReport('Hà Lam',71)">📋 Chi tiết</button></td></tr>
-        </tbody>
+        <thead><tr><th>Thời gian</th><th>Cửa hàng</th><th>Điểm</th><th>Nhận xét</th><th>Trạng thái</th></tr></thead>
+        <tbody id="audit-body-secret"><tr><td colspan="5"><div class="empty-state" style="padding:20px">Nhấn "Tải từ Form" để lấy dữ liệu</div></td></tr></tbody>
       </table></div>
     </div>
-    <div class="g2">
-      <div class="card">
-        <div class="ch"><span class="ct">So sánh Audit TT vs Bí ẩn</span></div>
-        <div class="cb" id="compare-chart">
-          <div class="prog-item"><div class="prog-hd"><span>Ninh Kiều 1</span><span>TT: 92 · Bí ẩn: 89</span></div><div class="prog-bg"><div class="prog-bar" style="width:92%;background:var(--green)"></div></div></div>
-          <div class="prog-item"><div class="prog-hd"><span>Hà Lam</span><span>TT: 74 · Bí ẩn: 71</span></div><div class="prog-bg"><div class="prog-bar" style="width:74%;background:var(--red)"></div></div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="ch"><span class="ct">AI phân tích xu hướng bí ẩn</span></div>
-        <div class="cb">
-          <button class="btn bp bfull" onclick="aiSecretAuditAnalysis()">🤖 AI phân tích kết quả bí ẩn</button>
-          <div id="secret-ai-result" style="margin-top:12px;font-size:13px;color:var(--gray)">Nhấn để AI phân tích kết quả audit khách hàng bí ẩn...</div>
-        </div>
+    <div class="card">
+      <div class="ch"><span class="ct">AI phân tích xu hướng bí ẩn</span></div>
+      <div class="cb">
+        <button class="btn bp bfull" onclick="aiSecretAuditAnalysis()">🤖 AI phân tích kết quả bí ẩn</button>
+        <div id="secret-ai-result" style="margin-top:12px;font-size:13px;color:var(--gray)">Nhấn để AI phân tích...</div>
       </div>
     </div>
   </div>
 
-  <!-- Tab: Kết quả & Biên bản -->
+  <!-- Kết quả & Biên bản -->
   <div id="tab-ket-qua" style="display:none">
     <div class="g2">
       <div class="card">
         <div class="ch"><span class="ct">Chọn cửa hàng xem biên bản</span></div>
         <div class="cb">
-          <div class="fg"><label class="fl">Cửa hàng</label><select class="fc" id="report-store" onchange="previewAuditReport()"><option>Phúc Tea – Ninh Kiều 1</option><option>Phúc Tea – Hà Lam</option><option>Phúc Tea – Vĩnh Cửu</option></select></div>
+          <div class="fg"><label class="fl">Cửa hàng</label><select class="fc" id="report-store"><option value="">-- Chọn cửa hàng --</option></select></div>
           <div class="fg"><label class="fl">Loại biên bản</label><select class="fc" id="report-type"><option>Audit trực tiếp</option><option>Audit bí ẩn</option><option>Tổng hợp cả hai</option></select></div>
           <div style="display:flex;gap:7px;flex-wrap:wrap">
             <button class="btn bp" onclick="generateAuditReport()">📋 Tạo biên bản</button>
@@ -485,39 +403,35 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
         </div>
       </div>
       <div class="card">
-        <div class="ch">
-          <span class="ct">Biên bản audit</span>
+        <div class="ch"><span class="ct">Biên bản audit</span>
           <div style="display:flex;gap:6px">
-            <button class="btn bo bsm" id="btn-copy-audit" style="display:none" onclick="copyAuditReport()">📋 Copy</button>
+            <button class="btn bo bsm" id="btn-copy-audit" style="display:none" onclick="copyText(auditReportText)">📋 Copy</button>
             <button class="btn bp bsm" id="btn-email-store" style="display:none" onclick="openModal('modal-email-store')">✉️ Gửi cửa hàng</button>
           </div>
         </div>
-        <div class="cb"><div class="audit-report-box" id="audit-report-preview">← Chọn cửa hàng và nhấn "Tạo biên bản" hoặc để AI soạn.</div></div>
+        <div class="cb"><div class="audit-report-box" id="audit-report-preview">← Chọn cửa hàng và tạo biên bản.</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============================= NHÂN SỰ ============================= -->
+<!-- ==================== NHÂN SỰ ==================== -->
 <div class="page" id="pg-nhansu">
   <div class="ph">
     <div><div class="pt">Nhân sự Vận hành</div><div class="ps">Quản lý đội ngũ Operations</div></div>
     <button class="btn bp" onclick="openModal('modal-new-staff')">+ Thêm nhân viên</button>
   </div>
-  <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="kpi"><div class="kl">Nhân sự HQ</div><div class="kv">6</div><div class="kc up">Operations team</div></div>
-    <div class="kpi"><div class="kl">Đang onboarding</div><div class="kv" style="color:var(--blue)">1</div><div class="kc warn">Theo dõi</div></div>
-    <div class="kpi"><div class="kl">Khóa học/tháng</div><div class="kv">0<span style="font-size:14px;color:var(--gray)">/6</span></div><div class="kc dn">Chưa hoàn thành</div></div>
-  </div>
   <div class="g2">
     <div class="card">
       <div class="ch"><span class="ct">Nhân sự Operations</span></div>
-      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Họ tên</th><th>Vị trí</th><th>Phụ trách</th><th>Trạng thái</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:700">Dương Thanh Liêm</td><td>Operations Leader</td><td>Toàn hệ thống</td><td><span class="bdg bg2">Active</span></td></tr>
-        <tr><td>Nhung Nguyễn</td><td>Ops Staff</td><td>4 điểm bán CT</td><td><span class="bdg bg2">Active</span></td></tr>
-        <tr><td>Tăng Hữu Phúc</td><td>NV Setup</td><td>Đang onboarding</td><td><span class="bdg by2">Onboarding</span></td></tr>
-      </tbody></table></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Họ tên</th><th>Vị trí</th><th>Phụ trách</th><th>Trạng thái</th></tr></thead>
+        <tbody id="staff-tbody">
+          <tr><td style="font-weight:700">Dương Thanh Liêm</td><td>Operations Leader</td><td>Toàn hệ thống</td><td><span class="bdg bg2">Active</span></td></tr>
+          <tr><td>Nhung Nguyễn</td><td>Ops Staff</td><td>4 điểm bán CT</td><td><span class="bdg bg2">Active</span></td></tr>
+          <tr><td>Tăng Hữu Phúc</td><td>NV Setup</td><td>Đang onboarding</td><td><span class="bdg by2">Onboarding</span></td></tr>
+        </tbody>
+      </table></div>
     </div>
     <div class="card">
       <div class="ch"><span class="ct">Đào tạo tháng 4</span></div>
@@ -525,42 +439,49 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
         <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Leader hoàn thành khóa Leadership & NQ</div><div class="chk-sub">Mục tiêu: trước 30/04</div></div></div>
         <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">100% nhân sự HQ hoàn thành 1 khóa chuyên môn</div></div></div>
         <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Tổ chức 1 buổi đào tạo nội bộ có bài test</div><div class="chk-sub">Tuần 2 tháng 4</div></div></div>
-        <div class="fg" style="margin-top:13px"><label class="fl">Ghi chú đào tạo</label><textarea class="fc" rows="2" placeholder="Kết quả bài test, ghi chú..."></textarea></div>
-        <button class="btn bp bsm" onclick="saveToSheets('training',{})">💾 Lưu ghi chú</button>
+        <div class="fg" style="margin-top:13px"><label class="fl">Ghi chú</label><textarea class="fc" id="training-note" rows="2" placeholder="Kết quả bài test, ghi chú..."></textarea></div>
+        <button class="btn bp bsm" onclick="saveTraining()">💾 Lưu lên Sheets</button>
       </div>
     </div>
   </div>
   <div class="card">
     <div class="ch"><span class="ct">Nhân sự tại cửa hàng</span></div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Cửa hàng</th><th>Store Manager</th><th>Nhân viên</th><th>Tình trạng</th></tr></thead>
-    <tbody>
-      <tr><td>Ninh Kiều 1</td><td>Nguyễn Thị C</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
-      <tr><td>Ninh Kiều 2</td><td>Lê Văn D</td><td>3</td><td><span class="bdg by2">Thiếu 1</span></td></tr>
-      <tr><td>Hà Lam</td><td>Phạm Thị E</td><td>3</td><td><span class="bdg bg2">Đủ</span></td></tr>
-      <tr><td>Vĩnh Cửu</td><td>Trần Văn F</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
-      <tr><td>Bình Thủy</td><td style="color:var(--red)">Đang tuyển</td><td>2</td><td><span class="bdg br2">Cần SM</span></td></tr>
-    </tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Cửa hàng</th><th>Store Manager</th><th>Nhân viên</th><th>Tình trạng</th></tr></thead>
+      <tbody id="store-staff-tbody">
+        <tr><td>Ninh Kiều 1</td><td>Nguyễn Thị C</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
+        <tr><td>Ninh Kiều 2</td><td>Lê Văn D</td><td>3</td><td><span class="bdg by2">Thiếu 1</span></td></tr>
+        <tr><td>Hà Lam</td><td>Phạm Thị E</td><td>3</td><td><span class="bdg bg2">Đủ</span></td></tr>
+        <tr><td>Vĩnh Cửu</td><td>Trần Văn F</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
+        <tr><td>Bình Thủy</td><td style="color:var(--red)">Đang tuyển</td><td>2</td><td><span class="bdg br2">Cần SM</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
 </div>
 
-<!-- ============================= BÁO CÁO ============================= -->
+<!-- ==================== BÁO CÁO ==================== -->
 <div class="page" id="pg-baocao">
   <div class="ph"><div><div class="pt">Báo cáo & Gửi Email</div><div class="ps">Soạn & gửi báo cáo thực hiện kế hoạch cho BOD</div></div></div>
   <div class="g2">
     <div class="card">
       <div class="ch"><span class="ct">Thông tin báo cáo</span></div>
       <div class="cb">
-        <div class="fg"><label class="fl">Tháng báo cáo</label><select class="fc" id="rpt-month"><option>Tháng 3/2026</option><option selected>Tháng 4/2026</option><option>Tháng 5/2026</option></select></div>
-        <div class="fr">
-          <div class="fg"><label class="fl">Cửa hàng khai trương mới</label><input class="fc" type="number" id="rpt-stores" value="2"></div>
-          <div class="fg"><label class="fl">Điểm audit TB</label><input class="fc" type="number" id="rpt-audit" value="87"></div>
+        <div class="fg"><label class="fl">Tháng báo cáo</label>
+          <select class="fc" id="rpt-month">
+            <option>Tháng 3/2026</option><option selected>Tháng 4/2026</option><option>Tháng 5/2026</option>
+          </select>
         </div>
         <div class="fr">
-          <div class="fg"><label class="fl">Số lượt audit</label><input class="fc" type="number" id="rpt-n-audit" value="4"></div>
-          <div class="fg"><label class="fl">Cần tái audit</label><input class="fc" type="number" id="rpt-reaudit" value="3"></div>
+          <div class="fg"><label class="fl">Cửa hàng khai trương mới</label><input class="fc" type="number" id="rpt-stores" value="2" min="0"></div>
+          <div class="fg"><label class="fl">Điểm audit TB</label><input class="fc" type="number" id="rpt-audit" min="0" max="100"></div>
         </div>
-        <div class="fg"><label class="fl">Thành tựu nổi bật</label><textarea class="fc" id="rpt-highlight" rows="3">Khai trương Phúc Tea Ninh Kiều 3, doanh thu ngày đầu 18.2tr vượt KPI. Hoàn thành 4/4 lượt audit bí ẩn tháng 3.</textarea></div>
-        <div class="fg"><label class="fl">Thách thức & kế hoạch tháng sau</label><textarea class="fc" id="rpt-challenge" rows="3">3 cửa hàng cần tái audit. Kế hoạch T4: khai trương 2 CH mới, hoàn thành tái audit trong 15 ngày.</textarea></div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Số lượt audit</label><input class="fc" type="number" id="rpt-n-audit" value="4" min="0"></div>
+          <div class="fg"><label class="fl">Cần tái audit</label><input class="fc" type="number" id="rpt-reaudit" value="0" min="0"></div>
+        </div>
+        <div class="fg"><label class="fl">Ngân sách đã dùng (triệu đồng)</label><input class="fc" type="number" id="rpt-budget" value="0" step="0.1"></div>
+        <div class="fg"><label class="fl">Thành tựu nổi bật</label><textarea class="fc" id="rpt-highlight" rows="3" placeholder="Nhập thành tựu..."></textarea></div>
+        <div class="fg"><label class="fl">Thách thức & kế hoạch tháng sau</label><textarea class="fc" id="rpt-challenge" rows="3" placeholder="Nhập thách thức & kế hoạch..."></textarea></div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
           <button class="btn bp" onclick="generateReport()">📝 Tạo báo cáo</button>
           <button class="btn bo" onclick="aiGenerateReport()">🤖 AI soạn nội dung</button>
@@ -570,25 +491,25 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
     <div class="card">
       <div class="ch"><span class="ct">Xem trước</span>
         <div style="display:flex;gap:6px">
-          <button class="btn bo bsm" id="btn-copy-rpt" style="display:none" onclick="copyReport()">📋 Copy</button>
+          <button class="btn bo bsm" id="btn-copy-rpt" style="display:none" onclick="copyText(reportText)">📋 Copy</button>
           <button class="btn bp bsm" id="btn-email-rpt" style="display:none" onclick="openEmailModal('report')">✉️ Gửi BOD</button>
         </div>
       </div>
-      <div class="cb"><div id="report-preview" style="font-size:13px;line-height:1.8;color:var(--gray)">← Điền thông tin và nhấn "Tạo báo cáo" hoặc để <strong style="color:var(--brown)">AI soạn</strong> giúp.</div></div>
+      <div class="cb"><div id="report-preview" style="font-size:13px;line-height:1.8;color:var(--gray);min-height:200px">← Điền thông tin và nhấn "Tạo báo cáo" hoặc để <strong style="color:var(--brown)">AI soạn</strong> giúp.</div></div>
     </div>
   </div>
   <div class="card">
-    <div class="ch"><span class="ct">Lịch sử báo cáo</span></div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tháng</th><th>Ngày gửi</th><th>Khai trương</th><th>Điểm audit TB</th><th>Trạng thái</th></tr></thead>
-    <tbody>
-      <tr><td>Tháng 3/2026</td><td>25/03/2026</td><td>2</td><td style="color:var(--green)">87</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
-      <tr><td>Tháng 2/2026</td><td>26/02/2026</td><td>3</td><td style="color:var(--green)">84</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
-      <tr><td>Tháng 1/2026</td><td>27/01/2026</td><td>3</td><td style="color:var(--gold)">81</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
-    </tbody></table></div>
+    <div class="ch"><span class="ct">Lịch sử báo cáo đã gửi</span></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Tháng</th><th>Ngày gửi</th><th>Cửa hàng KT</th><th>Điểm audit TB</th><th>Trạng thái</th></tr></thead>
+      <tbody id="report-history">
+        <tr><td colspan="5" style="text-align:center;color:var(--gray);padding:20px">Đồng bộ để xem lịch sử</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </div>
 
-<!-- ============================= KẾ HOẠCH ============================= -->
+<!-- ==================== KẾ HOẠCH ==================== -->
 <div class="page" id="pg-kehoach">
   <div class="ph">
     <div><div class="pt">Kế hoạch Tháng</div><div class="ps">Lập và gửi kế hoạch Operations cho BOD</div></div>
@@ -598,20 +519,16 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
     <div class="card">
       <div class="ch"><span class="ct">Soạn kế hoạch</span></div>
       <div class="cb">
-        <div class="fg"><label class="fl">Tháng kế hoạch</label><select class="fc" id="plan-month"><option selected>Tháng 4/2026</option><option>Tháng 5/2026</option><option>Tháng 6/2026</option></select></div>
+        <div class="fg"><label class="fl">Tháng kế hoạch</label><select class="fc" id="plan-month"><option>Tháng 4/2026</option><option>Tháng 5/2026</option><option>Tháng 6/2026</option></select></div>
         <div class="fr">
-          <div class="fg"><label class="fl">Mục tiêu khai trương</label><input class="fc" type="number" id="plan-target-stores" value="2"></div>
-          <div class="fg"><label class="fl">Ngân sách (triệu đồng)</label><input class="fc" type="number" id="plan-budget" value="24.9"></div>
+          <div class="fg"><label class="fl">Mục tiêu CH mới</label><input class="fc" type="number" id="plan-target-stores" value="2" min="0"></div>
+          <div class="fg"><label class="fl">Mục tiêu điểm audit</label><input class="fc" type="number" id="plan-target-audit" value="85" min="0" max="100"></div>
         </div>
-        <div class="fg"><label class="fl">Mục tiêu audit</label><input class="fc" type="number" id="plan-target-audit" value="4"></div>
-        <div class="fg"><label class="fl">Các hoạt động chính</label><textarea class="fc" id="plan-activities" rows="4">1. Khai trương Ninh Kiều 3 (05/04)
-2. Khai trương Bình Thủy (20/04)
-3. Tái audit Hà Lam, Vĩnh Cửu, Thới Lai
-4. Đào tạo nhân sự mới</textarea></div>
-        <div class="fg"><label class="fl">Rủi ro & Giải pháp</label><textarea class="fc" id="plan-risks" rows="2">Rủi ro: Chậm trễ thi công CH Bình Thủy → Điều chuyển setup team sớm từ tuần 1</textarea></div>
+        <div class="fg"><label class="fl">Ngân sách dự kiến (triệu đồng)</label><input class="fc" type="number" id="plan-budget" value="24.9" step="0.1"></div>
+        <div class="fg"><label class="fl">Nội dung ưu tiên tháng</label><textarea class="fc" id="plan-content" rows="4" placeholder="Nhập các hoạt động ưu tiên..."></textarea></div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button class="btn bp" onclick="generatePlan()">📋 Tạo kế hoạch</button>
-          <button class="btn bo" onclick="aiGeneratePlan()">🤖 AI soạn chi tiết</button>
+          <button class="btn bp" onclick="generatePlan()">📝 Tạo kế hoạch</button>
+          <button class="btn bo" onclick="aiGeneratePlan()">🤖 AI soạn kế hoạch</button>
         </div>
       </div>
     </div>
@@ -619,543 +536,757 @@ code{background:var(--gold-l);padding:1px 5px;border-radius:3px;color:var(--brow
       <div class="ch"><span class="ct">Xem trước kế hoạch</span>
         <button class="btn bp bsm" id="btn-send-plan" style="display:none" onclick="openEmailModal('plan')">✉️ Gửi BOD</button>
       </div>
-      <div class="cb"><div id="plan-preview" style="font-size:13px;line-height:1.8;color:var(--gray)">← Điền thông tin hoặc để <strong style="color:var(--brown)">AI soạn</strong> giúp.</div></div>
+      <div class="cb"><div id="plan-preview" style="font-size:13px;line-height:1.8;color:var(--gray);min-height:200px">← Nhấn "AI Lập kế hoạch" hoặc điền và "Tạo kế hoạch".</div></div>
     </div>
   </div>
 </div>
 
-<!-- ============================= AI ============================= -->
+<!-- ==================== AI ==================== -->
 <div class="page" id="pg-ai">
-  <div class="ph"><div><div class="pt">🤖 AI Phân tích & Đề xuất</div><div class="ps">Phân tích số liệu vận hành, tư vấn cải tiến thông minh</div></div></div>
+  <div class="ph"><div><div class="pt">🤖 AI Phân tích Operations</div><div class="ps">Trợ lý AI riêng cho bộ phận Operations Phúc Tea</div></div></div>
   <div class="g2">
-    <div class="card">
-      <div class="ch"><span class="ct">Chat với AI Ops Assistant</span></div>
-      <div class="cb">
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
-          <button class="btn bo bsm" onclick="quickAsk('Phân tích điểm audit và đề xuất cải thiện cửa hàng yếu nhất')">📊 Phân tích audit</button>
-          <button class="btn bo bsm" onclick="quickAsk('Lập kế hoạch tháng 5 dựa trên số liệu hiện tại')">📅 Kế hoạch T5</button>
-          <button class="btn bo bsm" onclick="quickAsk('Tổng kết Q1 và đề xuất chiến lược Q2/2026')">🎯 Chiến lược Q2</button>
-          <button class="btn bo bsm" onclick="quickAsk('Đánh giá hiệu suất đội ngũ và đề xuất đào tạo')">👥 Nhân sự</button>
-        </div>
-        <div id="ai-messages" class="ai-msgs">
-          <div class="ai-msg ai-msg-ai"><div class="ai-bbl">Xin chào! Tôi là AI Ops Assistant của Phúc Tea 🍵 Tôi có thể phân tích số liệu vận hành, đề xuất kế hoạch, và soạn nội dung báo cáo. Hỏi tôi bất cứ điều gì!</div></div>
-        </div>
-        <div class="ai-input-row">
-          <input class="ai-input" id="ai-question" placeholder="Hỏi AI về vận hành..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askAI()}">
-          <button class="btn bp" onclick="askAI()">Gửi ↗</button>
-        </div>
-      </div>
-    </div>
     <div>
       <div class="ai-box" id="ai-main-insight">
-        <span class="aitag">✨ PHÂN TÍCH TOÀN DIỆN</span>
-        <div class="ait" style="margin-top:8px">Nhấn để nhận báo cáo AI đầy đủ</div>
-        <div class="aii" style="color:rgba(255,255,255,.55)">AI phân tích toàn bộ số liệu vận hành và đề xuất chiến lược cụ thể.</div>
-        <button class="btn bsm" style="background:var(--gold);color:var(--brown);margin-top:11px" onclick="aiFullAnalysis()">🤖 Phân tích toàn hệ thống</button>
+        <span class="aitag">✨ AI PHÂN TÍCH</span>
+        <div class="ait">Chờ dữ liệu...</div>
+        <div class="aii" style="color:rgba(255,255,255,.55)">Nhấn nút bên dưới để AI phân tích toàn hệ thống.</div>
       </div>
-      <div class="card">
-        <div class="ch"><span class="ct">Đề xuất nhanh từ AI</span></div>
-        <div class="cb" id="ai-quick-suggestions"><div style="color:var(--gray);font-size:13px">Nhấn "Phân tích toàn hệ thống" để nhận đề xuất.</div></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px">
+        <button class="btn bp" onclick="aiFullAnalysis()">🤖 Phân tích toàn hệ thống</button>
+        <button class="btn bo" onclick="loadAIDashInsight()">📊 Tóm tắt dashboard</button>
+      </div>
+      <div id="ai-quick-suggestions"></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">💬 Hỏi AI về vận hành</span></div>
+      <div class="cb">
+        <div class="ai-msgs" id="ai-messages">
+          <div class="ai-msg ai-msg-ai"><div class="ai-bbl">Xin chào! Tôi là AI assistant Operations Phúc Tea. Hỏi tôi bất cứ điều gì về vận hành, audit, khai trương...</div></div>
+        </div>
+        <div class="ai-input-row">
+          <input class="ai-input" id="ai-question" placeholder="Hỏi về audit, setup, khai trương..." onkeydown="if(event.key==='Enter')askAI()">
+          <button class="btn bp" onclick="askAI()">Gửi</button>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap">
+          <button class="btn bo bsm" onclick="quickAsk('Tóm tắt tình hình audit tháng này')">📊 Tóm tắt audit</button>
+          <button class="btn bo bsm" onclick="quickAsk('Cửa hàng nào cần tái audit gấp?')">⚠️ Cần tái audit</button>
+          <button class="btn bo bsm" onclick="quickAsk('Đề xuất 5 việc cần làm tuần này')">📋 To-do tuần này</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============================== MODALS ============================== -->
+<!-- ==================== MODALS ==================== -->
 
-<!-- Cài đặt (Phúc Tea P&L style) -->
+<!-- Setup config -->
 <div class="overlay" id="modal-setup">
   <div class="modal">
-    <div class="cfg-modal-logo">
-      <div style="font-size:32px">⚡</div>
-      <div class="cfg-modal-brand">Phúc Tea · Ops Center</div>
-      <div class="cfg-modal-sub">Cài đặt kết nối dữ liệu</div>
-    </div>
-    <div class="alert ab" style="margin-bottom:14px;font-size:12px">💡 Điền thông tin bên dưới để kết nối Sheets & AI thật. Hoặc dùng Demo để chạy thử ngay.</div>
-    <div class="fg">
-      <div class="cfg-step">1. Google Sheet ID</div>
-      <div class="cfg-desc">Lấy từ URL Sheet: <code>spreadsheets/d/<strong style="color:var(--red)">ID</strong>/edit</code></div>
-      <input class="fc" id="cfg-sheet-id" value="1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo">
-    </div>
-    <div class="fg">
-      <div class="cfg-step">2. Apps Script URL (để nhập liệu & gửi email)</div>
-      <div class="cfg-desc">Deploy Apps Script → Web app → Tất cả mọi người → copy URL exec</div>
-      <input class="fc" id="cfg-script-url" placeholder="https://script.google.com/macros/s/...">
-    </div>
-    <div class="fg">
-      <div class="cfg-step">3. Anthropic API Key (để dùng AI)</div>
-      <div class="cfg-desc">Lấy tại <a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">console.anthropic.com</a> — nếu đã có Apps Script URL thì bỏ qua (proxy qua Apps Script).</div>
-      <input class="fc" id="cfg-api-key" type="password" placeholder="sk-ant-...">
-    </div>
-    <button class="btn bp bfull" style="padding:12px;font-size:14px;margin-top:4px" onclick="saveConfig()">✓ Kết nối & bắt đầu</button>
-    <div style="text-align:center;margin-top:10px">
-      <span style="font-size:12px;color:var(--gray);cursor:pointer;text-decoration:underline" onclick="useDemo()">Dùng dữ liệu demo (không cần cài đặt)</span>
-    </div>
-    <div style="background:var(--gray-l);border-radius:var(--rs);padding:11px;margin-top:14px;font-size:11px;color:var(--gray);line-height:1.7">
-      <strong style="color:var(--brown)">📋 Hướng dẫn Apps Script:</strong><br>
-      1. Mở Google Sheet → Extensions → Apps Script<br>
-      2. Dán code từ file <strong>ops-script.gs</strong><br>
-      3. Deploy → New deployment → Web app → Execute as: Me → Anyone<br>
-      4. Copy URL → Dán vào ô số 2 bên trên
+    <div class="mh"><div class="mt">⚙️ Cài đặt kết nối</div><button class="mx" onclick="closeModal('modal-setup')">×</button></div>
+    <div class="alert ay" style="margin-bottom:14px">⚠️ Cần cấu hình để web đồng bộ với Google Sheets thật của bạn.</div>
+    <div class="cfg-step">Bước 1 – Google Sheet ID</div>
+    <div class="cfg-desc">Mở Google Sheets → copy phần ID trong URL: <code>spreadsheets/d/<strong>[ID này]</strong>/edit</code></div>
+    <div class="fg"><input class="fc" id="cfg-sheet-id" placeholder="1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo"></div>
+    <div class="cfg-step">Bước 2 – Apps Script URL</div>
+    <div class="cfg-desc">Apps Script → Deploy → Copy Web App URL</div>
+    <div class="fg"><input class="fc" id="cfg-script-url" placeholder="https://script.google.com/macros/s/..."></div>
+    <div class="cfg-step">Bước 3 – Anthropic API Key (tùy chọn)</div>
+    <div class="cfg-desc">Nếu muốn AI hoạt động trực tiếp. Để trống = dùng AI qua Apps Script proxy.</div>
+    <div class="fg"><input class="fc" id="cfg-api-key" placeholder="sk-ant-..." type="password"></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:6px">
+      <button class="btn bp" style="flex:1" onclick="saveConfig()">✅ Lưu & Đồng bộ</button>
+      <button class="btn bo" onclick="closeModal('modal-setup')">Đóng</button>
     </div>
   </div>
 </div>
 
-<!-- Thêm cửa hàng -->
+<!-- New store -->
 <div class="overlay" id="modal-new-store">
   <div class="modal">
-    <div class="mh"><div class="mt">Thêm cửa hàng mới</div><button class="mx" onclick="closeModal('modal-new-store')">×</button></div>
+    <div class="mh"><div class="mt">+ Thêm cửa hàng mới</div><button class="mx" onclick="closeModal('modal-new-store')">×</button></div>
+    <div class="fg"><label class="fl">Tên cửa hàng</label><input class="fc" id="ns-name" placeholder="Phúc Tea – Ô Môn"></div>
     <div class="fg"><label class="fl">Thương hiệu</label><select class="fc" id="ns-brand"><option>Phúc Tea</option><option>The Hoa</option></select></div>
-    <div class="fg"><label class="fl">Tên chi nhánh</label><input class="fc" id="ns-name" placeholder="Ví dụ: Ô Môn"></div>
     <div class="fg"><label class="fl">Đối tác nhượng quyền</label><input class="fc" id="ns-partner" placeholder="Họ tên đối tác"></div>
+    <div class="fg"><label class="fl">Địa chỉ</label><input class="fc" id="ns-addr" placeholder="Địa chỉ cửa hàng"></div>
     <div class="fr">
-      <div class="fg"><label class="fl">Ngày bắt đầu setup</label><input type="date" class="fc" id="ns-start"></div>
-      <div class="fg"><label class="fl">Dự kiến khai trương</label><input type="date" class="fc" id="ns-open"></div>
+      <div class="fg"><label class="fl">Bắt đầu setup</label><input class="fc" type="date" id="ns-start"></div>
+      <div class="fg"><label class="fl">Dự kiến khai trương</label><input class="fc" type="date" id="ns-launch"></div>
     </div>
-    <div class="fg"><label class="fl">Địa chỉ</label><input class="fc" id="ns-address" placeholder="Địa chỉ cửa hàng"></div>
-    <div class="fg"><label class="fl">Mẫu timeline áp dụng</label><select class="fc" id="ns-template"><option>Phúc Tea Standard (6 giai đoạn)</option><option>The Hoa Standard</option><option>Tùy chỉnh</option></select></div>
-    <div style="display:flex;gap:7px;margin-top:4px">
-      <button class="btn bp" onclick="addNewStore()">Thêm & lưu lên Sheets</button>
+    <div style="display:flex;gap:7px;margin-top:6px">
+      <button class="btn bp" style="flex:1" onclick="addStore()">Thêm cửa hàng</button>
       <button class="btn bo" onclick="closeModal('modal-new-store')">Hủy</button>
     </div>
   </div>
 </div>
 
-<!-- Tạo phiên audit -->
-<div class="overlay" id="modal-new-audit">
-  <div class="modal">
-    <div class="mh"><div class="mt">Tạo phiên audit mới</div><button class="mx" onclick="closeModal('modal-new-audit')">×</button></div>
-    <div class="fg"><label class="fl">Cửa hàng</label><select class="fc"><option>Phúc Tea – Ninh Kiều 1</option><option>Phúc Tea – Hà Lam</option><option>Phúc Tea – Vĩnh Cửu</option></select></div>
-    <div class="fg"><label class="fl">Loại audit</label><select class="fc"><option>Audit bí ẩn</option><option>Tái audit</option><option>Audit định kỳ</option></select></div>
-    <div class="fg"><label class="fl">Ngày thực hiện</label><input type="date" class="fc"></div>
-    <div style="display:flex;gap:7px">
-      <button class="btn bp" onclick="closeModal('modal-new-audit');toast('Đã tạo phiên audit!','tok')">Tạo phiên audit</button>
-      <button class="btn bo" onclick="closeModal('modal-new-audit')">Hủy</button>
-    </div>
-  </div>
-</div>
-
-<!-- Thêm nhân viên -->
+<!-- New staff -->
 <div class="overlay" id="modal-new-staff">
   <div class="modal">
-    <div class="mh"><div class="mt">Thêm nhân viên</div><button class="mx" onclick="closeModal('modal-new-staff')">×</button></div>
-    <div class="fg"><label class="fl">Họ tên</label><input class="fc" placeholder="Nguyễn Văn A"></div>
-    <div class="fg"><label class="fl">Vị trí</label><select class="fc"><option>Operations Staff</option><option>Nhân viên Setup</option><option>Store Manager</option><option>Nhân viên cửa hàng</option></select></div>
-    <div class="fg"><label class="fl">Phụ trách cửa hàng</label><input class="fc" placeholder="Để trống nếu HQ"></div>
-    <div class="fg"><label class="fl">Ngày bắt đầu</label><input type="date" class="fc"></div>
-    <div style="display:flex;gap:7px">
-      <button class="btn bp" onclick="closeModal('modal-new-staff');saveToSheets('staff',{})">Thêm & lưu</button>
+    <div class="mh"><div class="mt">+ Thêm nhân viên</div><button class="mx" onclick="closeModal('modal-new-staff')">×</button></div>
+    <div class="fg"><label class="fl">Họ tên</label><input class="fc" id="staff-name" placeholder="Nguyễn Văn A"></div>
+    <div class="fg"><label class="fl">Vị trí</label><select class="fc" id="staff-pos"><option>Operations Staff</option><option>NV Setup</option><option>Store Manager</option><option>NV Cửa hàng</option></select></div>
+    <div class="fg"><label class="fl">Phụ trách</label><input class="fc" id="staff-store" placeholder="Cửa hàng / khu vực"></div>
+    <div class="fg"><label class="fl">Ngày bắt đầu</label><input class="fc" type="date" id="staff-date"></div>
+    <div style="display:flex;gap:7px;margin-top:6px">
+      <button class="btn bp" style="flex:1" onclick="addStaff()">Thêm</button>
       <button class="btn bo" onclick="closeModal('modal-new-staff')">Hủy</button>
     </div>
   </div>
 </div>
 
-<!-- Email BOD (báo cáo / kế hoạch) -->
+<!-- Email BOD -->
 <div class="overlay" id="modal-email">
   <div class="modal modal-lg">
-    <div class="mh"><div class="mt" id="email-modal-title">✉️ Gửi cho BOD</div><button class="mx" onclick="closeModal('modal-email')">×</button></div>
-    <div style="background:var(--gold-l);border-radius:var(--rs);padding:11px 13px;margin-bottom:13px;font-size:12px;color:var(--brown-m);line-height:1.6">
-      <strong>Gửi tới:</strong> Lý Tấn Tài (lytantai@phuctea.com.vn)<br>
-      <strong>CC:</strong> Trần Nhật Vũ · Nguyễn Ngọc Phi Yến · HR (hr@phuctea.com.vn)
-    </div>
-    <div class="fg"><label class="fl">Tiêu đề</label><input class="fc" id="email-subject"></div>
-    <div class="fg">
-      <label class="fl" style="display:flex;justify-content:space-between">Nội dung<button class="btn bo bsm" style="text-transform:none;letter-spacing:0;font-weight:600" onclick="aiRewriteEmail()">🤖 AI viết lại</button></label>
-      <textarea class="fc" id="email-body" rows="13"></textarea>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn bp" onclick="sendEmail()">📤 Gửi qua Apps Script</button>
-      <button class="btn bo" onclick="copyEmail()">📋 Copy</button>
+    <div class="mh"><div class="mt" id="email-modal-title">✉️ Gửi Email BOD</div><button class="mx" onclick="closeModal('modal-email')">×</button></div>
+    <div class="fg"><label class="fl">Gửi tới</label><input class="fc" id="email-to" value="lytantai@phuctea.com.vn"></div>
+    <div class="fg"><label class="fl">CC</label><input class="fc" id="email-cc" value="trannhatvu@phuctea.com.vn,phiyen@phuctea.com.vn,hr@phuctea.com.vn"></div>
+    <div class="fg"><label class="fl">Tiêu đề</label><input class="fc" id="email-subject" placeholder="[Operations] Báo cáo tháng..."></div>
+    <div class="fg"><label class="fl">Nội dung</label><textarea class="fc" id="email-body" rows="10"></textarea></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:6px">
+      <button class="btn bp" style="flex:1" onclick="sendEmail()">📤 Gửi qua Apps Script</button>
+      <button class="btn bo" onclick="aiRewriteEmail()">🤖 AI viết lại</button>
       <button class="btn bo" onclick="closeModal('modal-email')">Đóng</button>
     </div>
-    <div style="font-size:11px;color:var(--gray);margin-top:9px">⚠️ Cần cấu hình Apps Script để gửi email thật. Bạn có thể copy nội dung để gửi thủ công qua Gmail.</div>
   </div>
 </div>
 
-<!-- Email gửi cửa hàng (biên bản audit) -->
+<!-- Email Store -->
 <div class="overlay" id="modal-email-store">
-  <div class="modal modal-lg">
-    <div class="mh"><div class="mt">✉️ Gửi biên bản audit về cửa hàng</div><button class="mx" onclick="closeModal('modal-email-store')">×</button></div>
-    <div class="fg"><label class="fl">Email cửa hàng</label><input class="fc" id="store-email" placeholder="storemanager@phuctea.com.vn"></div>
-    <div class="fg"><label class="fl">Tiêu đề</label><input class="fc" id="store-email-subject" value="Biên bản Audit – Kết quả & Action Plan"></div>
-    <div class="fg"><label class="fl">Nội dung biên bản</label><textarea class="fc" id="store-email-body" rows="12"></textarea></div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn bp" onclick="sendAuditEmail()">📤 Gửi cho cửa hàng</button>
-      <button class="btn bo" onclick="copyAuditEmail()">📋 Copy</button>
-      <button class="btn bo" onclick="closeModal('modal-email-store')">Đóng</button>
+  <div class="modal">
+    <div class="mh"><div class="mt">✉️ Gửi biên bản audit</div><button class="mx" onclick="closeModal('modal-email-store')">×</button></div>
+    <div class="fg"><label class="fl">Email cửa hàng</label><input class="fc" id="store-email-to" placeholder="email@phuctea.com.vn"></div>
+    <div class="fg"><label class="fl">Tiêu đề</label><input class="fc" id="store-email-subject" value="Biên bản Audit – Phúc Tea"></div>
+    <div class="fg"><label class="fl">Nội dung</label><textarea class="fc" id="store-email-body" rows="8"></textarea></div>
+    <div style="display:flex;gap:7px;margin-top:6px">
+      <button class="btn bp" style="flex:1" onclick="sendAuditEmail()">📤 Gửi</button>
+      <button class="btn bo" onclick="closeModal('modal-email-store')">Hủy</button>
     </div>
   </div>
 </div>
 
-<!-- AI gợi ý -->
+<!-- AI Advice -->
 <div class="overlay" id="modal-ai-advice">
   <div class="modal">
-    <div class="mh"><div class="mt">🤖 AI Đề xuất</div><button class="mx" onclick="closeModal('modal-ai-advice')">×</button></div>
-    <div class="ai-box" style="margin-bottom:0">
-      <span class="aitag">AI ANALYSIS</span>
-      <div class="ait" id="ai-advice-title" style="margin-top:7px"></div>
-      <div class="aii" id="ai-advice-body"></div>
-    </div>
+    <div class="mh"><div class="mt" id="ai-advice-title">💡 AI Gợi ý</div><button class="mx" onclick="closeModal('modal-ai-advice')">×</button></div>
+    <div id="ai-advice-body" style="font-size:13px;line-height:1.8;color:var(--brown)"></div>
+    <div style="margin-top:14px"><button class="btn bo bfull" onclick="closeModal('modal-ai-advice')">Đóng</button></div>
   </div>
 </div>
 
 <script>
 // ============================================================
-//  CONFIG & STATE
+//  STATE – KHÔNG CÓ MOCK DATA
 // ============================================================
 let CFG = {
   scriptUrl: localStorage.getItem('ops_script_url') || '',
-  apiKey:    localStorage.getItem('ops_api_key') || '',
-  sheetId:   localStorage.getItem('ops_sheet_id') || '1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo'
+  apiKey:    localStorage.getItem('ops_api_key')    || '',
+  sheetId:   localStorage.getItem('ops_sheet_id')   || '1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo'
 };
-const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-let reportText = '', planText = '', auditReportText = '';
-let emailMode = 'report'; // 'report' | 'plan'
 
+// State thực – chỉ chứa data load từ Sheets
 let D = {
-  stores:14, newStores:8, targetStores:30,
-  auditAvg:87, reauditCount:3,
-  auditList:[
-    {name:'Ninh Kiều 1',score:92,date:'15/03'},
-    {name:'Ninh Kiều 2',score:88,date:'16/03'},
-    {name:'Bình Thủy',score:83,date:'17/03'},
-    {name:'Hà Lam',score:74,date:'18/03'},
-    {name:'Vĩnh Cửu',score:78,date:'20/03'},
-    {name:'Thới Lai',score:81,date:'22/03'}
-  ],
-  setupStores:[
-    {name:'Ninh Kiều 3',progress:75,openDate:'05/04/2026',partner:'Nguyễn Văn A'},
-    {name:'Bình Thủy',progress:40,openDate:'20/04/2026',partner:'Trần Thị B'}
-  ],
-  timeline:[
-    {text:'Khai trương Phúc Tea Ninh Kiều 3 – doanh thu ngày đầu 18.2 triệu',time:'25/03/2026',color:'var(--green)'},
-    {text:'Audit The Hoa Hà Lam – 74 điểm, đã lên Action Plan',time:'23/03/2026',color:'var(--gold)'},
-    {text:'Gửi kế hoạch tháng 4 lên BOD – chờ phê duyệt',time:'25/03/2026',color:'var(--blue)'},
-    {text:'Tuyển được Nhân viên Setup – Tăng Hữu Phúc',time:'26/03/2026',color:'var(--teal)'}
-  ]
+  kpi:         { stores:0, newStores:0, targetStores:30, auditAvg:0, reauditCount:0 },
+  auditList:   [],
+  secretList:  [],
+  setupStores: [],
+  allStores:   [],   // danh sách trung tâm – dùng cho mọi dropdown
+  timeline:    [],
+  template:    [],   // MẪU TIMELINE SETUP
 };
+
+let reportText = '', planText = '', auditReportText = '';
+let emailMode = 'report';
 
 // ============================================================
 //  UTILS
 // ============================================================
-function toast(msg,type='tok'){const e=document.getElementById('toastEl');e.textContent=msg;e.className=`toast ${type} on`;setTimeout(()=>e.classList.remove('on'),3400)}
-function load(msg='Đang xử lý...'){document.getElementById('loadMsg').textContent=msg;document.getElementById('loadEl').classList.add('on')}
-function unload(){document.getElementById('loadEl').classList.remove('on')}
-function openModal(id){document.getElementById(id).classList.add('on')}
-function closeModal(id){document.getElementById(id).classList.remove('on')}
+function $(id){ return document.getElementById(id); }
+function toast(msg,type='tok'){
+  const e=$('toastEl'); e.textContent=msg;
+  e.className=`toast ${type} on`;
+  clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('on'),3500);
+}
+function load(msg='Đang xử lý...'){$('loadMsg').textContent=msg;$('loadEl').classList.add('on');}
+function unload(){$('loadEl').classList.remove('on');}
+function openModal(id){$(id).classList.add('on');}
+function closeModal(id){$(id).classList.remove('on');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
 
 function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('pg-'+id).classList.add('on');
+  $('pg-'+id).classList.add('on');
   if(el) el.classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function toggleCheck(el,store,item){
-  el.classList.toggle('done');
-  el.querySelector('.chk-box').textContent=el.classList.contains('done')?'✓':'';
-  // auto-recalc progress if store provided
-  if(store) recalcProgress(store);
+function showAuditTab(id,btn){
+  ['truc-tiep','bi-an','ket-qua'].forEach(t=>$('tab-'+t).style.display='none');
+  $('tab-'+id).style.display='block';
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
 }
 
-function recalcProgress(storeId){
-  const cl=document.getElementById('cl-'+storeId);
-  if(!cl) return;
-  const items=cl.querySelectorAll('.chk-item');
-  const done=[...items].filter(i=>i.classList.contains('done')).length;
-  const pct=Math.round(done/items.length*100);
-  // find progress bar in parent setup-card
-  const card=cl.closest('.setup-card');
-  if(card){
-    card.querySelector('.prog-bar').style.width=pct+'%';
-    card.querySelector('.prog-hd span:last-child').textContent=pct+'%';
-    const bdg=card.querySelector('.bdg');
-    if(bdg) bdg.textContent=(pct>=100?'Hoàn thành':'Đang setup')+'  · '+pct+'%';
-  }
+function toggleCheck(el){
+  el.classList.toggle('done');
+  el.querySelector('.chk-box').textContent=el.classList.contains('done')?'✓':'';
+}
+
+function copyText(txt){
+  if(!txt){toast('Không có nội dung để copy','twarn');return;}
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Đã copy!','tok'));
 }
 
 function setGreeting(){
-  const now=new Date();const h=now.getHours();
+  const now=new Date(); const h=now.getHours();
   const g=h<11?'Chào buổi sáng':h<13?'Chào buổi trưa':h<18?'Chào buổi chiều':'Chào buổi tối';
-  document.getElementById('greeting').textContent=`${g}, Liêm 👋`;
+  $('greeting').textContent=`${g}, Liêm 👋`;
   const days=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-  document.getElementById('today-str').textContent=`${days[now.getDay()]}, ${now.toLocaleDateString('vi-VN')} · Mục tiêu 2026: 30 cửa hàng mới`;
-  const ad=document.getElementById('audit-date');if(ad)ad.value=now.toISOString().split('T')[0];
+  $('today-str').textContent=`${days[now.getDay()]}, ${now.toLocaleDateString('vi-VN')} · Mục tiêu 2026: ${D.kpi.targetStores||30} cửa hàng mới`;
+  const ad=$('audit-date'); if(ad) ad.value=now.toISOString().split('T')[0];
 }
 
 // ============================================================
-//  CONFIG / SETUP MODAL
+//  CONFIG
 // ============================================================
 function openSetup(){
-  if(CFG.scriptUrl)document.getElementById('cfg-script-url').value=CFG.scriptUrl;
-  if(CFG.apiKey)document.getElementById('cfg-api-key').value=CFG.apiKey;
-  if(CFG.sheetId)document.getElementById('cfg-sheet-id').value=CFG.sheetId;
+  if(CFG.scriptUrl) $('cfg-script-url').value=CFG.scriptUrl;
+  if(CFG.apiKey)    $('cfg-api-key').value=CFG.apiKey;
+  if(CFG.sheetId)   $('cfg-sheet-id').value=CFG.sheetId;
   openModal('modal-setup');
 }
 
 function saveConfig(){
-  const sid=document.getElementById('cfg-sheet-id').value.trim();
-  const url=document.getElementById('cfg-script-url').value.trim();
-  const key=document.getElementById('cfg-api-key').value.trim();
-  if(sid){CFG.sheetId=sid;localStorage.setItem('ops_sheet_id',sid)}
-  if(url){CFG.scriptUrl=url;localStorage.setItem('ops_script_url',url)}
-  if(key){CFG.apiKey=key;localStorage.setItem('ops_api_key',key)}
-  localStorage.setItem('ops_configured','1');
+  const sid=$('cfg-sheet-id').value.trim();
+  const url=$('cfg-script-url').value.trim();
+  const key=$('cfg-api-key').value.trim();
+  if(!url){toast('⚠️ Vui lòng nhập Apps Script URL','twarn');return;}
+  if(sid){CFG.sheetId=sid; localStorage.setItem('ops_sheet_id',sid);}
+  if(url){CFG.scriptUrl=url; localStorage.setItem('ops_script_url',url);}
+  if(key){CFG.apiKey=key; localStorage.setItem('ops_api_key',key);}
+  // Update sheet link
+  if(sid) $('sheet-link').href=`https://docs.google.com/spreadsheets/d/${sid}`;
   closeModal('modal-setup');
   toast('✅ Đã lưu cài đặt! Đang đồng bộ...','tok');
-  setTimeout(syncSheets,700);
+  setTimeout(syncAll,600);
 }
 
-function useDemo(){
-  localStorage.setItem('ops_configured','1');
-  closeModal('modal-setup');
-  toast('🎮 Chạy demo với dữ liệu mẫu!','tok');
-  renderDashboard();renderAuditTable();
+function setSyncStatus(ok,text){
+  $('sync-dot').className='sdot '+(ok?'on':'off');
+  $('sync-text').textContent=text;
 }
 
 // ============================================================
-//  SYNC SHEETS
+//  API CALL – qua Apps Script proxy (tránh CORS)
 // ============================================================
-function setSyncStatus(connected,text){
-  document.getElementById('sync-dot').className='sdot '+(connected?'on':'off');
-  document.getElementById('sync-text').textContent=text;
-}
-
-async function syncSheets(){
-  load('Đang kết nối Google Sheets...');
-  if(CFG.scriptUrl){
+async function api(params){
+  if(!CFG.scriptUrl) return {ok:false,error:'Chưa cấu hình Apps Script URL'};
+  try{
+    // Apps Script nhận POST tốt hơn GET cho data lớn
+    const url=CFG.scriptUrl;
+    const res=await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(params),
+      redirect:'follow'
+    });
+    return await res.json();
+  }catch(e){
+    // fallback GET
     try{
-      const res=await fetch(CFG.scriptUrl+'?action=getData');
-      const json=await res.json();
-      if(json.ok){
-        if(json.kpi){Object.assign(D,{stores:json.kpi.stores||D.stores,newStores:json.kpi.newStores||D.newStores,targetStores:json.kpi.targetStores||D.targetStores,auditAvg:json.kpi.auditAvg||D.auditAvg,reauditCount:json.kpi.reauditCount??D.reauditCount})}
-        if(json.auditList?.length)D.auditList=json.auditList;
-        if(json.setupStores?.length)D.setupStores=json.setupStores;
-        if(json.timeline?.length)D.timeline=json.timeline;
-        setSyncStatus(true,'Đã đồng bộ Sheets');
-        unload();renderDashboard();renderAuditTable();
-        toast('✅ Đã đồng bộ từ Google Sheets!','tok');
-        setTimeout(loadAIDashInsight,600);return;
-      }
-    }catch(e){console.warn('Sync error:',e)}
+      const qs=Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(typeof v==='object'?JSON.stringify(v):v)}`).join('&');
+      const res=await fetch(CFG.scriptUrl+'?'+qs,{redirect:'follow'});
+      return await res.json();
+    }catch(e2){
+      return {ok:false,error:e2.message};
+    }
   }
-  await new Promise(r=>setTimeout(r,700));
-  setSyncStatus(false,'Demo mode');unload();
-  renderDashboard();renderAuditTable();
-  toast('🎮 Hiển thị dữ liệu demo (chưa cấu hình Apps Script)','twarn');
 }
 
 // ============================================================
-//  RENDER DASHBOARD
+//  SYNC ALL
+// ============================================================
+async function syncAll(){
+  if(!CFG.scriptUrl){
+    $('cfg-alert').style.display='flex';
+    setSyncStatus(false,'Chưa cấu hình');
+    toast('⚠️ Chưa cấu hình Apps Script. Nhấn ⚙️ Cài đặt.','twarn');
+    return;
+  }
+  $('cfg-alert').style.display='none';
+  load('Đang đồng bộ Google Sheets...');
+  const data=await api({action:'getData'});
+  if(data.ok){
+    if(data.kpi)         D.kpi=data.kpi;
+    if(data.auditList?.length)   D.auditList=data.auditList;
+    if(data.setupStores?.length) D.setupStores=data.setupStores;
+    if(data.timeline?.length)    D.timeline=data.timeline;
+    setSyncStatus(true,'Đồng bộ '+new Date().toLocaleTimeString('vi-VN'));
+    toast('✅ Đồng bộ thành công!','tok');
+  }else{
+    setSyncStatus(false,'Lỗi kết nối');
+    toast('❌ Lỗi: '+(data.error||'Không kết nối được'),'terr');
+  }
+  unload();
+  renderDashboard();
+  renderAuditTable();
+  renderAuditStatsFromD();
+  await loadStores();
+  setTimeout(loadAIDashInsight,800);
+}
+
+// ============================================================
+//  DASHBOARD
 // ============================================================
 function renderDashboard(){
-  document.getElementById('kpi-stores').textContent=D.stores;
-  document.getElementById('kpi-new').textContent=`${D.newStores}/${D.targetStores}`;
-  const p=Math.round(D.newStores/D.targetStores*100);
-  document.getElementById('kpi-new-sub').textContent=p+'% mục tiêu';
-  document.getElementById('kpi-new-sub').className='kc '+(p>=40?'up':'warn');
-  document.getElementById('kpi-audit').textContent=D.auditAvg;
-  document.getElementById('kpi-audit-sub').textContent=D.auditAvg>=85?'↑ Đạt mục tiêu ≥85':'↓ Dưới mục tiêu';
-  document.getElementById('kpi-audit-sub').className='kc '+(D.auditAvg>=85?'up':'dn');
-  document.getElementById('kpi-reaudit').textContent=D.reauditCount;
-  document.getElementById('kpi-reaudit').style.color=D.reauditCount>0?'var(--red)':'var(--green)';
+  const k=D.kpi;
+  $('kpi-stores').textContent=k.stores||0;
+  $('kpi-stores-sub').textContent=`Tổng cửa hàng hoạt động`;
+  $('kpi-stores-sub').className='kc up';
+
+  $('kpi-new').textContent=`${k.newStores||0}/${k.targetStores||30}`;
+  const p=k.targetStores?Math.round((k.newStores||0)/k.targetStores*100):0;
+  $('kpi-new-sub').textContent=p+'% mục tiêu';
+  $('kpi-new-sub').className='kc '+(p>=40?'up':'warn');
+
+  $('kpi-audit').textContent=k.auditAvg||0;
+  $('kpi-audit-sub').textContent=k.auditAvg>=85?'↑ Đạt mục tiêu ≥85':'↓ Dưới mục tiêu';
+  $('kpi-audit-sub').className='kc '+(k.auditAvg>=85?'up':'dn');
+  $('kpi-audit').style.color=k.auditAvg>=85?'var(--green)':k.auditAvg>=70?'var(--gold)':'var(--red)';
+
+  $('kpi-reaudit').textContent=k.reauditCount||0;
+  $('kpi-reaudit').style.color=(k.reauditCount||0)>0?'var(--red)':'var(--green)';
+
   // alerts
   let ah='';
-  if(D.reauditCount>0)ah+=`<div class="alert ay">⚠️ <span><strong>${D.reauditCount} cửa hàng</strong> cần tái audit trong 15 ngày!</span></div>`;
-  document.getElementById('alerts-container').innerHTML=ah;
+  if((k.reauditCount||0)>0){
+    const names=D.auditList.filter(a=>a.score<85).map(a=>`${a.name}(${a.score}đ)`).slice(0,5).join(', ');
+    ah+=`<div class="alert ay">⚠️ <span><strong>${k.reauditCount} cửa hàng</strong> cần tái audit trong 15 ngày: ${names}</span></div>`;
+  }
+  $('alerts-container').innerHTML=ah;
+
   // setup progress
-  let sh=D.setupStores.map(s=>{const c=s.progress>=70?'var(--gold)':s.progress>=40?'var(--blue)':'var(--gray)';return`<div class="prog-item"><div class="prog-hd"><span>${s.name}</span><span style="color:${c};font-weight:700">${s.progress}%</span></div><div class="prog-bg"><div class="prog-bar" style="width:${s.progress}%;background:${c}"></div></div></div>`}).join('');
-  document.getElementById('setup-progress-dash').innerHTML=sh||'<div style="color:var(--gray);font-size:13px">Không có cửa hàng đang setup</div>';
+  const sl=D.setupStores.slice(0,5);
+  if(sl.length===0){
+    $('setup-progress-dash').innerHTML='<div class="empty-state"><div class="ei">🏪</div>Chưa có cửa hàng đang setup</div>';
+  }else{
+    $('setup-progress-dash').innerHTML=sl.map(s=>{
+      const c=s.progress>=70?'var(--gold)':s.progress>=40?'var(--blue)':'var(--gray)';
+      return`<div class="prog-item"><div class="prog-hd"><span>${s.name}</span><span style="color:${c};font-weight:700">${s.progress}%</span></div><div class="prog-bg"><div class="prog-bar" style="width:${s.progress}%;background:${c}"></div></div></div>`;
+    }).join('');
+  }
+
   // audit list
-  let al=D.auditList.map(a=>{const c=a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';return`<div class="store-item"><div class="store-dot" style="background:${c}"></div><div class="store-name">${a.name}</div><div class="store-score" style="color:${c}">${a.score}</div></div>`}).join('');
-  document.getElementById('audit-list-dash').innerHTML=al;
+  if(D.auditList.length===0){
+    $('audit-list-dash').innerHTML='<div class="empty-state"><div class="ei">✅</div>Chưa có dữ liệu audit</div>';
+  }else{
+    $('audit-list-dash').innerHTML=D.auditList.slice(0,8).map(a=>{
+      const c=a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';
+      return`<div class="store-item"><div class="store-dot" style="background:${c}"></div><div class="store-name">${a.name}</div><div class="store-score" style="color:${c}">${a.score}</div></div>`;
+    }).join('');
+  }
+
   // timeline
-  let tl=D.timeline.map(t=>`<div class="tl-item"><div class="tl-dot" style="background:${t.color}"></div><div><div class="tl-txt">${t.text}</div><div class="tl-time">${t.time}</div></div></div>`).join('');
-  document.getElementById('timeline-dash').innerHTML=tl;
+  if(D.timeline.length===0){
+    $('timeline-dash').innerHTML='<div class="empty-state"><div class="ei">📅</div>Chưa có hoạt động</div>';
+  }else{
+    $('timeline-dash').innerHTML=D.timeline.map(t=>`<div class="tl-item"><div class="tl-dot" style="background:${t.color||'var(--gray)'}"></div><div><div class="tl-txt">${t.text}</div><div class="tl-time">${t.time}</div></div></div>`).join('');
+  }
+
+  $('today-str').textContent=`${new Date().toLocaleDateString('vi-VN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · Mục tiêu 2026: ${k.targetStores||30} cửa hàng mới`;
+}
+
+// ============================================================
+//  STORES – DANH SÁCH TRUNG TÂM
+// ============================================================
+async function loadStores(){
+  if(!CFG.scriptUrl) return;
+  const data=await api({action:'getData'});
+  if(data.ok && data.setupStores){
+    D.allStores=data.setupStores.map(s=>s.name);
+    // Thêm cửa hàng từ auditList nếu chưa có
+    (data.auditList||[]).forEach(a=>{ if(!D.allStores.includes(a.name)) D.allStores.push(a.name); });
+  }
+  renderStoresTable();
+  updateAllDropdowns();
+}
+
+function renderStoresTable(){
+  const tbody=$('stores-tbody');
+  if(!D.allStores.length){
+    tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="ei">🏬</div>Chưa có dữ liệu. Nhấn đồng bộ hoặc thêm cửa hàng.</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML=D.setupStores.map(s=>{
+    const status=s.progress>=100?'<span class="bdg bg2">Đã khai trương</span>':'<span class="bdg by2">Đang setup</span>';
+    return`<tr>
+      <td style="font-weight:600">${s.name}</td>
+      <td>Phúc Tea</td>
+      <td>${s.partner||'–'}</td>
+      <td>–</td>
+      <td>${status}</td>
+      <td><button class="btn bo bsm" onclick="deleteStore('${s.name}')">🗑</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function updateAllDropdowns(){
+  const stores=D.allStores;
+  const selectors=['audit-store','report-store'];
+  selectors.forEach(id=>{
+    const sel=$(id); if(!sel) return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">-- Chọn cửa hàng --</option>';
+    stores.forEach(n=>{ sel.innerHTML+=`<option value="${n}"${n===cur?' selected':''}>${n}</option>`; });
+  });
+}
+
+async function addStore(){
+  const name=$('ns-name').value.trim();
+  if(!name){toast('⚠️ Vui lòng nhập tên cửa hàng','twarn');return;}
+  load('Đang thêm cửa hàng...');
+  const data={
+    name, brand:$('ns-brand').value,
+    partner:$('ns-partner').value,
+    address:$('ns-addr').value,
+    startDate:$('ns-start').value,
+    openDate:$('ns-launch').value,
+    template:'Standard'
+  };
+  const res=await api({action:'save',type:'newStore',data});
+  unload();
+  if(res.ok){
+    toast(`✅ Đã thêm ${name}!`,'tok');
+    closeModal('modal-new-store');
+    // Reset form
+    ['ns-name','ns-partner','ns-addr','ns-start','ns-launch'].forEach(id=>{$(id).value='';});
+    // Update local state
+    if(!D.allStores.includes(name)) D.allStores.push(name);
+    D.setupStores.push({name,partner:data.partner,openDate:'',progress:0,status:'Mới bắt đầu'});
+    D.kpi.newStores=(D.kpi.newStores||0)+1;
+    renderDashboard();
+    renderStoresTable();
+    updateAllDropdowns();
+    loadSetupFromSheets();
+  }else{
+    toast('❌ '+(res.error||'Lỗi không xác định'),'terr');
+  }
+}
+
+async function deleteStore(name){
+  if(!confirm(`Xóa cửa hàng "${name}"?`)) return;
+  D.allStores=D.allStores.filter(n=>n!==name);
+  D.setupStores=D.setupStores.filter(s=>s.name!==name);
+  renderStoresTable();
+  updateAllDropdowns();
+  renderDashboard();
+  toast(`🗑 Đã xóa ${name} khỏi danh sách local. Xóa trong Sheets nếu cần.`,'twarn');
+}
+
+// ============================================================
+//  SETUP TIMELINE
+// ============================================================
+async function loadSetupTemplate(){
+  if(!CFG.scriptUrl) return [];
+  const data=await api({action:'getSetupTemplate'});
+  if(data.ok && data.template) D.template=data.template;
+  return D.template;
+}
+
+async function loadSetupFromSheets(){
+  load('Đang tải dữ liệu setup...');
+  await loadSetupTemplate();
+  const data=await api({action:'getData'});
+  if(data.ok && data.setupStores) D.setupStores=data.setupStores;
+  unload();
+  renderSetupStores();
+  const k=D.kpi;
+  $('s-setting').textContent=D.setupStores.filter(s=>s.status!=='Đã khai trương').length;
+  $('s-launched').textContent=(k.newStores||0);
+  $('s-target').textContent=(k.targetStores||30);
+}
+
+function renderSetupStores(){
+  const list=$('setup-stores-list');
+  if(!D.setupStores.length){
+    list.innerHTML='<div class="empty-state"><div class="ei">🏪</div>Không có cửa hàng đang setup. Thêm cửa hàng mới để bắt đầu.</div>';
+    return;
+  }
+  list.innerHTML=D.setupStores.map((s,i)=>{
+    const pct=s.progress||0;
+    const c=pct>=70?'var(--gold)':pct>=40?'var(--blue)':'var(--gray)';
+    const tasks=D.template.length?D.template:getDefaultTasks();
+    const sid='setup_'+i;
+    const checks=tasks.map((t,ti)=>`
+      <div class="chk-item" id="${sid}_${ti}" onclick="toggleSetupCheck('${sid}_${ti}','${s.name}',${i})">
+        <div class="chk-box"></div>
+        <div>
+          <div class="chk-text">${t.task}</div>
+          <div class="chk-sub">${t.phase||''} ${t.duration?'· '+t.duration:''} ${t.owner?'· '+t.owner:''}</div>
+        </div>
+      </div>`).join('');
+    return`<div class="setup-card" id="card_${sid}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-weight:700;font-size:15px">${s.name}</div>
+          <div style="font-size:12px;color:var(--gray);margin-top:2px">${s.partner?'Đối tác: '+s.partner+' · ':''} ${s.openDate?'Khai trương: '+s.openDate:''}</div>
+        </div>
+        <span class="bdg ${pct>=100?'bg2':'by2'}" id="bdg_${sid}">${pct>=100?'Hoàn thành':'Đang setup'} · ${pct}%</span>
+      </div>
+      <div class="prog-item">
+        <div class="prog-hd"><span style="font-size:12px">Tiến độ tổng thể</span><span id="pct_${sid}" style="color:${c};font-weight:700">${pct}%</span></div>
+        <div class="prog-bg"><div class="prog-bar" id="bar_${sid}" style="width:${pct}%;background:${c}"></div></div>
+      </div>
+      <div class="sdiv">Checklist theo Mẫu Timeline Setup</div>
+      <div id="cl_${sid}">${checks}</div>
+      <div style="margin-top:13px">
+        <div class="fg"><label class="fl">Ghi chú / Kết quả</label><textarea class="fc" rows="2" id="note_${sid}" placeholder="Nhập kết quả hoặc ghi chú..."></textarea></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn bp bsm" onclick="saveSetupProgress('${s.name}','${sid}')">💾 Lưu lên Sheets</button>
+          <button class="btn bo bsm" onclick="markLaunched('${s.name}','${sid}')">🎉 Đã khai trương</button>
+          <button class="btn bo bsm" onclick="aiSetupAdvice('${s.name}',${pct})">🤖 AI gợi ý</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getDefaultTasks(){
+  return [
+    {task:'Xác nhận mặt bằng & ký hợp đồng',phase:'Giai đoạn 1',duration:'Tuần 1',owner:'Operations Leader'},
+    {task:'Giao đồng phục nhân viên',phase:'Giai đoạn 1',duration:'Tuần 1',owner:'Operations Staff'},
+    {task:'Lắp đặt thiết bị & bàn giao dụng cụ',phase:'Giai đoạn 2',duration:'Tuần 2-3',owner:'NV Setup'},
+    {task:'Đào tạo nhân viên công thức & quy trình',phase:'Giai đoạn 3',duration:'Tuần 4',owner:'Operations Leader'},
+    {task:'Soft opening & kiểm tra vận hành',phase:'Giai đoạn 4',duration:'Ngày -3',owner:'Operations Leader'},
+    {task:'Audit trước khai trương (≥85 điểm)',phase:'Giai đoạn 4',duration:'Ngày -2',owner:'Operations Leader'},
+    {task:'Khai trương chính thức & giám sát ngày đầu',phase:'Giai đoạn 4',duration:'Ngày KT',owner:'Operations Leader'},
+  ];
+}
+
+function toggleSetupCheck(checkId,storeName,storeIdx){
+  const el=$(checkId); if(!el) return;
+  el.classList.toggle('done');
+  el.querySelector('.chk-box').textContent=el.classList.contains('done')?'✓':'';
+  // recalc progress
+  const cl=$(`cl_setup_${storeIdx}`)||el.parentElement;
+  const items=cl.querySelectorAll('.chk-item');
+  const done=[...items].filter(i=>i.classList.contains('done')).length;
+  const pct=items.length?Math.round(done/items.length*100):0;
+  const sid='setup_'+storeIdx;
+  const pctEl=$('pct_'+sid); if(pctEl) pctEl.textContent=pct+'%';
+  const barEl=$('bar_'+sid); if(barEl) barEl.style.width=pct+'%';
+  const bdgEl=$('bdg_'+sid); if(bdgEl) bdgEl.textContent=(pct>=100?'Hoàn thành':'Đang setup')+' · '+pct+'%';
+  if(D.setupStores[storeIdx]) D.setupStores[storeIdx].progress=pct;
+}
+
+async function saveSetupProgress(storeName,sid){
+  const note=$('note_'+sid)?.value||'';
+  const cl=$('cl_'+sid); if(!cl) return;
+  const items=cl.querySelectorAll('.chk-item');
+  const done=[...items].filter(i=>i.classList.contains('done')).length;
+  const pct=items.length?Math.round(done/items.length*100):0;
+  load('Đang lưu lên Sheets...');
+  const res=await api({action:'save',type:'setup',data:{store:storeName,progress:pct,note}});
+  unload();
+  if(res.ok) toast(`✅ Đã lưu tiến độ ${storeName}: ${pct}%`,'tok');
+  else toast('❌ '+(res.error||'Lỗi lưu'),'terr');
+}
+
+async function markLaunched(storeName,sid){
+  if(!confirm(`Xác nhận ${storeName} đã khai trương?`)) return;
+  load('Đang cập nhật...');
+  const res=await api({action:'save',type:'setup',data:{store:storeName,progress:100,note:'Đã khai trương'}});
+  unload();
+  if(res.ok){
+    toast(`🎉 ${storeName} đã khai trương!`,'tok');
+    D.kpi.newStores=(D.kpi.newStores||0)+1;
+    renderDashboard();
+    loadSetupFromSheets();
+  }else toast('❌ '+(res.error||'Lỗi'),'terr');
 }
 
 // ============================================================
 //  AUDIT
 // ============================================================
-function showAuditTab(id,btn){
-  ['truc-tiep','bi-an','ket-qua'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
-  document.getElementById('tab-'+id).style.display='block';
-  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-}
-
 function calcAudit(){
-  const inputs=document.querySelectorAll('.audit-inp');
-  let t=0;inputs.forEach(i=>t+=parseInt(i.value)||0);
-  const el=document.getElementById('audit-total'),st=document.getElementById('audit-status');
+  const vals=[+($('a1').value||0),+($('a2').value||0),+($('a3').value||0),+($('a4').value||0),+($('a5').value||0)];
+  const t=vals.reduce((a,b)=>a+b,0);
+  const el=$('audit-total'), st=$('audit-status');
   el.textContent=t;
   if(t>=85){el.style.color='var(--green)';st.textContent='✓ Đạt tiêu chuẩn';st.style.color='var(--green)';}
   else if(t>=70){el.style.color='var(--gold)';st.textContent='⚠ Cần tái audit trong 15 ngày';st.style.color='var(--gold)';}
   else{el.style.color='var(--red)';st.textContent='✗ Dưới tiêu chuẩn – Hành động ngay';st.style.color='var(--red)';}
 }
 
-function renderAuditTable(){
-  const body=document.getElementById('audit-body-direct');if(!body)return;
-  body.innerHTML=D.auditList.map(a=>{
-    const c=a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';
-    const bdg=a.score>=85?'<span class="bdg bg2">Đạt</span>':a.score>=80?'<span class="bdg by2">Theo dõi</span>':'<span class="bdg br2">Tái audit</span>';
-    return`<tr><td>${a.name}</td><td style="color:${c};font-weight:700">${a.score}</td><td>${a.date}</td><td>${bdg}</td><td><button class="btn bo bsm" onclick="viewAuditReport('${a.name}',${a.score})">📋 Biên bản</button></td></tr>`;
-  }).join('');
-  const avg=document.getElementById('audit-avg');if(avg)avg.textContent=D.auditAvg;
-  const cnt=document.getElementById('audit-reaudit-cnt');if(cnt)cnt.textContent=D.reauditCount;
-  const alertEl=document.getElementById('audit-alert-msg');
-  if(alertEl&&D.reauditCount>0){
-    const names=D.auditList.filter(a=>a.score<85).map(a=>`${a.name} (${a.score}đ)`).join(', ');
-    alertEl.innerHTML=`<strong>${D.reauditCount} cửa hàng</strong> dưới 85 điểm cần tái audit: ${names}`;
-  }
-}
-
-async function saveAudit(){
-  const store=document.getElementById('audit-store').value;
-  const total=document.getElementById('audit-total').textContent;
-  const date=document.getElementById('audit-date').value;
-  const type=document.getElementById('audit-type').value;
-  const plan=document.getElementById('action-plan').value;
-  const idx=D.auditList.findIndex(a=>store.includes(a.name));
-  if(idx>=0){D.auditList[idx].score=parseInt(total);D.auditList[idx].date=new Date().toLocaleDateString('vi-VN').split('/').slice(0,2).join('/');}
-  D.auditAvg=Math.round(D.auditList.reduce((a,b)=>a+b.score,0)/D.auditList.length);
-  D.reauditCount=D.auditList.filter(a=>a.score<85).length;
-  renderDashboard();renderAuditTable();
-  await saveToSheets('audit',{store,score:parseInt(total),date,type,actionPlan:plan});
-  toast(`✅ Đã lưu audit ${store}: ${total} điểm`,'tok');
-}
-
 async function loadAuditData(){
-  load('Đang tải kết quả từ Google Form Audit TT...');
-  await new Promise(r=>setTimeout(r,800));
-  if(CFG.scriptUrl){
-    try{
-      const res=await fetch(CFG.scriptUrl+'?action=getAuditData');
-      const json=await res.json();
-      if(json.ok&&json.auditList){D.auditList=json.auditList;renderAuditTable();}
-    }catch(e){}
-  }
-  unload();toast('✅ Đã tải kết quả audit từ Google Form!','tok');
+  load('Đang tải audit từ Google Form...');
+  const data=await api({action:'getAuditData'});
+  unload();
+  if(data.ok && data.auditList){
+    D.auditList=data.auditList;
+    if(data.avg!==undefined) D.kpi.auditAvg=data.avg;
+    if(data.reauditCount!==undefined) D.kpi.reauditCount=data.reauditCount;
+    renderAuditTable();
+    renderAuditStatsFromD();
+    toast('✅ Đã tải dữ liệu audit từ Google Form!','tok');
+  }else toast('❌ '+(data.error||'Lỗi tải audit'),'terr');
 }
 
 async function loadSecretAuditData(){
-  load('Đang tải kết quả từ Google Form KHBM...');
-  await new Promise(r=>setTimeout(r,800));
-  unload();toast('✅ Đã tải kết quả audit bí ẩn!','tok');
+  load('Đang tải audit bí ẩn...');
+  const data=await api({action:'getSecretAudit'});
+  unload();
+  if(data.ok && data.secretAuditList){
+    D.secretList=data.secretAuditList;
+    renderSecretAuditTable();
+    toast('✅ Đã tải audit bí ẩn!','tok');
+  }else toast('❌ '+(data.error||'Lỗi'),'terr');
+}
+
+function renderAuditTable(){
+  const body=$('audit-body-direct');
+  if(!D.auditList.length){
+    body.innerHTML='<tr><td colspan="5"><div class="empty-state" style="padding:20px">Chưa có dữ liệu. Nhấn "Làm mới".</div></td></tr>';
+    return;
+  }
+  body.innerHTML=D.auditList.map(a=>{
+    const c=a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';
+    const bdg=a.score>=85?'<span class="bdg bg2">Đạt</span>':a.score>=80?'<span class="bdg by2">Theo dõi</span>':'<span class="bdg br2">Tái audit</span>';
+    return`<tr><td>${a.name}</td><td style="color:${c};font-weight:700">${a.score}</td><td>${a.date||'–'}</td><td>${bdg}</td><td><button class="btn bo bsm" onclick="viewAuditReport('${a.name}',${a.score})">📋 Biên bản</button></td></tr>`;
+  }).join('');
+}
+
+function renderSecretAuditTable(){
+  const body=$('audit-body-secret');
+  if(!D.secretList.length){
+    body.innerHTML='<tr><td colspan="5"><div class="empty-state" style="padding:20px">Chưa có dữ liệu</div></td></tr>';
+    return;
+  }
+  body.innerHTML=D.secretList.map(a=>{
+    const c=a.score>=85?'var(--green)':a.score>=70?'var(--gold)':'var(--red)';
+    const bdg=a.score>=85?'<span class="bdg bg2">Tốt</span>':a.score>=70?'<span class="bdg by2">TB</span>':'<span class="bdg br2">Cần cải thiện</span>';
+    return`<tr><td>${a.timestamp||'–'}</td><td>${a.store}</td><td style="color:${c};font-weight:700">${a.score}</td><td style="max-width:200px;white-space:normal">${a.comment||'–'}</td><td>${bdg}</td></tr>`;
+  }).join('');
+}
+
+function renderAuditStatsFromD(){
+  const avg=D.kpi.auditAvg||0; const cnt=D.kpi.reauditCount||0;
+  const avgEl=$('audit-avg'); if(avgEl){avgEl.textContent=avg; avgEl.style.color=avg>=85?'var(--green)':avg>=70?'var(--gold)':'var(--red)';}
+  const subEl=$('audit-avg-sub'); if(subEl){subEl.textContent=avg>=85?'✓ Đạt mục tiêu ≥85':'Cần cải thiện'; subEl.className='kc '+(avg>=85?'up':'dn');}
+  const cntEl=$('audit-reaudit-cnt'); if(cntEl) cntEl.textContent=cnt;
+  const doneEl=$('audit-done'); if(doneEl) doneEl.textContent=D.auditList.length;
+  // alerts
+  const ac=$('audit-alerts-container'); if(!ac) return;
+  ac.innerHTML=cnt>0?`<div class="alert ay">⚠️ <span><strong>${cnt} cửa hàng</strong> dưới 85 điểm cần tái audit: ${D.auditList.filter(a=>a.score<85).map(a=>`${a.name}(${a.score}đ)`).join(', ')}</span></div>`:'';
+}
+
+async function saveAudit(){
+  const store=$('audit-store').value;
+  if(!store){toast('⚠️ Chọn cửa hàng trước','twarn');return;}
+  const v1=+($('a1').value||0), v2=+($('a2').value||0), v3=+($('a3').value||0), v4=+($('a4').value||0), v5=+($('a5').value||0);
+  const total=v1+v2+v3+v4+v5;
+  load('Đang lưu kết quả audit...');
+  const res=await api({action:'save',type:'audit',data:{
+    store, score:total,
+    date:$('audit-date').value,
+    type:$('audit-type').value,
+    actionPlan:$('action-plan').value,
+    scores:{hygiene:v1,quality:v2,service:v3,uniform:v4,ops:v5}
+  }});
+  unload();
+  if(res.ok){
+    toast(`✅ Đã lưu audit ${store}: ${total} điểm`,'tok');
+    $('action-plan').value='';
+    // Cập nhật local state
+    const idx=D.auditList.findIndex(a=>a.name===store||store.includes(a.name));
+    const date=new Date().toLocaleDateString('vi-VN').split('/').slice(0,2).join('/');
+    if(idx>=0) D.auditList[idx]={...D.auditList[idx],score:total,date};
+    else D.auditList.push({name:store,score:total,date});
+    D.kpi.auditAvg=Math.round(D.auditList.reduce((s,a)=>s+a.score,0)/D.auditList.length);
+    D.kpi.reauditCount=D.auditList.filter(a=>a.score<85).length;
+    renderAuditTable(); renderAuditStatsFromD(); renderDashboard();
+  }else toast('❌ '+(res.error||'Lỗi lưu'),'terr');
 }
 
 function viewAuditReport(store,score){
-  document.getElementById('report-store').value=store;
+  const sel=$('report-store');
+  for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===store||sel.options[i].text===store){sel.selectedIndex=i;break;}}
   showAuditTab('ket-qua',document.querySelectorAll('.ptab')[2]);
-  generateAuditReport();
-}
-
-function viewSecretAuditReport(store,score){
-  showAuditTab('ket-qua',document.querySelectorAll('.ptab')[2]);
-  document.getElementById('report-type').value='Audit bí ẩn';
-  document.getElementById('report-store').value=store;
   generateAuditReport();
 }
 
 function generateAuditReport(){
-  const store=document.getElementById('report-store').value||'Phúc Tea – Ninh Kiều 1';
-  const type=document.getElementById('report-type').value;
-  const entry=D.auditList.find(a=>store.includes(a.name))||{score:87,date:new Date().toLocaleDateString('vi-VN')};
+  const store=$('report-store').value||$('report-store').options[$('report-store').selectedIndex]?.text||'';
+  if(!store){toast('⚠️ Chọn cửa hàng','twarn');return;}
+  const type=$('report-type').value;
+  const entry=D.auditList.find(a=>a.name===store||store.includes(a.name))||D.secretList.find(a=>a.store===store)||{score:0,date:'–'};
+  const score=entry.score||0;
   const today=new Date().toLocaleDateString('vi-VN');
-  const status=entry.score>=85?'ĐẠT TIÊU CHUẨN':entry.score>=70?'CẦN TÁI AUDIT':'DƯỚI TIÊU CHUẨN';
+  const status=score>=85?'ĐẠT TIÊU CHUẨN':score>=70?'CẦN TÁI AUDIT':'DƯỚI TIÊU CHUẨN – KHẨN CẤP';
   auditReportText=`BIÊN BẢN AUDIT – ${type.toUpperCase()}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Cửa hàng   : ${store}
-Loại audit : ${type}
-Ngày audit : ${entry.date || today}
-Ngày lập   : ${today}
-Người thực hiện: Dương Thanh Liêm
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Cửa hàng    : ${store}
+Loại audit  : ${type}
+Ngày audit  : ${entry.date||today}
+Ngày lập    : ${today}
+Người thực hiện: Dương Thanh Liêm – Operations Leader
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 KẾT QUẢ CHẤM ĐIỂM
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Vệ sinh & ATTP          : ${Math.round(entry.score*0.26)}/25
-• Chất lượng sản phẩm     : ${Math.round(entry.score*0.26)}/25
-• Dịch vụ khách hàng      : ${Math.round(entry.score*0.21)}/20
-• Đồng phục & thương hiệu : ${Math.round(entry.score*0.15)}/15
-• Vận hành & quy trình    : ${Math.round(entry.score*0.12)}/15
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TỔNG ĐIỂM: ${entry.score}/100  →  ${status}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Vệ sinh & ATTP          : /25
+• Chất lượng sản phẩm     : /25
+• Dịch vụ khách hàng      : /20
+• Đồng phục & thương hiệu : /15
+• Vận hành & quy trình    : /15
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TỔNG ĐIỂM: ${score}/100  →  ${status}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️ ĐIỂM CẦN CẢI THIỆN
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${entry.score<85?'• Cần tái audit trong vòng 15 ngày\n• Lên action plan chi tiết cho từng tiêu chí yếu\n• Giám đốc vùng theo dõi hàng tuần':'• Duy trì kết quả hiện tại\n• Tập trung cải thiện điểm dịch vụ khách hàng'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${score<85?'⚠️ CẦN CẢI THIỆN:\n• Tái audit trong 15 ngày\n• Lên action plan chi tiết\n• Giám đốc vùng theo dõi hàng tuần':'✅ GHI NHẬN:\n• Duy trì kết quả hiện tại\n• Chia sẻ best practice toàn hệ thống'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 ACTION PLAN
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${entry.score<85?'1. Họp nhân viên phổ biến kết quả audit trong 24h\n2. Lên lịch tái audit trong 15 ngày\n3. Trưởng ca giám sát thực hiện hàng ngày':'1. Chia sẻ kết quả tốt với toàn hệ thống\n2. Ghi nhận nhân viên xuất sắc\n3. Chuẩn bị cho audit tiếp theo'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 ACTION PLAN (hoàn thành trong 48h)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${score<85?'1. Họp nhân viên phổ biến kết quả trong 24h\n2. Lên lịch tái audit trong 15 ngày\n3. Trưởng ca giám sát hàng ngày\n4. Báo cáo cải tiến về Operations sau 7 ngày':'1. Ghi nhận và khen thưởng nhân viên\n2. Duy trì tiêu chuẩn cho audit kỳ sau\n3. Chia sẻ kết quả tốt toàn hệ thống'}
 
 Người lập: Dương Thanh Liêm · Operations Leader
-Xác nhận: ___________________`;
-  const preview=document.getElementById('audit-report-preview');
-  preview.textContent=auditReportText;preview.style.color='var(--brown)';
-  document.getElementById('btn-copy-audit').style.display='';
-  document.getElementById('btn-email-store').style.display='';
-  document.getElementById('store-email-body').value=auditReportText;
-  document.getElementById('store-email-subject').value=`Biên bản Audit – ${store} – ${today}`;
-}
-
-function copyAuditReport(){navigator.clipboard.writeText(auditReportText).then(()=>toast('✅ Đã copy biên bản!','tok'))}
-function copyAuditEmail(){const b=document.getElementById('store-email-body').value;navigator.clipboard.writeText(b).then(()=>toast('✅ Đã copy!','tok'))}
-function previewAuditReport(){generateAuditReport()}
-
-async function sendAuditEmail(){
-  const email=document.getElementById('store-email').value;
-  if(!email){toast('Nhập email cửa hàng!','terr');return;}
-  const subject=document.getElementById('store-email-subject').value;
-  const body=document.getElementById('store-email-body').value;
-  await sendEmailViaScript(email,'',subject,body);
-  closeModal('modal-email-store');
+Ngày ký: _______________ · Xác nhận: ___________________`;
+  const prev=$('audit-report-preview');
+  prev.textContent=auditReportText; prev.style.color='var(--brown)';
+  $('btn-copy-audit').style.display='';
+  $('btn-email-store').style.display='';
+  $('store-email-body').value=auditReportText;
+  $('store-email-subject').value=`Biên bản Audit – ${store}`;
 }
 
 // ============================================================
-//  SETUP
+//  NHÂN SỰ
 // ============================================================
-async function saveSetupProgress(storeName,storeId){
-  const cl=document.getElementById('cl-'+storeId);
-  const items=cl?cl.querySelectorAll('.chk-item'):[];
-  const done=[...items].filter(i=>i.classList.contains('done')).length;
-  const pct=items.length?Math.round(done/items.length*100):0;
-  const note=document.getElementById('note-'+storeId)?.value||'';
-  await saveToSheets('setup',{store:storeName,progress:pct,note});
-  toast(`💾 Đã lưu tiến độ ${storeName}: ${pct}%`,'tok');
+async function addStaff(){
+  const name=$('staff-name').value.trim();
+  if(!name){toast('⚠️ Nhập họ tên','twarn');return;}
+  load('Đang lưu...');
+  const res=await api({action:'save',type:'staff',data:{
+    name, position:$('staff-pos').value,
+    store:$('staff-store').value,
+    startDate:$('staff-date').value
+  }});
+  unload();
+  if(res.ok){
+    toast(`✅ Đã thêm ${name}`,'tok');
+    closeModal('modal-new-staff');
+    ['staff-name','staff-store','staff-date'].forEach(id=>{$(id).value='';});
+  }else toast('❌ '+(res.error||'Lỗi'),'terr');
 }
 
-async function addNewStore(){
-  const name=document.getElementById('ns-name').value;
-  if(!name){toast('Nhập tên cửa hàng!','terr');return;}
-  const data={name:document.getElementById('ns-brand').value+' – '+name,partner:document.getElementById('ns-partner').value,startDate:document.getElementById('ns-start').value,openDate:document.getElementById('ns-open').value,address:document.getElementById('ns-address').value,template:document.getElementById('ns-template').value};
-  D.setupStores.push({name,progress:0,openDate:data.openDate,partner:data.partner});
-  closeModal('modal-new-store');
-  await saveToSheets('newStore',data);
-  toast(`✅ Đã thêm ${data.name}!`,'tok');
-}
-
-async function loadSetupFromSheets(){
-  load('Đang tải Mẫu Timeline từ Sheets...');
-  await new Promise(r=>setTimeout(r,800));
-  if(CFG.scriptUrl){try{const res=await fetch(CFG.scriptUrl+'?action=getSetupTemplate');const json=await res.json();if(json.ok)toast('✅ Đã tải mẫu timeline!','tok');}catch(e){}}
-  unload();toast('✅ Đã tải mẫu timeline setup!','tok');
-}
-
-// ============================================================
-//  SAVE TO SHEETS
-// ============================================================
-async function saveToSheets(type,data){
-  if(!CFG.scriptUrl){toast('⚠️ Chưa cấu hình Apps Script URL.','twarn');return;}
-  load('Đang lưu lên Google Sheets...');
-  try{
-    await fetch(CFG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'save',type,data,timestamp:new Date().toISOString()})});
-    unload();toast('✅ Đã lưu lên Google Sheets!','tok');
-  }catch(e){unload();toast('❌ Lỗi kết nối Sheets.','terr');}
+async function saveTraining(){
+  const note=$('training-note').value.trim();
+  load('Đang lưu...');
+  const res=await api({action:'save',type:'training',data:{content:'Đào tạo tháng 4',note}});
+  unload();
+  if(res.ok) toast('✅ Đã lưu ghi chú đào tạo','tok');
+  else toast('❌ '+(res.error||'Lỗi'),'terr');
 }
 
 // ============================================================
@@ -1163,229 +1294,273 @@ async function saveToSheets(type,data){
 // ============================================================
 function openEmailModal(mode){
   emailMode=mode;
-  document.getElementById('email-modal-title').textContent=mode==='report'?'✉️ Gửi báo cáo cho BOD':'✉️ Gửi kế hoạch cho BOD';
-  document.getElementById('email-subject').value=mode==='report'?`Báo cáo Vận hành Operations – ${document.getElementById('rpt-month')?.value||'Tháng 4/2026'}`:`Kế hoạch Vận hành Operations – ${document.getElementById('plan-month')?.value||'Tháng 4/2026'}`;
-  document.getElementById('email-body').value=mode==='report'?reportText:planText;
+  $('email-modal-title').textContent=mode==='plan'?'✉️ Gửi Kế hoạch BOD':'✉️ Gửi Báo cáo BOD';
+  $('email-subject').value=mode==='plan'?`[Operations – Dương Thanh Liêm] Kế hoạch ${$('plan-month')?.value||''}`:`[Operations – Dương Thanh Liêm] Báo cáo ${$('rpt-month')?.value||''}`;
+  $('email-body').value=mode==='plan'?planText:reportText;
   openModal('modal-email');
 }
 
-function copyEmail(){navigator.clipboard.writeText(document.getElementById('email-body').value).then(()=>toast('✅ Đã copy!','tok'))}
-
 async function sendEmail(){
-  const subject=document.getElementById('email-subject').value;
-  const body=document.getElementById('email-body').value;
-  await sendEmailViaScript('lytantai@phuctea.com.vn','trannhatvu@phuctea.com.vn,phiyen@phuctea.com.vn,hr@phuctea.com.vn',subject,body);
-  closeModal('modal-email');
+  const to=$('email-to').value.trim();
+  const subj=$('email-subject').value.trim();
+  const body=$('email-body').value.trim();
+  if(!to||!subj||!body){toast('⚠️ Điền đầy đủ thông tin','twarn');return;}
+  load('Đang gửi email...');
+  const res=await api({action:'sendEmail',to,subject:subj,body,cc:$('email-cc').value});
+  unload();
+  if(res.ok){toast('✅ Email đã gửi thành công!','tok');closeModal('modal-email');}
+  else toast('❌ '+(res.error||'Lỗi gửi email'),'terr');
 }
 
-async function sendEmailViaScript(to,cc,subject,body){
-  if(!CFG.scriptUrl){toast('⚠️ Chưa cấu hình Apps Script. Copy nội dung gửi thủ công.','twarn');return;}
-  load('Đang gửi email...');
-  try{
-    await fetch(CFG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'sendEmail',to,cc,subject,body})});
-    unload();toast('✅ Email đã gửi!','tok');
-  }catch(e){unload();toast('❌ Lỗi gửi email.','terr');}
+async function sendAuditEmail(){
+  const to=$('store-email-to').value.trim();
+  if(!to){toast('⚠️ Nhập email cửa hàng','twarn');return;}
+  load('Đang gửi...');
+  const res=await api({action:'sendAuditEmail',to,subject:$('store-email-subject').value,body:$('store-email-body').value});
+  unload();
+  if(res.ok){toast('✅ Đã gửi biên bản audit!','tok');closeModal('modal-email-store');}
+  else toast('❌ '+(res.error||'Lỗi'),'terr');
 }
 
 // ============================================================
-//  REPORT & PLAN
+//  BÁO CÁO
 // ============================================================
 function generateReport(){
-  const month=document.getElementById('rpt-month').value;
-  const stores=document.getElementById('rpt-stores').value;
-  const audit=document.getElementById('rpt-audit').value;
-  const nAudit=document.getElementById('rpt-n-audit').value;
-  const reaudit=document.getElementById('rpt-reaudit').value;
-  const highlight=document.getElementById('rpt-highlight').value;
-  const challenge=document.getElementById('rpt-challenge').value;
+  const month=$('rpt-month').value;
+  const stores=$('rpt-stores').value;
+  const audit=$('rpt-audit').value;
+  const nAudit=$('rpt-n-audit').value;
+  const reaudit=$('rpt-reaudit').value;
+  const budget=$('rpt-budget').value;
+  const highlight=$('rpt-highlight').value||'(Chưa nhập)';
+  const challenge=$('rpt-challenge').value||'(Chưa nhập)';
   const today=new Date().toLocaleDateString('vi-VN');
-  reportText=`[Operations – Dương Thanh Liêm] – Báo cáo thực hiện kế hoạch ${month}\n\nKính gửi:\n• Anh Lý Tấn Tài (lytantai@phuctea.com.vn)\nCC:\n• Anh Trần Nhật Vũ · Chị Nguyễn Ngọc Phi Yến · Bộ phận HR\n\nEm xin gửi báo cáo kết quả thực hiện kế hoạch ${month} của bộ phận Operations.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📊 KẾT QUẢ THỰC HIỆN\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n• Cửa hàng khai trương mới: ${stores}\n• Tổng đang hoạt động: ${D.stores}\n• Tiến độ 2026: ${D.newStores}/30 (${Math.round(D.newStores/30*100)}%)\n• Số lượt audit: ${nAudit}/4\n• Điểm audit TB: ${audit}/100\n• Cần tái audit: ${reaudit}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n✅ THÀNH TỰU NỔI BẬT\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n${highlight}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ THÁCH THỨC & KẾ HOẠCH\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n${challenge}\n\nTrân trọng,\nDương Thanh Liêm – Operations Leader – Phúc Tea\n📞 0357 636 539 · Ngày: ${today}`;
-  const p=document.getElementById('report-preview');
-  p.innerHTML=reportText.replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border-color:var(--border);margin:7px 0">');
-  p.style.color='var(--brown)';
-  document.getElementById('btn-copy-rpt').style.display='';
-  document.getElementById('btn-email-rpt').style.display='';
-  toast('📋 Đã tạo báo cáo!','tok');
-}
+  reportText=`[Operations – Dương Thanh Liêm] – Báo cáo ${month}
 
-function copyReport(){navigator.clipboard.writeText(reportText).then(()=>toast('✅ Đã copy!','tok'))}
+Kính gửi Anh Tài, Anh Vũ, Chị Yến và Bộ phận HR,
+
+Em xin gửi báo cáo kết quả thực hiện kế hoạch ${month} của bộ phận Operations.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 KẾT QUẢ THỰC HIỆN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Cửa hàng khai trương mới: ${stores} cửa hàng
+• Điểm audit trung bình hệ thống: ${audit}/100 (Mục tiêu ≥85)
+• Số lượt audit thực hiện: ${nAudit}/4 lượt
+• Cần tái audit: ${reaudit} cửa hàng
+• Ngân sách đã sử dụng: ${budget} triệu đồng
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ THÀNH TỰU NỔI BẬT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${highlight}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ THÁCH THỨC & KẾ HOẠCH THÁNG SAU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${challenge}
+
+Trân trọng,
+Dương Thanh Liêm
+Operations Leader – Phúc Tea
+📞 0357 636 539 | 📧 operations@phuctea.com.vn
+${today}`;
+  const prev=$('report-preview');
+  prev.innerHTML=reportText.replace(/\n/g,'<br>'); prev.style.color='var(--brown)';
+  $('btn-copy-rpt').style.display=''; $('btn-email-rpt').style.display='';
+  $('email-body').value=reportText;
+  toast('✅ Báo cáo đã được tạo!','tok');
+}
 
 function generatePlan(){
-  const month=document.getElementById('plan-month').value;
-  const ts=document.getElementById('plan-target-stores').value;
-  const ta=document.getElementById('plan-target-audit').value;
-  const budget=document.getElementById('plan-budget').value;
-  const act=document.getElementById('plan-activities').value;
-  const risks=document.getElementById('plan-risks').value;
+  const month=$('plan-month').value;
+  const stores=$('plan-target-stores').value;
+  const audit=$('plan-target-audit').value;
+  const budget=$('plan-budget').value;
+  const content=$('plan-content').value||'(Chưa nhập nội dung)';
   const today=new Date().toLocaleDateString('vi-VN');
-  planText=`[Operations – Dương Thanh Liêm] – Kế hoạch ${month}\n\nKính gửi:\n• Anh Lý Tấn Tài (lytantai@phuctea.com.vn)\nCC:\n• Anh Trần Nhật Vũ · Chị Nguyễn Ngọc Phi Yến · Bộ phận HR\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎯 MỤC TIÊU THÁNG\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n• Khai trương mới: ${ts} cửa hàng\n• Thực hiện audit: ${ta} lượt\n• Duy trì điểm audit TB: ≥85/100\n• Ngân sách: ${budget} triệu đồng\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 CÁC HOẠT ĐỘNG CHÍNH\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n${act}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ RỦI RO & GIẢI PHÁP\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n${risks}\n\nKính mong anh/chị phê duyệt.\n\nDương Thanh Liêm – Operations Leader – Phúc Tea\n📞 0357 636 539 · Ngày: ${today}`;
-  const p=document.getElementById('plan-preview');
-  p.innerHTML=planText.replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border-color:var(--border);margin:7px 0">');
-  p.style.color='var(--brown)';
-  document.getElementById('btn-send-plan').style.display='';
-  toast('📋 Đã tạo kế hoạch!','tok');
+  planText=`[Operations – Dương Thanh Liêm] – Kế hoạch ${month}
+
+Kính gửi Anh Tài, Anh Vũ, Chị Yến và Bộ phận HR,
+
+Em xin gửi kế hoạch công việc ${month} của bộ phận Operations để xem xét và phê duyệt.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 MỤC TIÊU THÁNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Khai trương mới: ${stores} cửa hàng
+• Điểm audit mục tiêu: ≥${audit}/100
+• Ngân sách dự kiến: ${budget} triệu đồng
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 NỘI DUNG TRIỂN KHAI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${content}
+
+Rất mong nhận được ý kiến xem xét và phê duyệt từ Anh/Chị BOD.
+
+Trân trọng,
+Dương Thanh Liêm
+Operations Leader – Phúc Tea
+📞 0357 636 539 | 📧 operations@phuctea.com.vn
+${today}`;
+  const prev=$('plan-preview');
+  prev.innerHTML=planText.replace(/\n/g,'<br>'); prev.style.color='var(--brown)';
+  $('btn-send-plan').style.display='';
+  toast('✅ Kế hoạch đã được tạo!','tok');
 }
 
 // ============================================================
-//  AI
+//  AI – route qua Apps Script proxy để tránh CORS
 // ============================================================
-async function callAI(prompt,system=''){
-  const ctx=`Bạn là AI Assistant của bộ phận Operations – Phúc Tea. Dữ liệu hiện tại:
-- Cửa hàng hoạt động: ${D.stores} | Mục tiêu 2026: ${D.newStores}/${D.targetStores}
-- Điểm audit TB: ${D.auditAvg}/100 | Cần tái audit: ${D.reauditCount}
-- Cửa hàng yếu nhất: ${D.auditList.sort((a,b)=>a.score-b.score).slice(0,2).map(a=>a.name+' ('+a.score+'đ)').join(', ')}
-- Đang setup: ${D.setupStores.map(s=>s.name+' ('+s.progress+'%)').join(', ')}
-Trả lời tiếng Việt, ngắn gọn, thực tế, có số liệu cụ thể.`;
-
-  if(!CFG.apiKey){
-    if(CFG.scriptUrl){
-      try{
-        const res=await fetch(CFG.scriptUrl+'?action=aiProxy&prompt='+encodeURIComponent(prompt));
-        const json=await res.json();
-        if(json.ok&&json.text)return json.text;
-      }catch(e){}
-    }
-    toast('⚠️ Cần nhập API Key trong ⚙️ Cài đặt để dùng AI.','twarn');
-    return 'Vui lòng vào ⚙️ Cài đặt và nhập Anthropic API Key.';
+async function callAI(prompt, system=''){
+  // Ưu tiên: direct API key → Apps Script proxy
+  if(CFG.apiKey){
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',max_tokens:1000,
+          system:'Bạn là AI assistant vận hành Phúc Tea – chuỗi trà sữa tại Cần Thơ. '+(system||'Trả lời tiếng Việt, ngắn gọn, thực tế.'),
+          messages:[{role:'user',content:prompt}]
+        })
+      });
+      const data=await res.json();
+      if(data.content?.[0]?.text) return data.content[0].text;
+    }catch(e){}
   }
-  try{
-    const res=await fetch(ANTHROPIC_URL,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:ctx+(system?'\n'+system:''),messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    return data.content?.[0]?.text||'Không có phản hồi.';
-  }catch(e){return'Lỗi AI: '+e.message;}
+  // Fallback: Apps Script proxy
+  if(CFG.scriptUrl){
+    const res=await api({action:'aiProxy',prompt,system});
+    if(res.ok && res.text) return res.text;
+    if(!res.ok) return '❌ Lỗi AI proxy: '+(res.error||'Không xác định');
+  }
+  return '⚠️ Chưa cấu hình AI. Vào ⚙️ Cài đặt → nhập Anthropic API Key.';
 }
 
 async function loadAIDashInsight(){
-  const el=document.getElementById('ai-insight-dash');
+  const el=$('ai-insight-dash');
   el.querySelector('.ait').textContent='Đang phân tích dữ liệu vận hành...';
   el.querySelector('.aii').style.color='rgba(255,255,255,.5)';
   el.querySelector('.aii').textContent='Vui lòng chờ AI phân tích...';
-  const r=await callAI('Phân tích nhanh tình hình vận hành tháng 3/2026. Đưa ra 3 ưu tiên hàng đầu cho tháng 4. Ngắn gọn, bullet points.');
-  el.querySelector('.ait').textContent='📊 AI Phân tích & Ưu tiên tháng 4';
+  const context=`Dữ liệu hiện tại: ${D.kpi.stores} cửa hàng, ${D.kpi.newStores}/${D.kpi.targetStores} mục tiêu, điểm audit TB ${D.kpi.auditAvg}, ${D.kpi.reauditCount} cần tái audit.`;
+  const r=await callAI(context+' Phân tích tình hình và đưa ra 3 ưu tiên hàng đầu. Bullet points, ngắn gọn.');
+  el.querySelector('.ait').textContent='📊 AI Phân tích & Ưu tiên';
   el.querySelector('.aii').style.color='rgba(255,255,255,.9)';
   el.querySelector('.aii').innerHTML=r.replace(/\n/g,'<br>');
 }
 
 async function aiAuditAdvice(){
-  const store=document.getElementById('audit-store').value;
-  const total=document.getElementById('audit-total').textContent;
+  const store=$('audit-store').value; const total=$('audit-total').textContent;
+  if(!store){toast('⚠️ Chọn cửa hàng trước','twarn');return;}
   load('AI đang phân tích...');
-  const r=await callAI(`Cửa hàng ${store} vừa audit ${total}/100. Đưa ra action plan 5 bước cụ thể để cải thiện. Ngắn gọn.`);
-  unload();
-  document.getElementById('action-plan').value=r;
-  toast('🤖 AI đã đề xuất action plan!','tok');
+  const r=await callAI(`Cửa hàng ${store} vừa audit ${total}/100. Đưa ra action plan 5 bước cụ thể. Ngắn gọn.`);
+  unload(); $('action-plan').value=r; toast('🤖 AI đã đề xuất action plan!','tok');
 }
 
 async function aiSetupAdvice(name,pct){
   load('AI đang tư vấn...');
-  const r=await callAI(`Cửa hàng ${name} đang setup, tiến độ ${pct}%. Đưa ra 4-5 điểm cần làm ngay để đảm bảo khai trương đúng hẹn.`);
+  const r=await callAI(`Cửa hàng ${name} đang setup, tiến độ ${pct}%. Đưa 4-5 việc cần làm ngay để khai trương đúng hẹn.`);
   unload();
-  document.getElementById('ai-advice-title').textContent=`💡 Gợi ý – ${name} (${pct}%)`;
-  document.getElementById('ai-advice-body').innerHTML=r.replace(/\n/g,'<br>');
+  $('ai-advice-title').textContent=`💡 Gợi ý – ${name} (${pct}%)`;
+  $('ai-advice-body').innerHTML=r.replace(/\n/g,'<br>');
   openModal('modal-ai-advice');
 }
 
 async function aiGenerateReport(){
   load('AI đang soạn báo cáo...');
-  const month=document.getElementById('rpt-month').value;
-  const r=await callAI(`Soạn báo cáo thực hiện kế hoạch ${month} cho BOD Phúc Tea. Gửi đến anh Lý Tấn Tài. Chuyên nghiệp, trang trọng, đầy đủ số liệu, có đề xuất tháng sau.`,'Soạn văn bản chuyên nghiệp tiếng Việt cho lãnh đạo doanh nghiệp.');
-  unload();reportText=r;
-  document.getElementById('report-preview').innerHTML=r.replace(/\n/g,'<br>');
-  document.getElementById('report-preview').style.color='var(--brown)';
-  document.getElementById('btn-copy-rpt').style.display='';
-  document.getElementById('btn-email-rpt').style.display='';
-  document.getElementById('email-body').value=r;
+  const month=$('rpt-month').value;
+  const r=await callAI(`Soạn báo cáo thực hiện kế hoạch ${month} cho BOD Phúc Tea gửi anh Lý Tấn Tài. Chuyên nghiệp, có số liệu, đề xuất tháng sau.`,'Soạn văn bản chuyên nghiệp tiếng Việt.');
+  unload(); reportText=r;
+  $('report-preview').innerHTML=r.replace(/\n/g,'<br>'); $('report-preview').style.color='var(--brown)';
+  $('btn-copy-rpt').style.display=''; $('btn-email-rpt').style.display='';
+  $('email-body').value=r;
   toast('🤖 AI đã soạn báo cáo!','tok');
 }
 
 async function aiGenerateAuditReport(){
-  const store=document.getElementById('report-store').value;
-  const type=document.getElementById('report-type').value;
-  const entry=D.auditList.find(a=>store.includes(a.name))||{score:87};
-  load('AI đang soạn biên bản audit...');
-  const r=await callAI(`Soạn biên bản audit ${type} cho ${store}, điểm ${entry.score}/100. Bao gồm: kết quả từng tiêu chí, nhận xét, action plan cụ thể, deadline. Chuyên nghiệp.`);
-  unload();auditReportText=r;
-  const prev=document.getElementById('audit-report-preview');
-  prev.innerHTML=r.replace(/\n/g,'<br>');prev.style.color='var(--brown)';
-  document.getElementById('btn-copy-audit').style.display='';
-  document.getElementById('btn-email-store').style.display='';
-  document.getElementById('store-email-body').value=r;
+  const store=$('report-store').value;
+  if(!store){toast('⚠️ Chọn cửa hàng','twarn');return;}
+  const entry=D.auditList.find(a=>a.name===store||store.includes(a.name))||{score:0};
+  load('AI đang soạn biên bản...');
+  const r=await callAI(`Soạn biên bản audit cho ${store}, điểm ${entry.score}/100. Bao gồm kết quả từng tiêu chí, nhận xét, action plan, deadline.`);
+  unload(); auditReportText=r;
+  $('audit-report-preview').innerHTML=r.replace(/\n/g,'<br>'); $('audit-report-preview').style.color='var(--brown)';
+  $('btn-copy-audit').style.display=''; $('btn-email-store').style.display='';
+  $('store-email-body').value=r;
   toast('🤖 AI đã soạn biên bản!','tok');
-}
-
-async function aiSecretAuditAnalysis(){
-  load('AI đang phân tích audit bí ẩn...');
-  const r=await callAI('Phân tích xu hướng kết quả audit khách hàng bí ẩn. So sánh với audit trực tiếp. Đưa ra đề xuất cải thiện trải nghiệm khách hàng cho từng cửa hàng yếu. Có số liệu.');
-  unload();
-  document.getElementById('secret-ai-result').innerHTML=r.replace(/\n/g,'<br>');
-  document.getElementById('secret-ai-result').style.color='var(--brown)';
 }
 
 async function aiGeneratePlan(){
   load('AI đang lập kế hoạch...');
-  const month=document.getElementById('plan-month').value;
-  const ts=document.getElementById('plan-target-stores').value;
-  const r=await callAI(`Soạn kế hoạch Operations ${month} cho BOD Phúc Tea. Mục tiêu: ${ts} cửa hàng mới. Bao gồm: OKR, hoạt động ưu tiên theo tuần, rủi ro, giải pháp, KPI. Chuyên nghiệp.`,'Lập kế hoạch chiến lược Operations.');
-  unload();planText=r;
-  document.getElementById('plan-preview').innerHTML=r.replace(/\n/g,'<br>');
-  document.getElementById('plan-preview').style.color='var(--brown)';
-  document.getElementById('btn-send-plan').style.display='';
+  const month=$('plan-month').value; const ts=$('plan-target-stores').value;
+  const r=await callAI(`Soạn kế hoạch Operations ${month} cho BOD Phúc Tea. Mục tiêu: ${ts} CH mới. OKR, hoạt động tuần, rủi ro, KPI. Chuyên nghiệp.`);
+  unload(); planText=r;
+  $('plan-preview').innerHTML=r.replace(/\n/g,'<br>'); $('plan-preview').style.color='var(--brown)';
+  $('btn-send-plan').style.display='';
   toast('🤖 AI đã lập kế hoạch!','tok');
+}
+
+async function aiSecretAuditAnalysis(){
+  load('AI đang phân tích...');
+  const data=D.secretList.slice(0,10).map(a=>`${a.store}: ${a.score}đ - ${a.comment}`).join('\n');
+  const r=await callAI(`Phân tích xu hướng audit bí ẩn:\n${data||'(Chưa có dữ liệu)'}\nĐề xuất cải thiện trải nghiệm khách hàng.`);
+  unload();
+  $('secret-ai-result').innerHTML=r.replace(/\n/g,'<br>'); $('secret-ai-result').style.color='var(--brown)';
 }
 
 async function aiFullAnalysis(){
   load('AI đang phân tích toàn hệ thống...');
-  const r=await callAI('Phân tích toàn diện Operations Phúc Tea Q1/2026. Phân tích SWOT, đề xuất chiến lược Q2 (tháng 4,5,6) với số liệu cụ thể.');
+  const ctx=`${D.kpi.stores} CH, ${D.kpi.newStores}/${D.kpi.targetStores} mục tiêu, audit TB ${D.kpi.auditAvg}, ${D.kpi.reauditCount} cần tái audit.`;
+  const r=await callAI(ctx+' Phân tích SWOT ngắn gọn Operations Phúc Tea Q1/2026. Đề xuất chiến lược Q2 với số liệu.');
   unload();
-  document.getElementById('ai-main-insight').querySelector('.ait').textContent='📊 Phân tích Q1 & Chiến lược Q2/2026';
-  document.getElementById('ai-main-insight').querySelector('.aii').innerHTML=r.replace(/\n/g,'<br>');
-  const s=await callAI('Liệt kê 5 đề xuất cải tiến thực hiện ngay trong tháng 4. Mỗi đề xuất 1 câu súc tích.');
-  document.getElementById('ai-quick-suggestions').innerHTML=s.split('\n').filter(l=>l.trim()).map(l=>`<div class="alert ag" style="margin-bottom:7px">✨ ${l.replace(/^\d+\.\s*/,'')}</div>`).join('');
+  const box=$('ai-main-insight');
+  box.querySelector('.ait').textContent='📊 Phân tích Q1 & Chiến lược Q2/2026';
+  box.querySelector('.aii').innerHTML=r.replace(/\n/g,'<br>');
+  const s=await callAI('Liệt kê 5 đề xuất cải tiến thực hiện ngay tháng 4. Mỗi đề xuất 1 câu.');
+  $('ai-quick-suggestions').innerHTML=s.split('\n').filter(l=>l.trim()).map(l=>`<div class="alert ag" style="margin-bottom:7px">✨ ${l.replace(/^\d+\.\s*/,'')}</div>`).join('');
   toast('🤖 Phân tích hoàn thành!','tok');
 }
 
 async function aiRewriteEmail(){
-  const cur=document.getElementById('email-body').value;
+  const cur=$('email-body').value;
+  if(!cur){toast('⚠️ Nhập nội dung email trước','twarn');return;}
   load('AI đang viết lại...');
-  const r=await callAI(`Viết lại email này chuyên nghiệp, súc tích, trang trọng hơn. Giữ nguyên số liệu:\n\n${cur}`,'Viết email chuyên nghiệp tiếng Việt.');
-  unload();document.getElementById('email-body').value=r;toast('🤖 Đã viết lại!','tok');
+  const r=await callAI(`Viết lại email này chuyên nghiệp, súc tích hơn. Giữ số liệu:\n\n${cur}`);
+  unload(); $('email-body').value=r; toast('🤖 Đã viết lại!','tok');
 }
 
 async function askAI(){
-  const q=document.getElementById('ai-question').value.trim();if(!q)return;
-  document.getElementById('ai-question').value='';
-  const ms=document.getElementById('ai-messages');
+  const q=$('ai-question').value.trim(); if(!q) return;
+  $('ai-question').value='';
+  const ms=$('ai-messages');
   ms.innerHTML+=`<div class="ai-msg ai-msg-user"><div class="ai-bbl">${q}</div></div>`;
   ms.innerHTML+=`<div class="ai-msg ai-msg-ai" id="ai-typing"><div class="ai-bbl" style="color:rgba(255,255,255,.4)">Đang suy nghĩ...</div></div>`;
   ms.scrollTop=ms.scrollHeight;
   const r=await callAI(q);
-  const t=document.getElementById('ai-typing');
+  const t=$('ai-typing');
   if(t){t.querySelector('.ai-bbl').innerHTML=r.replace(/\n/g,'<br>');t.removeAttribute('id');}
   ms.scrollTop=ms.scrollHeight;
 }
 
-function quickAsk(q){
-  document.getElementById('ai-question').value=q;
-  goPage('ai',document.querySelectorAll('.ntab')[6]);
-  setTimeout(askAI,80);
-}
+function quickAsk(q){ $('ai-question').value=q; goPage('ai',document.querySelectorAll('.ntab')[7]); setTimeout(askAI,80); }
 
 // ============================================================
 //  INIT
 // ============================================================
 setGreeting();
-renderDashboard();
-renderAuditTable();
 calcAudit();
 
-document.querySelectorAll('.overlay').forEach(m=>{
-  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');});
-});
+if(CFG.sheetId) $('sheet-link').href=`https://docs.google.com/spreadsheets/d/${CFG.sheetId}`;
 
-if(!localStorage.getItem('ops_configured')){
-  setTimeout(()=>openSetup(),400);
-} else {
-  renderDashboard();renderAuditTable();
+if(CFG.scriptUrl){
+  $('cfg-alert').style.display='none';
+  syncAll();
+}else{
+  $('cfg-alert').style.display='flex';
+  setSyncStatus(false,'Chưa cấu hình');
+  toast('👋 Chào mừng! Nhấn ⚙️ Cài đặt để kết nối Google Sheets.','twarn');
 }
 </script>
 </body>

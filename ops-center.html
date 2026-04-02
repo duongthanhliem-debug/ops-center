@@ -4,989 +4,1434 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ops Center – Phúc Tea</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0f14;
-    --surface: #161921;
-    --surface2: #1e2330;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --text: #f0f2f7;
-    --muted: #7a8399;
-    --accent: #e8a035;
-    --accent2: #3b82f6;
-    --green: #22c55e;
-    --red: #ef4444;
-    --amber: #f59e0b;
-    --teal: #14b8a6;
-    --radius: 14px;
-    --radius-sm: 8px;
-  }
+:root{
+  --gold:#F5A623;--gold-l:#FDF3E3;--gold-m:#F7C56E;
+  --brown:#3D2B1F;--brown-m:#6B4226;--brown-l:#9C6B47;
+  --cream:#FAF7F2;--white:#fff;
+  --red:#E53E3E;--red-l:#FFF5F5;
+  --green:#2D8248;--green-l:#F0FFF4;
+  --blue:#2B6CB0;--blue-l:#EBF8FF;
+  --teal:#0D9488;--teal-l:#F0FDFA;
+  --gray:#718096;--gray-l:#F7F8FA;
+  --border:#E8E0D4;
+  --sh:0 2px 12px rgba(61,43,31,.08);
+  --shm:0 4px 24px rgba(61,43,31,.12);
+  --r:12px;--rs:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(--brown)}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* LOADING */
+.load{display:none;position:fixed;inset:0;background:rgba(250,247,242,.9);z-index:600;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.load.on{display:flex}
+.spin{width:42px;height:42px;border:4px solid var(--border);border-top:4px solid var(--gold);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.load-msg{font-size:13px;color:var(--gray);font-weight:500}
 
-  body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-  }
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;padding:12px 17px;border-radius:var(--r);font-size:13px;font-weight:600;z-index:1100;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px;box-shadow:var(--shm)}
+.toast.on{transform:translateY(0);opacity:1}
+.tok{background:var(--green);color:#fff}
+.terr{background:var(--red);color:#fff}
+.twarn{background:var(--gold);color:var(--brown)}
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(13,15,20,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; align-items: center; gap: 0;
-    height: 60px;
-  }
-  .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px; font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.5px;
-    margin-right: 32px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-tabs { display: flex; gap: 2px; flex: 1; }
-  .nav-tab {
-    padding: 8px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 13px; font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all .2s;
-    border: none; background: none;
-    white-space: nowrap;
-  }
-  .nav-tab:hover { color: var(--text); background: var(--surface2); }
-  .nav-tab.active { color: var(--accent); background: rgba(232,160,53,0.1); }
-  .nav-right {
-    display: flex; align-items: center; gap: 10px;
-    margin-left: auto;
-  }
-  .avatar {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), #c97b20);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; color: #fff;
-    flex-shrink: 0;
-  }
+/* NAV */
+.nav{background:var(--brown);padding:0 20px;display:flex;align-items:center;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
+.nbrand{display:flex;align-items:center;gap:9px;padding:12px 0;margin-right:16px}
+.nlogo{width:32px;height:32px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--brown);font-weight:700}
+.ntitle{font-size:13px;font-weight:700;color:#fff}
+.ntitle span{color:var(--gold)}
+.ntabs{display:flex;overflow-x:auto}
+.ntab{padding:15px 13px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all .2s;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit}
+.ntab:hover{color:var(--gold-m)}
+.ntab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.nright{display:flex;align-items:center;gap:9px;margin-left:auto}
+.navatar{width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--brown)}
+.nsync{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7);padding:5px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit}
+.nsync:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* MAIN */
-  main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+/* PAGE */
+.page{display:none;padding:22px 22px 80px;max-width:1400px;margin:0 auto}
+.page.on{display:block}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:14px;flex-wrap:wrap}
+.pt{font-family:'Be Vietnam Pro',sans-serif;font-size:22px;font-weight:700;color:var(--brown)}
+.ps{font-size:13px;color:var(--gray);margin-top:3px}
 
-  /* SECTIONS */
-  .section { display: none; }
-  .section.active { display: block; }
+/* BUTTONS */
+.btn{font-family:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:var(--rs);cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.bp{background:var(--gold);color:var(--brown)}.bp:hover{background:var(--gold-m)}
+.bo{background:var(--white);color:var(--brown-m);border:1.5px solid var(--border)}.bo:hover{border-color:var(--gold);color:var(--gold)}
+.bsm{padding:5px 10px;font-size:12px}
+.bfull{width:100%;justify-content:center}
 
-  /* HERO STATS */
-  .hero-greeting {
-    margin-bottom: 24px;
-  }
-  .hero-greeting h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px; font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 4px;
-  }
-  .hero-greeting p { color: var(--muted); font-size: 14px; }
+/* KPI */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:13px;margin-bottom:20px}
+.kpi{background:var(--white);border-radius:var(--r);padding:17px;border:1.5px solid var(--border);box-shadow:var(--sh)}
+.kl{font-size:11px;font-weight:600;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.kv{font-size:26px;font-weight:700;color:var(--brown);line-height:1;margin-bottom:5px}
+.kc{font-size:12px;color:var(--gray);display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px}
+.kc.up{background:var(--green-l);color:var(--green)}
+.kc.dn{background:var(--red-l);color:var(--red)}
+.kc.warn{background:var(--gold-l);color:var(--brown-m)}
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    transition: border-color .2s;
-  }
-  .stat-card:hover { border-color: var(--border2); }
-  .stat-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
-  .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin-bottom: 6px; }
-  .stat-sub { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-  .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 99px; }
-  .badge-green { background: rgba(34,197,94,0.12); color: var(--green); }
-  .badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
-  .badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); }
-  .badge-blue { background: rgba(59,130,246,0.12); color: var(--accent2); }
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
 
-  /* TWO-COL */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+/* CARD */
+.card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh)}
+.ch{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ct{font-size:14px;font-weight:600;color:var(--brown)}
+.cb{padding:17px}
 
-  /* CARD */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-  .card-title {
-    font-size: 13px; font-weight: 600;
-    color: var(--muted); text-transform: uppercase;
-    letter-spacing: .06em; margin-bottom: 16px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .card-title a, .card-title button {
-    font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 600;
-    background: none; border: none; cursor: pointer; text-transform: none; letter-spacing: 0;
-  }
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{padding:9px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;background:var(--gray-l);border-bottom:1px solid var(--border)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--brown)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--gold-l)}
 
-  /* PROGRESS BAR */
-  .progress-item { margin-bottom: 14px; }
-  .progress-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-  .progress-bar-bg { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
-  .progress-bar { height: 100%; border-radius: 99px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+/* BADGE */
+.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.bg2{background:var(--green-l);color:var(--green)}
+.br2{background:var(--red-l);color:var(--red)}
+.by2{background:var(--gold-l);color:var(--brown-m)}
+.bb2{background:var(--blue-l);color:var(--blue)}
+.bt2{background:var(--teal-l);color:var(--teal)}
 
-  /* STORE LIST */
-  .store-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer; transition: background .15s;
-  }
-  .store-item:last-child { border-bottom: none; }
-  .store-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .store-name { font-size: 13px; font-weight: 500; flex: 1; }
-  .store-score { font-size: 13px; font-weight: 600; }
+/* ALERTS */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:var(--rs);margin-bottom:9px;font-size:13px}
+.ar{background:var(--red-l);border-left:3px solid var(--red);color:var(--red)}
+.ay{background:var(--gold-l);border-left:3px solid var(--gold);color:var(--brown-m)}
+.ag{background:var(--green-l);border-left:3px solid var(--green);color:var(--green)}
 
-  /* TIMELINE */
-  .timeline-item {
-    display: flex; gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-  .timeline-text { font-size: 13px; line-height: 1.5; }
-  .timeline-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+/* AI BOX */
+.ai{background:linear-gradient(135deg,var(--brown) 0%,var(--brown-m) 100%);border-radius:var(--r);padding:17px;color:#fff;margin-bottom:16px;box-shadow:var(--shm)}
+.aitag{background:var(--gold);color:var(--brown);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.06em;display:inline-block;margin-bottom:8px}
+.ait{font-size:13px;font-weight:600;color:var(--gold-m);margin-bottom:6px}
+.aii{font-size:13px;line-height:1.75;color:rgba(255,255,255,.9);padding-left:10px;border-left:2px solid var(--gold)}
 
-  /* FORM ELEMENTS */
-  input, select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 14px;
-    padding: 10px 14px;
-    width: 100%;
-    outline: none;
-    transition: border-color .2s;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-  select option { background: var(--surface2); }
-  textarea { resize: vertical; min-height: 80px; }
+/* FORM */
+.fg{margin-bottom:13px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--brown-m);margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase}
+.fc{width:100%;font-family:inherit;font-size:13px;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--brown)}
+.fc:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,.1)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:600px){.fr{grid-template-columns:1fr}}
+textarea.fc{resize:vertical;min-height:100px;line-height:1.6}
 
-  .form-group { margin-bottom: 14px; }
-  .form-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: .05em; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* PROGRESS */
+.prog-item{margin-bottom:14px}
+.prog-hd{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.prog-bg{height:7px;background:var(--gray-l);border-radius:99px;overflow:hidden;border:1px solid var(--border)}
+.prog-bar{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
-  /* BUTTONS */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 18px;
-    border-radius: var(--radius-sm);
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 13px; font-weight: 600;
-    cursor: pointer; border: none;
-    transition: all .2s;
-  }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #d4912e; }
-  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-danger { background: rgba(239,68,68,0.12); color: var(--red); }
-  .btn-sm { padding: 6px 12px; font-size: 12px; }
-  .btn-full { width: 100%; justify-content: center; }
+/* CHECKLIST */
+.chk-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.chk-item:last-child{border-bottom:none}
+.chk-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s;font-size:11px}
+.chk-item.done .chk-box{background:var(--green);border-color:var(--green);color:#fff}
+.chk-item.done .chk-text{text-decoration:line-through;color:var(--gray)}
+.chk-text{font-size:13px;line-height:1.5}
+.chk-sub{font-size:11px;color:var(--gray);margin-top:2px}
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); }
-  td { padding: 12px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--surface2); }
+/* TIMELINE */
+.tl-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.tl-txt{font-size:13px;line-height:1.5}
+.tl-time{font-size:11px;color:var(--gray);margin-top:2px}
 
-  /* AUDIT FORM */
-  .audit-criteria { margin-bottom: 10px; }
-  .audit-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-  }
-  .audit-row:last-child { border-bottom: none; }
-  .audit-name { flex: 1; font-size: 13px; }
-  .audit-max { font-size: 12px; color: var(--muted); width: 40px; text-align: right; }
-  .audit-input { width: 70px; text-align: center; }
-  .audit-score-display {
-    background: var(--surface2);
-    border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-    margin-top: 16px;
-  }
+/* STORE ITEM */
+.store-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.store-item:last-child{border-bottom:none}
+.store-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.store-name{font-size:13px;font-weight:500;flex:1}
+.store-score{font-size:14px;font-weight:700}
 
-  /* CHECKLIST */
-  .check-item {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-    cursor: pointer;
-  }
-  .check-item:last-child { border-bottom: none; }
-  .check-box {
-    width: 20px; height: 20px; border-radius: 6px;
-    border: 1.5px solid var(--border2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
-    transition: all .15s;
-  }
-  .check-item.done .check-box { background: var(--green); border-color: var(--green); }
-  .check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
-  .check-text { font-size: 13px; line-height: 1.5; }
-  .check-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+/* AUDIT FORM */
+.audit-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.audit-row:last-child{border-bottom:none}
+.audit-name{flex:1;font-size:13px}
+.audit-max{font-size:12px;color:var(--gray);width:36px;text-align:right}
+.audit-inp{width:68px;text-align:center;font-family:inherit;font-size:13px;padding:6px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--brown)}
+.audit-inp:focus{outline:none;border-color:var(--gold)}
+.audit-score-box{background:var(--gray-l);border-radius:var(--r);padding:20px;text-align:center;margin-top:16px;border:1.5px solid var(--border)}
 
-  /* MODAL OVERLAY */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7); z-index: 200;
-    align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: var(--radius); padding: 24px;
-    width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
-  }
-  .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 20px; }
-  .modal-close { float: right; cursor: pointer; color: var(--muted); font-size: 20px; background: none; border: none; color: var(--muted); }
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(61,43,31,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.on{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:24px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shm)}
+.modal-lg{max-width:720px}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mt{font-size:17px;font-weight:700;color:var(--brown)}
+.mx{background:none;border:none;font-size:22px;color:var(--gray);cursor:pointer;line-height:1}
+.mx:hover{color:var(--brown)}
 
-  /* SECTION HEADER */
-  .section-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .section-header h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
+/* SETUP CARD */
+.setup-card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:17px;margin-bottom:12px;box-shadow:var(--sh)}
 
-  /* ALERT */
-  .alert {
-    padding: 12px 16px; border-radius: var(--radius-sm);
-    font-size: 13px; margin-bottom: 12px;
-    display: flex; align-items: flex-start; gap: 10px;
-  }
-  .alert-amber { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
-  .alert-green { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: #4ade80; }
+/* EMAIL PREVIEW */
+.email-box{background:var(--gray-l);border-radius:var(--rs);padding:16px;font-size:13px;line-height:1.85;color:var(--brown);border:1.5px solid var(--border);white-space:pre-wrap;max-height:400px;overflow-y:auto}
 
-  /* CHIP */
-  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+/* SYNC STATUS */
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-dot.off{background:var(--gray);animation:none}
 
-  /* EMPTY STATE */
-  .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .two-col, .three-col { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    nav { gap: 4px; }
-    .nav-tab { padding: 7px 10px; font-size: 12px; }
-  }
+/* AI CHAT */
+.ai-messages{max-height:320px;overflow-y:auto;padding:12px;background:var(--gray-l);border-radius:var(--rs);border:1.5px solid var(--border);margin-bottom:12px}
+.ai-msg{margin-bottom:12px}
+.ai-msg-user{text-align:right}
+.ai-msg-bubble{display:inline-block;padding:8px 12px;border-radius:10px;font-size:13px;line-height:1.6;max-width:85%}
+.ai-msg-user .ai-msg-bubble{background:var(--gold);color:var(--brown);font-weight:500}
+.ai-msg-ai .ai-msg-bubble{background:var(--brown);color:#fff}
+.ai-msg-ai .ai-msg-bubble em{color:var(--gold-m);font-style:normal}
+.ai-input-row{display:flex;gap:8px}
+.ai-input{flex:1;font-family:inherit;font-size:13px;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--brown)}
+.ai-input:focus{outline:none;border-color:var(--gold)}
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
+<div class="load" id="loadEl">
+  <div class="spin"></div>
+  <div class="load-msg" id="loadMsg">Đang xử lý...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
 <!-- NAV -->
-<nav>
-  <div class="nav-logo">⚡ <span>Ops</span>Center</div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
-    <button class="nav-tab" onclick="showSection('setup')">Setup & Khai trương</button>
-    <button class="nav-tab" onclick="showSection('audit')">Audit</button>
-    <button class="nav-tab" onclick="showSection('nhansu')">Nhân sự</button>
-    <button class="nav-tab" onclick="showSection('baocao')">Báo cáo</button>
+<nav class="nav">
+  <div class="nbrand">
+    <div class="nlogo">⚡</div>
+    <div class="ntitle">Phúc Tea · <span>Ops Center</span></div>
   </div>
-  <div class="nav-right">
-    <div class="avatar">DL</div>
+  <div class="ntabs">
+    <button class="ntab on" onclick="goPage('dashboard',this)">📊 Dashboard</button>
+    <button class="ntab" onclick="goPage('setup',this)">🏪 Setup & Khai trương</button>
+    <button class="ntab" onclick="goPage('audit',this)">✅ Audit</button>
+    <button class="ntab" onclick="goPage('nhansu',this)">👥 Nhân sự</button>
+    <button class="ntab" onclick="goPage('baocao',this)">📋 Báo cáo</button>
+    <button class="ntab" onclick="goPage('kehoach',this)">🎯 Kế hoạch</button>
+    <button class="ntab" onclick="goPage('ai',this)">🤖 AI Phân tích</button>
+  </div>
+  <div class="nright">
+    <span style="font-size:11px;color:rgba(255,255,255,.5)" id="sync-label"><span class="sync-dot off" id="sync-dot"></span>Chưa kết nối</span>
+    <button class="nsync" onclick="syncSheets()">🔄 Đồng bộ</button>
+    <div class="navatar">DL</div>
   </div>
 </nav>
 
-<main>
-
-<!-- ===== DASHBOARD ===== -->
-<div id="sec-dashboard" class="section active">
-  <div class="hero-greeting">
-    <h1>Chào buổi sáng, Liêm 👋</h1>
-    <p>Thứ Năm, 26 tháng 3, 2026 · Tháng 3/2026 · Mục tiêu: 30 cửa hàng mới trong 2026</p>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Cửa hàng đang hoạt động</div>
-      <div class="stat-value" style="color:var(--accent)">14</div>
-      <div class="stat-sub"><span class="badge badge-green">+2 tháng này</span></div>
+<!-- ===================== DASHBOARD ===================== -->
+<div class="page on" id="pg-dashboard">
+  <div class="ph">
+    <div>
+      <div class="pt" id="greeting">Chào Liêm 👋</div>
+      <div class="ps" id="today-str">Đang tải dữ liệu từ Google Sheets...</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Tiến độ mở mới 2026</div>
-      <div class="stat-value" style="color:var(--accent2)">8<span style="font-size:16px;color:var(--muted)">/30</span></div>
-      <div class="stat-sub"><span class="badge badge-amber">27% mục tiêu</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Điểm audit trung bình</div>
-      <div class="stat-value" style="color:var(--green)">87<span style="font-size:16px;color:var(--muted)">/100</span></div>
-      <div class="stat-sub"><span class="badge badge-green">↑ 3đ vs tháng trước</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Cần tái audit</div>
-      <div class="stat-value" style="color:var(--red)">3</div>
-      <div class="stat-sub"><span class="badge badge-red">Dưới 85 điểm</span></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn bo bsm" onclick="syncSheets()">🔄 Đồng bộ Sheets</button>
+      <a href="https://docs.google.com/spreadsheets/d/1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo/edit" target="_blank" class="btn bo bsm">📊 Mở Sheets</a>
     </div>
   </div>
 
-  <div class="alert alert-amber">
-    ⚠️ <span><strong>3 cửa hàng</strong> cần tái audit trong tuần này: Hà Lam, Vĩnh Cửu, Thới Lai. Deadline hôm nay 26/3.</span>
+  <div class="kgrid" id="kpi-grid">
+    <div class="kpi">
+      <div class="kl">Cửa hàng hoạt động</div>
+      <div class="kv" id="kpi-stores">—</div>
+      <div class="kc warn" id="kpi-stores-sub">Đang tải...</div>
+    </div>
+    <div class="kpi">
+      <div class="kl">Tiến độ mở mới 2026</div>
+      <div class="kv" id="kpi-new">—</div>
+      <div class="kc warn" id="kpi-new-sub">Đang tải...</div>
+    </div>
+    <div class="kpi">
+      <div class="kl">Điểm audit TB</div>
+      <div class="kv" id="kpi-audit">—</div>
+      <div class="kc up" id="kpi-audit-sub">Đang tải...</div>
+    </div>
+    <div class="kpi">
+      <div class="kl">Cần tái audit</div>
+      <div class="kv" id="kpi-reaudit">—</div>
+      <div class="kc dn" id="kpi-reaudit-sub">Đang tải...</div>
+    </div>
   </div>
 
-  <div class="two-col">
+  <div id="alerts-container"></div>
+
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Tiến độ khai trương tháng 4 <button onclick="showSection('setup')">Xem chi tiết →</button></div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Cửa hàng Ninh Kiều 3</span><span style="color:var(--green)">75%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:75%;background:var(--green)"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Cửa hàng Bình Thủy</span><span style="color:var(--amber)">40%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:40%;background:var(--amber)"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Cửa hàng Ô Môn (dự kiến T5)</span><span style="color:var(--muted)">10%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:10%;background:var(--muted)"></div></div>
+      <div class="ch"><span class="ct">Tiến độ khai trương tháng này</span><button class="btn bo bsm" onclick="goPage('setup',document.querySelectorAll('.ntab')[1])">Chi tiết →</button></div>
+      <div class="cb" id="setup-progress-dash">
+        <div style="color:var(--gray);font-size:13px">Đang tải...</div>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-title">Điểm audit theo cửa hàng <button onclick="showSection('audit')">Xem tất cả →</button></div>
-      <div id="store-list">
-        <div class="store-item">
-          <div class="store-dot" style="background:var(--green)"></div>
-          <div class="store-name">Phúc Tea – Ninh Kiều 1</div>
-          <div class="store-score" style="color:var(--green)">92</div>
-        </div>
-        <div class="store-item">
-          <div class="store-dot" style="background:var(--green)"></div>
-          <div class="store-name">Phúc Tea – Ninh Kiều 2</div>
-          <div class="store-score" style="color:var(--green)">88</div>
-        </div>
-        <div class="store-item">
-          <div class="store-dot" style="background:var(--amber)"></div>
-          <div class="store-name">The Hoa – Bình Thủy</div>
-          <div class="store-score" style="color:var(--amber)">83</div>
-        </div>
-        <div class="store-item">
-          <div class="store-dot" style="background:var(--red)"></div>
-          <div class="store-name">Phúc Tea – Hà Lam</div>
-          <div class="store-score" style="color:var(--red)">74</div>
-        </div>
-        <div class="store-item">
-          <div class="store-dot" style="background:var(--red)"></div>
-          <div class="store-name">Phúc Tea – Vĩnh Cửu</div>
-          <div class="store-score" style="color:var(--red)">78</div>
-        </div>
+      <div class="ch"><span class="ct">Điểm audit theo cửa hàng</span><button class="btn bo bsm" onclick="goPage('audit',document.querySelectorAll('.ntab')[2])">Chi tiết →</button></div>
+      <div class="cb" id="audit-list-dash">
+        <div style="color:var(--gray);font-size:13px">Đang tải...</div>
       </div>
     </div>
   </div>
 
-  <div class="two-col">
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Hoạt động gần đây</div>
-      <div class="timeline-item">
-        <div class="timeline-dot" style="background:var(--green)"></div>
-        <div>
-          <div class="timeline-text">Khai trương Phúc Tea Ninh Kiều 3 – doanh thu ngày đầu 18.2 triệu</div>
-          <div class="timeline-time">Hôm qua · 25/03/2026</div>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot" style="background:var(--amber)"></div>
-        <div>
-          <div class="timeline-text">Audit The Hoa Hà Lam – 74 điểm, lên Action Plan</div>
-          <div class="timeline-time">23/03/2026</div>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot" style="background:var(--accent2)"></div>
-        <div>
-          <div class="timeline-text">Gửi kế hoạch tháng 4 lên BOD – chờ phê duyệt</div>
-          <div class="timeline-time">25/03/2026</div>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot" style="background:var(--teal)"></div>
-        <div>
-          <div class="timeline-text">Tuyển được Nhân viên Setup – Tăng Hữu Phúc</div>
-          <div class="timeline-time">26/03/2026</div>
-        </div>
+      <div class="ch"><span class="ct">Hoạt động gần đây</span></div>
+      <div class="cb" id="timeline-dash">
+        <div style="color:var(--gray);font-size:13px">Đang tải...</div>
       </div>
     </div>
+    <div class="card">
+      <div class="ch"><span class="ct">OKR Tháng · Ngân sách</span></div>
+      <div class="cb" id="okr-dash">
+        <div style="color:var(--gray);font-size:13px">Đang tải...</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="card">
-      <div class="card-title">OKR Tháng 4 · Ngân sách 24.9tr</div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Setup & Mở mới (20tr)</span><span class="badge badge-amber">Đang triển khai</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:30%;background:var(--accent)"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Audit & Tái audit (1.7tr)</span><span class="badge badge-amber">Đang triển khai</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:60%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Đào tạo & Phát triển (2.2tr)</span><span class="badge badge-blue">Lên kế hoạch</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:20%;background:var(--teal)"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Web báo cáo & AI (1tr)</span><span class="badge badge-green">Đang làm 🎉</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:15%;background:var(--green)"></div></div>
-      </div>
-    </div>
+  <!-- AI Insight -->
+  <div class="ai" id="ai-insight-dash">
+    <span class="aitag">✨ AI PHÂN TÍCH</span>
+    <div class="ait">Đang tổng hợp dữ liệu vận hành...</div>
+    <div class="aii" style="color:rgba(255,255,255,.6)">Nhấn "Đồng bộ" để tải dữ liệu và nhận phân tích AI.</div>
   </div>
 </div>
 
-<!-- ===== SETUP ===== -->
-<div id="sec-setup" class="section">
-  <div class="section-header">
-    <h2>Setup & Khai trương</h2>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-store')">+ Thêm cửa hàng mới</button>
+<!-- ===================== SETUP ===================== -->
+<div class="page" id="pg-setup">
+  <div class="ph">
+    <div>
+      <div class="pt">Setup & Khai trương</div>
+      <div class="ps">Quản lý tiến độ mở cửa hàng mới</div>
+    </div>
+    <button class="btn bp" onclick="openModal('modal-new-store')">+ Thêm cửa hàng mới</button>
   </div>
 
-  <div class="two-col" style="margin-bottom:16px">
-    <div class="stat-card">
-      <div class="stat-label">Đang setup</div>
-      <div class="stat-value" style="color:var(--accent)">2</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Khai trương tháng 4</div>
-      <div class="stat-value" style="color:var(--green)">2</div>
-    </div>
+  <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi"><div class="kl">Đang setup</div><div class="kv" id="s-setting">2</div><div class="kc warn">Đang triển khai</div></div>
+    <div class="kpi"><div class="kl">Khai trương tháng này</div><div class="kv" id="s-launching">2</div><div class="kc up">Dự kiến</div></div>
+    <div class="kpi"><div class="kl">Mục tiêu 2026</div><div class="kv">30</div><div class="kc warn">8/30 đã đạt</div></div>
   </div>
 
-  <!-- Store Cards -->
-  <div id="setup-stores">
-    <div class="card" style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+  <div id="setup-stores-list">
+    <!-- Generated by JS -->
+    <div class="setup-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div>
           <div style="font-weight:700;font-size:15px">Phúc Tea – Ninh Kiều 3</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Dự kiến khai trương: 05/04/2026 · Đối tác: Nguyễn Văn A</div>
+          <div style="font-size:12px;color:var(--gray);margin-top:3px">Dự kiến: 05/04/2026 · Đối tác: Nguyễn Văn A</div>
         </div>
-        <span class="chip badge-amber">Đang setup</span>
+        <span class="bdg by2">Đang setup</span>
       </div>
-      <div class="progress-item">
-        <div class="progress-header"><span style="font-size:13px">Tiến độ tổng thể</span><span style="color:var(--accent)">75%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:75%;background:var(--accent)"></div></div>
+      <div class="prog-item">
+        <div class="prog-hd"><span>Tiến độ</span><span style="color:var(--gold);font-weight:700">75%</span></div>
+        <div class="prog-bg"><div class="prog-bar" style="width:75%;background:var(--gold)"></div></div>
       </div>
-      <div style="margin-top:16px">
-        <div class="card-title" style="margin-bottom:10px">Checklist Setup</div>
-        <div id="checklist-1">
-          <div class="check-item done" onclick="toggleCheck(this)">
-            <div class="check-box">✓</div>
-            <div><div class="check-text">Xác nhận mặt bằng & ký hợp đồng</div></div>
-          </div>
-          <div class="check-item done" onclick="toggleCheck(this)">
-            <div class="check-box">✓</div>
-            <div><div class="check-text">Giao đồng phục nhân viên</div><div class="check-sub">Đã bàn giao 18/11/2025</div></div>
-          </div>
-          <div class="check-item done" onclick="toggleCheck(this)">
-            <div class="check-box">✓</div>
-            <div><div class="check-text">Lắp đặt thiết bị & bàn giao dụng cụ</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Đào tạo nhân viên (công thức, quy trình)</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Kiểm tra vận hành thử (soft opening)</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Khai trương chính thức & giám sát ngày đầu</div></div>
-          </div>
-        </div>
+      <div style="margin-top:14px">
+        <div style="font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Checklist Setup</div>
+        <div class="chk-item done" onclick="toggleCheck(this)"><div class="chk-box">✓</div><div><div class="chk-text">Xác nhận mặt bằng & ký hợp đồng</div></div></div>
+        <div class="chk-item done" onclick="toggleCheck(this)"><div class="chk-box">✓</div><div><div class="chk-text">Giao đồng phục nhân viên</div><div class="chk-sub">Bàn giao 18/11/2025</div></div></div>
+        <div class="chk-item done" onclick="toggleCheck(this)"><div class="chk-box">✓</div><div><div class="chk-text">Lắp đặt thiết bị & bàn giao dụng cụ</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Đào tạo nhân viên (công thức, quy trình)</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Soft opening & kiểm tra vận hành</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Khai trương chính thức & giám sát ngày đầu</div></div></div>
       </div>
-      <div style="margin-top:16px">
-        <div class="form-group">
-          <label class="form-label">Ghi chú nhanh</label>
-          <textarea placeholder="Nhập ghi chú về cửa hàng này..." rows="2"></textarea>
-        </div>
-        <button class="btn btn-secondary btn-sm">Lưu ghi chú</button>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn bp bsm" onclick="saveSetupNote(this)">💾 Lưu lên Sheets</button>
+        <button class="btn bo bsm" onclick="aiSetupAdvice('Ninh Kiều 3',75)">🤖 AI gợi ý</button>
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div class="setup-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div>
           <div style="font-weight:700;font-size:15px">Phúc Tea – Bình Thủy</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Dự kiến khai trương: 20/04/2026 · Đối tác: Trần Thị B</div>
+          <div style="font-size:12px;color:var(--gray);margin-top:3px">Dự kiến: 20/04/2026 · Đối tác: Trần Thị B</div>
         </div>
-        <span class="chip badge-blue">Mới bắt đầu</span>
+        <span class="bdg bb2">Mới bắt đầu</span>
       </div>
-      <div class="progress-item">
-        <div class="progress-header"><span style="font-size:13px">Tiến độ tổng thể</span><span style="color:var(--accent2)">40%</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar" style="width:40%;background:var(--accent2)"></div></div>
+      <div class="prog-item">
+        <div class="prog-hd"><span>Tiến độ</span><span style="color:var(--blue);font-weight:700">40%</span></div>
+        <div class="prog-bg"><div class="prog-bar" style="width:40%;background:var(--blue)"></div></div>
       </div>
-      <div style="margin-top:16px">
-        <div class="card-title" style="margin-bottom:10px">Checklist Setup</div>
-        <div>
-          <div class="check-item done" onclick="toggleCheck(this)">
-            <div class="check-box">✓</div>
-            <div><div class="check-text">Xác nhận mặt bằng & ký hợp đồng</div></div>
-          </div>
-          <div class="check-item done" onclick="toggleCheck(this)">
-            <div class="check-box">✓</div>
-            <div><div class="check-text">Giao đồng phục nhân viên</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Lắp đặt thiết bị & bàn giao dụng cụ</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Đào tạo nhân viên</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Soft opening & kiểm tra</div></div>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"></div>
-            <div><div class="check-text">Khai trương chính thức</div></div>
-          </div>
-        </div>
+      <div style="margin-top:14px">
+        <div style="font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Checklist Setup</div>
+        <div class="chk-item done" onclick="toggleCheck(this)"><div class="chk-box">✓</div><div><div class="chk-text">Xác nhận mặt bằng & ký hợp đồng</div></div></div>
+        <div class="chk-item done" onclick="toggleCheck(this)"><div class="chk-box">✓</div><div><div class="chk-text">Giao đồng phục nhân viên</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Lắp đặt thiết bị & bàn giao dụng cụ</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Đào tạo nhân viên</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Soft opening & kiểm tra</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Khai trương chính thức</div></div></div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn bp bsm" onclick="saveSetupNote(this)">💾 Lưu lên Sheets</button>
+        <button class="btn bo bsm" onclick="aiSetupAdvice('Bình Thủy',40)">🤖 AI gợi ý</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== AUDIT ===== -->
-<div id="sec-audit" class="section">
-  <div class="section-header">
-    <h2>Audit & Tái Audit</h2>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-audit')">+ Tạo phiên audit</button>
+<!-- ===================== AUDIT ===================== -->
+<div class="page" id="pg-audit">
+  <div class="ph">
+    <div>
+      <div class="pt">Audit & Tái Audit</div>
+      <div class="ps">Kiểm tra chất lượng vận hành cửa hàng</div>
+    </div>
+    <button class="btn bp" onclick="openModal('modal-new-audit')">+ Tạo phiên audit</button>
   </div>
 
-  <div class="alert alert-amber">
-    ⚠️ <span>3 cửa hàng dưới 85 điểm cần tái audit trong vòng 15 ngày: <strong>Hà Lam (74đ)</strong>, <strong>Vĩnh Cửu (78đ)</strong>, <strong>Thới Lai (81đ)</strong></span>
+  <div class="alert ay" id="audit-alert">
+    ⚠️ <span><strong>3 cửa hàng</strong> dưới 85 điểm cần tái audit: Hà Lam (74đ), Vĩnh Cửu (78đ), Thới Lai (81đ)</span>
   </div>
 
-  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="stat-card">
-      <div class="stat-label">Điểm TB hệ thống</div>
-      <div class="stat-value" style="color:var(--green)">87</div>
-      <div class="stat-sub"><span class="badge badge-green">Mục tiêu ≥85 ✓</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Audit tháng này</div>
-      <div class="stat-value" style="color:var(--accent)">4<span style="font-size:14px;color:var(--muted)">/4</span></div>
-      <div class="stat-sub"><span class="badge badge-green">Đạt kế hoạch</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Cần tái audit</div>
-      <div class="stat-value" style="color:var(--red)">3</div>
-      <div class="stat-sub"><span class="badge badge-red">Deadline 15 ngày</span></div>
-    </div>
+  <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi"><div class="kl">Điểm TB hệ thống</div><div class="kv" style="color:var(--green)" id="audit-avg">87</div><div class="kc up">Mục tiêu ≥85 ✓</div></div>
+    <div class="kpi"><div class="kl">Audit tháng này</div><div class="kv" id="audit-done">4/4</div><div class="kc up">Đạt kế hoạch</div></div>
+    <div class="kpi"><div class="kl">Cần tái audit</div><div class="kv" style="color:var(--red)" id="audit-reaudit-cnt">3</div><div class="kc dn">Deadline 15 ngày</div></div>
   </div>
 
-  <div class="two-col">
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Danh sách cửa hàng</div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Cửa hàng</th><th>Điểm gần nhất</th><th>Ngày audit</th><th>Trạng thái</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Ninh Kiều 1</td><td style="color:var(--green);font-weight:600">92</td><td>15/03</td><td><span class="badge badge-green">Đạt</span></td></tr>
-            <tr><td>Ninh Kiều 2</td><td style="color:var(--green);font-weight:600">88</td><td>16/03</td><td><span class="badge badge-green">Đạt</span></td></tr>
-            <tr><td>Bình Thủy</td><td style="color:var(--amber);font-weight:600">83</td><td>17/03</td><td><span class="badge badge-amber">Theo dõi</span></td></tr>
-            <tr><td>Hà Lam</td><td style="color:var(--red);font-weight:600">74</td><td>18/03</td><td><span class="badge badge-red">Tái audit</span></td></tr>
-            <tr><td>Vĩnh Cửu</td><td style="color:var(--red);font-weight:600">78</td><td>20/03</td><td><span class="badge badge-red">Tái audit</span></td></tr>
-            <tr><td>Thới Lai</td><td style="color:var(--red);font-weight:600">81</td><td>22/03</td><td><span class="badge badge-red">Tái audit</span></td></tr>
+      <div class="ch"><span class="ct">Danh sách cửa hàng</span></div>
+      <div class="cb" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Cửa hàng</th><th>Điểm</th><th>Ngày audit</th><th>Trạng thái</th></tr></thead>
+          <tbody id="audit-table-body">
+            <tr><td>Ninh Kiều 1</td><td style="color:var(--green);font-weight:700">92</td><td>15/03</td><td><span class="bdg bg2">Đạt</span></td></tr>
+            <tr><td>Ninh Kiều 2</td><td style="color:var(--green);font-weight:700">88</td><td>16/03</td><td><span class="bdg bg2">Đạt</span></td></tr>
+            <tr><td>Bình Thủy</td><td style="color:var(--gold);font-weight:700">83</td><td>17/03</td><td><span class="bdg by2">Theo dõi</span></td></tr>
+            <tr><td>Hà Lam</td><td style="color:var(--red);font-weight:700">74</td><td>18/03</td><td><span class="bdg br2">Tái audit</span></td></tr>
+            <tr><td>Vĩnh Cửu</td><td style="color:var(--red);font-weight:700">78</td><td>20/03</td><td><span class="bdg br2">Tái audit</span></td></tr>
+            <tr><td>Thới Lai</td><td style="color:var(--red);font-weight:700">81</td><td>22/03</td><td><span class="bdg br2">Tái audit</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Form Audit Nhanh</div>
-      <div class="form-group">
-        <label class="form-label">Cửa hàng</label>
-        <select id="audit-store">
-          <option>Phúc Tea – Ninh Kiều 1</option>
-          <option>Phúc Tea – Hà Lam</option>
-          <option>Phúc Tea – Vĩnh Cửu</option>
-          <option>The Hoa – Bình Thủy</option>
-        </select>
+      <div class="ch"><span class="ct">Form Audit Nhanh</span></div>
+      <div class="cb">
+        <div class="fg">
+          <label class="fl">Cửa hàng</label>
+          <select class="fc" id="audit-store">
+            <option>Phúc Tea – Ninh Kiều 1</option>
+            <option>Phúc Tea – Ninh Kiều 2</option>
+            <option>Phúc Tea – Hà Lam</option>
+            <option>Phúc Tea – Vĩnh Cửu</option>
+            <option>The Hoa – Bình Thủy</option>
+            <option>Phúc Tea – Thới Lai</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Ngày audit</label>
+          <input type="date" class="fc" id="audit-date">
+        </div>
+        <div class="fg">
+          <label class="fl">Loại audit</label>
+          <select class="fc" id="audit-type">
+            <option>Audit bí ẩn</option>
+            <option>Tái audit</option>
+            <option>Audit định kỳ</option>
+          </select>
+        </div>
+        <div style="font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Tiêu chí chấm điểm</div>
+        <div class="audit-row"><div class="audit-name">Vệ sinh & ATTP</div><div class="audit-max">/25</div><input class="audit-inp" type="number" min="0" max="25" value="22" oninput="calcAudit()"></div>
+        <div class="audit-row"><div class="audit-name">Chất lượng sản phẩm</div><div class="audit-max">/25</div><input class="audit-inp" type="number" min="0" max="25" value="20" oninput="calcAudit()"></div>
+        <div class="audit-row"><div class="audit-name">Dịch vụ khách hàng</div><div class="audit-max">/20</div><input class="audit-inp" type="number" min="0" max="20" value="18" oninput="calcAudit()"></div>
+        <div class="audit-row"><div class="audit-name">Đồng phục & thương hiệu</div><div class="audit-max">/15</div><input class="audit-inp" type="number" min="0" max="15" value="13" oninput="calcAudit()"></div>
+        <div class="audit-row"><div class="audit-name">Vận hành & quy trình</div><div class="audit-max">/15</div><input class="audit-inp" type="number" min="0" max="15" value="12" oninput="calcAudit()"></div>
+        <div class="audit-score-box">
+          <div style="font-size:12px;color:var(--gray);margin-bottom:4px">Tổng điểm</div>
+          <div id="audit-total" style="font-size:40px;font-weight:700;color:var(--green)">85</div>
+          <div id="audit-status" style="font-size:13px;margin-top:4px;color:var(--green)">✓ Đạt tiêu chuẩn</div>
+        </div>
+        <div class="fg" style="margin-top:14px">
+          <label class="fl">Action Plan</label>
+          <textarea class="fc" id="action-plan" placeholder="Nhập hành động cần thực hiện..."></textarea>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bp" style="flex:1" onclick="saveAudit()">💾 Lưu lên Sheets</button>
+          <button class="btn bo" onclick="aiAuditAdvice()">🤖 AI đề xuất</button>
+        </div>
       </div>
-      <div class="card-title" style="margin-top:8px;margin-bottom:8px">Tiêu chí chấm điểm</div>
-      <div class="audit-criteria">
-        <div class="audit-row">
-          <div class="audit-name">Vệ sinh & an toàn thực phẩm</div>
-          <div class="audit-max">/ 25</div>
-          <input class="audit-input" type="number" min="0" max="25" value="22" oninput="calcAudit()">
-        </div>
-        <div class="audit-row">
-          <div class="audit-name">Chất lượng sản phẩm & công thức</div>
-          <div class="audit-max">/ 25</div>
-          <input class="audit-input" type="number" min="0" max="25" value="20" oninput="calcAudit()">
-        </div>
-        <div class="audit-row">
-          <div class="audit-name">Dịch vụ khách hàng</div>
-          <div class="audit-max">/ 20</div>
-          <input class="audit-input" type="number" min="0" max="20" value="18" oninput="calcAudit()">
-        </div>
-        <div class="audit-row">
-          <div class="audit-name">Đồng phục & hình ảnh thương hiệu</div>
-          <div class="audit-max">/ 15</div>
-          <input class="audit-input" type="number" min="0" max="15" value="13" oninput="calcAudit()">
-        </div>
-        <div class="audit-row">
-          <div class="audit-name">Vận hành & quy trình</div>
-          <div class="audit-max">/ 15</div>
-          <input class="audit-input" type="number" min="0" max="15" value="12" oninput="calcAudit()">
-        </div>
-      </div>
-      <div class="audit-score-display">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Tổng điểm</div>
-        <div id="audit-total" style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--green)">85</div>
-        <div id="audit-status" style="font-size:13px;margin-top:4px;color:var(--green)">✓ Đạt tiêu chuẩn</div>
-      </div>
-      <div class="form-group" style="margin-top:12px">
-        <label class="form-label">Action Plan (nếu có vấn đề)</label>
-        <textarea id="action-plan" placeholder="Nhập các hành động cần thực hiện..."></textarea>
-      </div>
-      <button class="btn btn-primary btn-full" onclick="saveAudit()">Lưu kết quả audit</button>
     </div>
   </div>
 </div>
 
-<!-- ===== NHÂN SỰ ===== -->
-<div id="sec-nhansu" class="section">
-  <div class="section-header">
-    <h2>Nhân sự Vận hành</h2>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-staff')">+ Thêm nhân viên</button>
+<!-- ===================== NHÂN SỰ ===================== -->
+<div class="page" id="pg-nhansu">
+  <div class="ph">
+    <div>
+      <div class="pt">Nhân sự Vận hành</div>
+      <div class="ps">Quản lý đội ngũ Operations</div>
+    </div>
+    <button class="btn bp" onclick="openModal('modal-new-staff')">+ Thêm nhân viên</button>
   </div>
 
-  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="stat-card">
-      <div class="stat-label">Tổng nhân sự HQ</div>
-      <div class="stat-value" style="color:var(--accent)">6</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Đang onboarding</div>
-      <div class="stat-value" style="color:var(--accent2)">1</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Khóa học hoàn thành T4</div>
-      <div class="stat-value" style="color:var(--green)">0<span style="font-size:14px;color:var(--muted)">/6</span></div>
-    </div>
+  <div class="kgrid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi"><div class="kl">Nhân sự HQ</div><div class="kv">6</div><div class="kc up">Operations team</div></div>
+    <div class="kpi"><div class="kl">Đang onboarding</div><div class="kv" style="color:var(--blue)">1</div><div class="kc warn">Theo dõi</div></div>
+    <div class="kpi"><div class="kl">Khóa học hoàn thành</div><div class="kv">0<span style="font-size:14px;color:var(--gray)">/6</span></div><div class="kc dn">Tháng này</div></div>
   </div>
 
-  <div class="two-col">
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Nhân sự bộ phận Operations</div>
-      <div class="table-wrap">
-        <table>
+      <div class="ch"><span class="ct">Nhân sự bộ phận Operations</span></div>
+      <div class="cb" style="padding:0">
+        <table class="tbl" id="staff-table">
           <thead><tr><th>Họ tên</th><th>Vị trí</th><th>Phụ trách</th><th>Trạng thái</th></tr></thead>
           <tbody>
-            <tr><td style="font-weight:600">Dương Thanh Liêm</td><td>Operations Leader</td><td>Toàn hệ thống</td><td><span class="badge badge-green">Active</span></td></tr>
-            <tr><td>Nhung Nguyễn</td><td>Ops Staff</td><td>4 điểm bán CT</td><td><span class="badge badge-green">Active</span></td></tr>
-            <tr><td>Tăng Hữu Phúc</td><td>NV Setup</td><td>Đang onboarding</td><td><span class="badge badge-amber">Onboarding</span></td></tr>
+            <tr><td style="font-weight:700">Dương Thanh Liêm</td><td>Operations Leader</td><td>Toàn hệ thống</td><td><span class="bdg bg2">Active</span></td></tr>
+            <tr><td>Nhung Nguyễn</td><td>Ops Staff</td><td>4 điểm bán CT</td><td><span class="bdg bg2">Active</span></td></tr>
+            <tr><td>Tăng Hữu Phúc</td><td>NV Setup</td><td>Đang onboarding</td><td><span class="bdg by2">Onboarding</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Đào tạo & Phát triển tháng 4</div>
-      <div class="check-item" onclick="toggleCheck(this)">
-        <div class="check-box"></div>
-        <div><div class="check-text">Leader hoàn thành khóa học Leadership & NQ</div><div class="check-sub">Mục tiêu: trước 30/04</div></div>
-      </div>
-      <div class="check-item" onclick="toggleCheck(this)">
-        <div class="check-box"></div>
-        <div><div class="check-text">100% nhân sự HQ hoàn thành 1 khóa chuyên môn</div></div>
-      </div>
-      <div class="check-item" onclick="toggleCheck(this)">
-        <div class="check-box"></div>
-        <div><div class="check-text">Tổ chức 1 buổi đào tạo nội bộ có bài test</div><div class="check-sub">Lên lịch: tuần 2 tháng 4</div></div>
-      </div>
-      <div style="margin-top:16px">
-        <div class="form-group">
-          <label class="form-label">Ghi chú đào tạo</label>
-          <textarea placeholder="Kết quả bài test, ghi chú buổi đào tạo..."></textarea>
+      <div class="ch"><span class="ct">Đào tạo & Phát triển tháng 4</span></div>
+      <div class="cb">
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Leader hoàn thành khóa Leadership & NQ</div><div class="chk-sub">Mục tiêu: trước 30/04</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">100% nhân sự HQ hoàn thành 1 khóa chuyên môn</div></div></div>
+        <div class="chk-item" onclick="toggleCheck(this)"><div class="chk-box"></div><div><div class="chk-text">Tổ chức 1 buổi đào tạo nội bộ có bài test</div><div class="chk-sub">Lên lịch: tuần 2 tháng 4</div></div></div>
+        <div class="fg" style="margin-top:14px">
+          <label class="fl">Ghi chú đào tạo</label>
+          <textarea class="fc" placeholder="Kết quả bài test, ghi chú buổi đào tạo..."></textarea>
         </div>
-        <button class="btn btn-secondary btn-sm">Lưu ghi chú</button>
+        <button class="btn bp bsm" onclick="saveToSheets('training')">💾 Lưu ghi chú</button>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Cơ cấu nhân sự tại cửa hàng</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Cửa hàng</th><th>Store Manager</th><th>Số nhân viên</th><th>Tình trạng</th></tr></thead>
+    <div class="ch"><span class="ct">Cơ cấu nhân sự tại cửa hàng</span></div>
+    <div class="cb" style="padding:0">
+      <table class="tbl">
+        <thead><tr><th>Cửa hàng</th><th>Store Manager</th><th>Nhân viên</th><th>Tình trạng</th></tr></thead>
         <tbody>
-          <tr><td>Ninh Kiều 1</td><td>Nguyễn Thị C</td><td>4</td><td><span class="badge badge-green">Đủ</span></td></tr>
-          <tr><td>Ninh Kiều 2</td><td>Lê Văn D</td><td>3</td><td><span class="badge badge-amber">Thiếu 1</span></td></tr>
-          <tr><td>Hà Lam</td><td>Phạm Thị E</td><td>3</td><td><span class="badge badge-green">Đủ</span></td></tr>
-          <tr><td>Vĩnh Cửu</td><td>Trần Văn F</td><td>4</td><td><span class="badge badge-green">Đủ</span></td></tr>
-          <tr><td>Bình Thủy</td><td>Đang tuyển</td><td>2</td><td><span class="badge badge-red">Cần SM</span></td></tr>
+          <tr><td>Ninh Kiều 1</td><td>Nguyễn Thị C</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
+          <tr><td>Ninh Kiều 2</td><td>Lê Văn D</td><td>3</td><td><span class="bdg by2">Thiếu 1</span></td></tr>
+          <tr><td>Hà Lam</td><td>Phạm Thị E</td><td>3</td><td><span class="bdg bg2">Đủ</span></td></tr>
+          <tr><td>Vĩnh Cửu</td><td>Trần Văn F</td><td>4</td><td><span class="bdg bg2">Đủ</span></td></tr>
+          <tr><td>Bình Thủy</td><td style="color:var(--red)">Đang tuyển</td><td>2</td><td><span class="bdg br2">Cần SM</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ===== BÁO CÁO ===== -->
-<div id="sec-baocao" class="section">
-  <div class="section-header">
-    <h2>Báo cáo & Tổng hợp</h2>
+<!-- ===================== BÁO CÁO ===================== -->
+<div class="page" id="pg-baocao">
+  <div class="ph">
+    <div>
+      <div class="pt">Báo cáo & Gửi Email</div>
+      <div class="ps">Soạn & gửi báo cáo thực hiện kế hoạch cho BOD</div>
+    </div>
   </div>
 
-  <div class="two-col">
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Tạo Báo cáo tháng gửi BOD</div>
-      <div class="form-group">
-        <label class="form-label">Tháng báo cáo</label>
-        <select id="report-month">
-          <option>Tháng 3/2026</option>
-          <option selected>Tháng 4/2026</option>
-        </select>
+      <div class="ch"><span class="ct">Thông tin báo cáo</span></div>
+      <div class="cb">
+        <div class="fg">
+          <label class="fl">Tháng báo cáo</label>
+          <select class="fc" id="rpt-month">
+            <option>Tháng 3/2026</option>
+            <option selected>Tháng 4/2026</option>
+            <option>Tháng 5/2026</option>
+          </select>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Cửa hàng khai trương mới</label><input class="fc" type="number" id="rpt-stores" value="2"></div>
+          <div class="fg"><label class="fl">Điểm audit TB</label><input class="fc" type="number" id="rpt-audit" value="87"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Số lượt audit</label><input class="fc" type="number" id="rpt-n-audit" value="4"></div>
+          <div class="fg"><label class="fl">Tái audit cần xử lý</label><input class="fc" type="number" id="rpt-reaudit" value="3"></div>
+        </div>
+        <div class="fg">
+          <label class="fl">Thành tựu nổi bật</label>
+          <textarea class="fc" id="rpt-highlight" rows="3">Khai trương Phúc Tea Ninh Kiều 3, doanh thu ngày đầu 18.2tr vượt KPI. Hoàn thành 4/4 lượt audit bí ẩn tháng 3.</textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Thách thức & kế hoạch tháng sau</label>
+          <textarea class="fc" id="rpt-challenge" rows="3">3 cửa hàng cần tái audit. Kế hoạch T4: khai trương 2 CH mới, hoàn thành tái audit trong 15 ngày.</textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn bp" onclick="generateReport()">📝 Tạo báo cáo</button>
+          <button class="btn bo" onclick="aiGenerateReport()">🤖 AI soạn nội dung</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Tổng cửa hàng khai trương</label>
-        <input type="number" id="rpt-stores" value="2" placeholder="Số cửa hàng mở mới">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Điểm audit trung bình</label>
-        <input type="number" id="rpt-audit" value="87" placeholder="Điểm TB">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Số lượt audit thực hiện</label>
-        <input type="number" id="rpt-n-audit" value="4">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Thành tựu nổi bật</label>
-        <textarea id="rpt-highlight" placeholder="Ví dụ: Khai trương thành công Ninh Kiều 3, doanh thu ngày đầu đạt 18.2tr...">Khai trương thành công Phúc Tea Ninh Kiều 3, doanh thu ngày đầu 18.2tr vượt KPI (15tr). Hoàn thành 4/4 lượt audit bí ẩn tháng 3.</textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Thách thức & Kế hoạch tháng sau</label>
-        <textarea id="rpt-challenge" placeholder="Các vấn đề phát sinh và hướng giải quyết...">3 cửa hàng cần tái audit (Hà Lam, Vĩnh Cửu, Thới Lai). Kế hoạch T4: khai trương 2 cửa hàng mới, hoàn thành tái audit trong 15 ngày.</textarea>
-      </div>
-      <button class="btn btn-primary btn-full" onclick="generateReport()">Tạo báo cáo</button>
     </div>
 
     <div class="card">
-      <div class="card-title">Xem trước báo cáo</div>
-      <div id="report-preview" style="font-size:13px;line-height:1.8;color:var(--muted)">
-        <p>← Điền thông tin và nhấn <strong style="color:var(--text)">"Tạo báo cáo"</strong> để xem bản nháp.</p>
+      <div class="ch">
+        <span class="ct">Xem trước báo cáo</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn bo bsm" onclick="copyReport()" id="btn-copy" style="display:none">📋 Copy</button>
+          <button class="btn bp bsm" onclick="openModal('modal-email')" id="btn-email" style="display:none">✉️ Gửi email BOD</button>
+        </div>
       </div>
-      <div id="report-actions" style="display:none;margin-top:16px;display:none">
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-secondary btn-sm" onclick="copyReport()">📋 Copy nội dung</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-send-email')">✉️ Soạn email gửi BOD</button>
+      <div class="cb">
+        <div id="report-preview" style="font-size:13px;line-height:1.8;color:var(--gray)">
+          ← Điền thông tin và nhấn <strong style="color:var(--brown)">"Tạo báo cáo"</strong> để xem bản nháp, hoặc để AI soạn giúp.
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card" style="margin-top:16px">
-    <div class="card-title">Lịch sử báo cáo</div>
-    <div class="table-wrap">
-      <table>
+  <div class="card">
+    <div class="ch"><span class="ct">Lịch sử báo cáo</span></div>
+    <div class="cb" style="padding:0">
+      <table class="tbl">
         <thead><tr><th>Tháng</th><th>Ngày gửi</th><th>Khai trương</th><th>Điểm audit TB</th><th>Trạng thái</th></tr></thead>
         <tbody>
-          <tr><td>Tháng 3/2026</td><td>25/03/2026</td><td>2 cửa hàng</td><td style="color:var(--green)">87</td><td><span class="badge badge-green">Đã gửi BOD</span></td></tr>
-          <tr><td>Tháng 2/2026</td><td>26/02/2026</td><td>3 cửa hàng</td><td style="color:var(--green)">84</td><td><span class="badge badge-green">Đã gửi BOD</span></td></tr>
-          <tr><td>Tháng 1/2026</td><td>27/01/2026</td><td>3 cửa hàng</td><td style="color:var(--amber)">81</td><td><span class="badge badge-green">Đã gửi BOD</span></td></tr>
+          <tr><td>Tháng 3/2026</td><td>25/03/2026</td><td>2 cửa hàng</td><td style="color:var(--green)">87</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
+          <tr><td>Tháng 2/2026</td><td>26/02/2026</td><td>3 cửa hàng</td><td style="color:var(--green)">84</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
+          <tr><td>Tháng 1/2026</td><td>27/01/2026</td><td>3 cửa hàng</td><td style="color:var(--gold)">81</td><td><span class="bdg bg2">Đã gửi BOD</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-</main>
-
-<!-- MODALS -->
-<div id="modal-new-store" class="modal-overlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-new-store')">×</button>
-    <div class="modal-title">Thêm cửa hàng mới</div>
-    <div class="form-group"><label class="form-label">Tên cửa hàng</label><input type="text" placeholder="Ví dụ: Phúc Tea – Ô Môn"></div>
-    <div class="form-group"><label class="form-label">Thương hiệu</label>
-      <select><option>Phúc Tea</option><option>The Hoa</option></select></div>
-    <div class="form-group"><label class="form-label">Đối tác nhượng quyền</label><input type="text" placeholder="Họ tên đối tác"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Ngày bắt đầu setup</label><input type="date"></div>
-      <div class="form-group"><label class="form-label">Dự kiến khai trương</label><input type="date"></div>
+<!-- ===================== KẾ HOẠCH ===================== -->
+<div class="page" id="pg-kehoach">
+  <div class="ph">
+    <div>
+      <div class="pt">Kế hoạch Tháng</div>
+      <div class="ps">Lập và gửi kế hoạch Operations cho BOD</div>
     </div>
-    <div class="form-group"><label class="form-label">Địa chỉ</label><input type="text" placeholder="Địa chỉ cửa hàng"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" onclick="closeModal('modal-new-store')">Thêm cửa hàng</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-new-store')">Hủy</button>
+    <button class="btn bp" onclick="aiGeneratePlan()">🤖 AI Lập kế hoạch</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="ct">Soạn kế hoạch</span></div>
+      <div class="cb">
+        <div class="fg">
+          <label class="fl">Tháng kế hoạch</label>
+          <select class="fc" id="plan-month">
+            <option selected>Tháng 4/2026</option>
+            <option>Tháng 5/2026</option>
+            <option>Tháng 6/2026</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Mục tiêu khai trương</label>
+          <input class="fc" type="number" id="plan-target-stores" value="2" placeholder="Số cửa hàng">
+        </div>
+        <div class="fg">
+          <label class="fl">Mục tiêu audit (số lượt)</label>
+          <input class="fc" type="number" id="plan-target-audit" value="4">
+        </div>
+        <div class="fg">
+          <label class="fl">Ngân sách ước tính (triệu đồng)</label>
+          <input class="fc" type="number" id="plan-budget" value="24.9">
+        </div>
+        <div class="fg">
+          <label class="fl">Các hoạt động chính</label>
+          <textarea class="fc" id="plan-activities" rows="4" placeholder="Liệt kê các hoạt động...">1. Khai trương Ninh Kiều 3 (05/04)
+2. Khai trương Bình Thủy (20/04)
+3. Tái audit Hà Lam, Vĩnh Cửu, Thới Lai
+4. Đào tạo nhân sự mới</textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Rủi ro & Giải pháp</label>
+          <textarea class="fc" id="plan-risks" rows="3" placeholder="Rủi ro dự kiến và hướng xử lý...">Rủi ro: Chậm trễ thi công CH Bình Thủy → Phương án: điều chuyển setup team sớm từ tuần 1</textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn bp" onclick="generatePlan()">📋 Tạo kế hoạch</button>
+          <button class="btn bo" onclick="aiGeneratePlan()">🤖 AI soạn chi tiết</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch">
+        <span class="ct">Xem trước kế hoạch</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn bp bsm" onclick="openModal('modal-email-plan')" id="btn-send-plan" style="display:none">✉️ Gửi email BOD</button>
+        </div>
+      </div>
+      <div class="cb">
+        <div id="plan-preview" style="font-size:13px;line-height:1.8;color:var(--gray)">
+          ← Điền thông tin và nhấn <strong style="color:var(--brown)">"Tạo kế hoạch"</strong> hoặc để AI soạn giúp.
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="modal-new-audit" class="modal-overlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-new-audit')">×</button>
-    <div class="modal-title">Tạo phiên audit mới</div>
-    <div class="form-group"><label class="form-label">Cửa hàng</label>
-      <select><option>Phúc Tea – Hà Lam</option><option>Phúc Tea – Vĩnh Cửu</option><option>Phúc Tea – Thới Lai</option></select></div>
-    <div class="form-group"><label class="form-label">Loại audit</label>
-      <select><option>Audit bí ẩn</option><option>Tái audit</option><option>Audit định kỳ</option></select></div>
-    <div class="form-group"><label class="form-label">Ngày thực hiện</label><input type="date"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" onclick="closeModal('modal-new-audit')">Tạo phiên audit</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-new-audit')">Hủy</button>
+<!-- ===================== AI PHÂN TÍCH ===================== -->
+<div class="page" id="pg-ai">
+  <div class="ph">
+    <div>
+      <div class="pt">🤖 AI Phân tích & Đề xuất</div>
+      <div class="ps">Phân tích số liệu vận hành, đề xuất cải tiến thông minh</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="height:fit-content">
+      <div class="ch"><span class="ct">Hỏi AI về vận hành</span></div>
+      <div class="cb">
+        <div style="font-size:12px;color:var(--gray);margin-bottom:10px">Gợi ý câu hỏi:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+          <button class="btn bo bsm" onclick="quickAsk('Phân tích điểm audit và đề xuất cải thiện cửa hàng yếu nhất')">📊 Phân tích audit</button>
+          <button class="btn bo bsm" onclick="quickAsk('Lập kế hoạch tháng 5 dựa trên số liệu hiện tại')">📅 KH tháng 5</button>
+          <button class="btn bo bsm" onclick="quickAsk('Đánh giá hiệu suất đội ngũ và đề xuất đào tạo')">👥 Đánh giá nhân sự</button>
+          <button class="btn bo bsm" onclick="quickAsk('Phân tích rủi ro vận hành và biện pháp phòng ngừa')">⚠️ Rủi ro vận hành</button>
+          <button class="btn bo bsm" onclick="quickAsk('Tổng kết Q1 2026 và đề xuất chiến lược Q2')">🎯 Chiến lược Q2</button>
+        </div>
+        <div id="ai-messages" class="ai-messages">
+          <div class="ai-msg ai-msg-ai">
+            <div class="ai-msg-bubble">Xin chào! Tôi là AI Ops Assistant của Phúc Tea 🍵 Tôi có thể giúp bạn phân tích số liệu vận hành, đề xuất kế hoạch, đánh giá hiệu suất cửa hàng, và soạn nội dung báo cáo. Hỏi tôi bất cứ điều gì!</div>
+          </div>
+        </div>
+        <div class="ai-input-row">
+          <input class="ai-input" id="ai-question" placeholder="Hỏi AI về vận hành..." onkeydown="if(event.key==='Enter'&&!event.shiftKey)askAI()">
+          <button class="btn bp" onclick="askAI()">Gửi ↗</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="">
+      <div class="ai" id="ai-main-insight">
+        <span class="aitag">✨ AI PHÂN TÍCH TỔNG QUAN</span>
+        <div class="ait" style="margin-top:8px">Nhấn "Phân tích ngay" để nhận báo cáo AI</div>
+        <div class="aii" style="color:rgba(255,255,255,.6)">AI sẽ phân tích toàn bộ số liệu vận hành và đưa ra đề xuất cụ thể cho tháng tới.</div>
+        <button class="btn" style="background:var(--gold);color:var(--brown);margin-top:12px" onclick="aiFullAnalysis()">🤖 Phân tích toàn bộ hệ thống</button>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="ct">Đề xuất nhanh từ AI</span></div>
+        <div class="cb" id="ai-quick-suggestions">
+          <div style="color:var(--gray);font-size:13px">Nhấn "Phân tích toàn bộ hệ thống" để nhận đề xuất.</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="modal-new-staff" class="modal-overlay">
+<!-- ===================== MODALS ===================== -->
+
+<!-- Modal: Thêm cửa hàng mới -->
+<div class="overlay" id="modal-new-store">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-new-staff')">×</button>
-    <div class="modal-title">Thêm nhân viên</div>
-    <div class="form-group"><label class="form-label">Họ tên</label><input type="text" placeholder="Nguyễn Văn A"></div>
-    <div class="form-group"><label class="form-label">Vị trí</label>
-      <select><option>Operations Staff</option><option>Nhân viên Setup</option><option>Store Manager</option><option>Nhân viên cửa hàng</option></select></div>
-    <div class="form-group"><label class="form-label">Phụ trách cửa hàng</label><input type="text" placeholder="Để trống nếu là nhân sự HQ"></div>
-    <div class="form-group"><label class="form-label">Ngày bắt đầu</label><input type="date"></div>
+    <div class="mh"><div class="mt">Thêm cửa hàng mới</div><button class="mx" onclick="closeModal('modal-new-store')">×</button></div>
+    <div class="fg"><label class="fl">Tên cửa hàng</label><input class="fc" id="ns-name" placeholder="Ví dụ: Phúc Tea – Ô Môn"></div>
+    <div class="fg"><label class="fl">Thương hiệu</label><select class="fc" id="ns-brand"><option>Phúc Tea</option><option>The Hoa</option></select></div>
+    <div class="fg"><label class="fl">Đối tác nhượng quyền</label><input class="fc" id="ns-partner" placeholder="Họ tên đối tác"></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Ngày bắt đầu setup</label><input type="date" class="fc" id="ns-start"></div>
+      <div class="fg"><label class="fl">Dự kiến khai trương</label><input type="date" class="fc" id="ns-open"></div>
+    </div>
+    <div class="fg"><label class="fl">Địa chỉ</label><input class="fc" id="ns-address" placeholder="Địa chỉ cửa hàng"></div>
     <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" onclick="closeModal('modal-new-staff')">Thêm</button>
-      <button class="btn btn-secondary" onclick="closeModal('modal-new-staff')">Hủy</button>
+      <button class="btn bp" onclick="addNewStore()">Thêm & lưu lên Sheets</button>
+      <button class="btn bo" onclick="closeModal('modal-new-store')">Hủy</button>
     </div>
   </div>
 </div>
 
-<div id="modal-send-email" class="modal-overlay">
+<!-- Modal: Tạo phiên audit -->
+<div class="overlay" id="modal-new-audit">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-send-email')">×</button>
-    <div class="modal-title">Soạn email gửi BOD</div>
-    <div id="email-preview-content" style="font-size:13px;line-height:1.8;background:var(--surface2);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px;color:var(--text)"></div>
+    <div class="mh"><div class="mt">Tạo phiên audit mới</div><button class="mx" onclick="closeModal('modal-new-audit')">×</button></div>
+    <div class="fg"><label class="fl">Cửa hàng</label>
+      <select class="fc"><option>Phúc Tea – Ninh Kiều 1</option><option>Phúc Tea – Hà Lam</option><option>Phúc Tea – Vĩnh Cửu</option><option>Phúc Tea – Thới Lai</option></select></div>
+    <div class="fg"><label class="fl">Loại audit</label>
+      <select class="fc"><option>Audit bí ẩn</option><option>Tái audit</option><option>Audit định kỳ</option></select></div>
+    <div class="fg"><label class="fl">Ngày thực hiện</label><input type="date" class="fc"></div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-secondary" onclick="closeModal('modal-send-email')">Đóng</button>
+      <button class="btn bp" onclick="closeModal('modal-new-audit');toast('Đã tạo phiên audit!','tok')">Tạo phiên audit</button>
+      <button class="btn bo" onclick="closeModal('modal-new-audit')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Thêm nhân viên -->
+<div class="overlay" id="modal-new-staff">
+  <div class="modal">
+    <div class="mh"><div class="mt">Thêm nhân viên</div><button class="mx" onclick="closeModal('modal-new-staff')">×</button></div>
+    <div class="fg"><label class="fl">Họ tên</label><input class="fc" placeholder="Nguyễn Văn A"></div>
+    <div class="fg"><label class="fl">Vị trí</label>
+      <select class="fc"><option>Operations Staff</option><option>Nhân viên Setup</option><option>Store Manager</option><option>Nhân viên cửa hàng</option></select></div>
+    <div class="fg"><label class="fl">Phụ trách cửa hàng</label><input class="fc" placeholder="Để trống nếu HQ"></div>
+    <div class="fg"><label class="fl">Ngày bắt đầu</label><input type="date" class="fc"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bp" onclick="closeModal('modal-new-staff');saveToSheets('staff')">Thêm & lưu</button>
+      <button class="btn bo" onclick="closeModal('modal-new-staff')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Gửi email báo cáo -->
+<div class="overlay" id="modal-email">
+  <div class="modal modal-lg">
+    <div class="mh"><div class="mt">✉️ Gửi báo cáo cho BOD</div><button class="mx" onclick="closeModal('modal-email')">×</button></div>
+    <div style="background:var(--gold-l);border-radius:var(--rs);padding:12px;margin-bottom:14px;font-size:12px;color:var(--brown-m)">
+      <strong>Gửi tới:</strong> Lý Tấn Tài (lytantai@phuctea.com.vn)<br>
+      <strong>CC:</strong> Trần Nhật Vũ, Nguyễn Ngọc Phi Yến, HR<br>
+      <strong>CC emails:</strong> trannhatvu@phuctea.com.vn · phiyen@phuctea.com.vn · hr@phuctea.com.vn
+    </div>
+    <div class="fg"><label class="fl">Tiêu đề email</label><input class="fc" id="email-subject" value="Báo cáo Vận hành Operations – Tháng 4/2026"></div>
+    <div class="fg">
+      <label class="fl">Nội dung email <button class="btn bo bsm" style="float:right;margin-top:-2px" onclick="aiRewriteEmail()">🤖 AI viết lại</button></label>
+      <textarea class="fc" id="email-body" rows="14" id="email-content"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bp" onclick="sendEmail('report')">📤 Gửi qua Apps Script</button>
+      <button class="btn bo" onclick="copyEmail()">📋 Copy nội dung</button>
+      <button class="btn bo" onclick="closeModal('modal-email')">Đóng</button>
+    </div>
+    <div style="font-size:11px;color:var(--gray);margin-top:10px">⚠️ Cần cấu hình Google Apps Script để gửi email thật. Bạn có thể copy nội dung để gửi thủ công qua Gmail.</div>
+  </div>
+</div>
+
+<!-- Modal: Gửi email kế hoạch -->
+<div class="overlay" id="modal-email-plan">
+  <div class="modal modal-lg">
+    <div class="mh"><div class="mt">✉️ Gửi kế hoạch cho BOD</div><button class="mx" onclick="closeModal('modal-email-plan')">×</button></div>
+    <div style="background:var(--gold-l);border-radius:var(--rs);padding:12px;margin-bottom:14px;font-size:12px;color:var(--brown-m)">
+      <strong>Gửi tới:</strong> Lý Tấn Tài (lytantai@phuctea.com.vn)<br>
+      <strong>CC:</strong> Trần Nhật Vũ · Nguyễn Ngọc Phi Yến · HR
+    </div>
+    <div class="fg"><label class="fl">Tiêu đề</label><input class="fc" id="plan-email-subject" value="Kế hoạch Vận hành Operations – Tháng 4/2026"></div>
+    <div class="fg">
+      <label class="fl">Nội dung <button class="btn bo bsm" style="float:right;margin-top:-2px" onclick="aiRewritePlanEmail()">🤖 AI viết lại</button></label>
+      <textarea class="fc" id="plan-email-body" rows="14"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bp" onclick="sendEmail('plan')">📤 Gửi qua Apps Script</button>
+      <button class="btn bo" onclick="copyPlanEmail()">📋 Copy</button>
+      <button class="btn bo" onclick="closeModal('modal-email-plan')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: AI gợi ý -->
+<div class="overlay" id="modal-ai-advice">
+  <div class="modal">
+    <div class="mh"><div class="mt">🤖 AI Đề xuất</div><button class="mx" onclick="closeModal('modal-ai-advice')">×</button></div>
+    <div class="ai" style="margin-bottom:0">
+      <span class="aitag">AI ANALYSIS</span>
+      <div class="ait" id="ai-advice-title" style="margin-top:8px"></div>
+      <div class="aii" id="ai-advice-body"></div>
     </div>
   </div>
 </div>
 
 <script>
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('sec-' + id).classList.add('active');
-    event.target.classList.add('active');
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
+// ========== CONFIG ==========
+const SHEETS_ID = '1tImeHSb1BacVVhJPzQxh2LHffOhqjnX7OVuTrygPJKo';
+const APPS_SCRIPT_URL = ''; // Điền URL Apps Script của bạn sau khi deploy
+const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
-  function toggleCheck(el) {
-    el.classList.toggle('done');
-    if (el.classList.contains('done')) el.querySelector('.check-box').textContent = '✓';
-    else el.querySelector('.check-box').textContent = '';
-  }
+// ========== DEMO DATA (sẽ được thay bằng data từ Sheets) ==========
+let D = {
+  stores: 14, newStores: 8, targetStores: 30,
+  auditAvg: 87, auditDone: 4, auditTarget: 4, reauditCount: 3,
+  setupStores: [
+    {name:'Ninh Kiều 3', progress:75, openDate:'05/04/2026', partner:'Nguyễn Văn A', status:'Đang setup'},
+    {name:'Bình Thủy', progress:40, openDate:'20/04/2026', partner:'Trần Thị B', status:'Mới bắt đầu'}
+  ],
+  auditList: [
+    {name:'Ninh Kiều 1', score:92, date:'15/03', status:'Đạt'},
+    {name:'Ninh Kiều 2', score:88, date:'16/03', status:'Đạt'},
+    {name:'Bình Thủy', score:83, date:'17/03', status:'Theo dõi'},
+    {name:'Hà Lam', score:74, date:'18/03', status:'Tái audit'},
+    {name:'Vĩnh Cửu', score:78, date:'20/03', status:'Tái audit'},
+    {name:'Thới Lai', score:81, date:'22/03', status:'Tái audit'}
+  ],
+  timeline: [
+    {text:'Khai trương Phúc Tea Ninh Kiều 3 – doanh thu ngày đầu 18.2 triệu', time:'25/03/2026', color:'var(--green)'},
+    {text:'Audit The Hoa Hà Lam – 74 điểm, lên Action Plan', time:'23/03/2026', color:'var(--gold)'},
+    {text:'Gửi kế hoạch tháng 4 lên BOD – chờ phê duyệt', time:'25/03/2026', color:'var(--blue)'},
+    {text:'Tuyển được Nhân viên Setup – Tăng Hữu Phúc', time:'26/03/2026', color:'var(--teal)'}
+  ],
+  okr: [
+    {label:'Setup & Mở mới (20tr)', pct:30, color:'var(--gold)'},
+    {label:'Audit & Tái audit (1.7tr)', pct:60, color:'var(--blue)'},
+    {label:'Đào tạo & Phát triển (2.2tr)', pct:20, color:'var(--teal)'},
+    {label:'Web báo cáo & AI (1tr)', pct:85, color:'var(--green)'}
+  ]
+};
+let connected = false;
+let reportText = '';
+let planText = '';
 
-  function openModal(id) {
-    document.getElementById(id).classList.add('open');
-  }
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-  }
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+// ========== UTILS ==========
+function toast(msg, type='tok') {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg; el.className = `toast ${type} on`;
+  setTimeout(() => el.classList.remove('on'), 3200);
+}
+function load(msg='Đang xử lý...') {
+  document.getElementById('loadMsg').textContent = msg;
+  document.getElementById('loadEl').classList.add('on');
+}
+function unload() { document.getElementById('loadEl').classList.remove('on'); }
+function openModal(id) { document.getElementById(id).classList.add('on'); }
+function closeModal(id) { document.getElementById(id).classList.remove('on'); }
+function goPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  if(el) el.classList.add('on');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  el.querySelector('.chk-box').textContent = el.classList.contains('done') ? '✓' : '';
+}
+
+// ========== GREETING ==========
+function setGreeting() {
+  const now = new Date();
+  const h = now.getHours();
+  const greet = h < 11 ? 'Chào buổi sáng' : h < 13 ? 'Chào buổi trưa' : h < 18 ? 'Chào buổi chiều' : 'Chào buổi tối';
+  document.getElementById('greeting').textContent = `${greet}, Liêm 👋`;
+  const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+  document.getElementById('today-str').textContent = `${days[now.getDay()]}, ${now.toLocaleDateString('vi-VN')} · Mục tiêu 2026: 30 cửa hàng mới`;
+  const auditDate = document.getElementById('audit-date');
+  if(auditDate) auditDate.value = now.toISOString().split('T')[0];
+}
+
+// ========== RENDER DASHBOARD ==========
+function renderDashboard() {
+  // KPIs
+  document.getElementById('kpi-stores').textContent = D.stores;
+  document.getElementById('kpi-stores-sub').innerHTML = `<span class="kc up">+2 tháng này</span>`;
+  document.getElementById('kpi-stores-sub').className='kc up';
+  document.getElementById('kpi-new').textContent = `${D.newStores}/${D.targetStores}`;
+  const newPct = Math.round(D.newStores/D.targetStores*100);
+  document.getElementById('kpi-new-sub').textContent = `${newPct}% mục tiêu năm`;
+  document.getElementById('kpi-new-sub').className = newPct >= 40 ? 'kc up' : 'kc warn';
+  document.getElementById('kpi-audit').textContent = D.auditAvg;
+  document.getElementById('kpi-audit-sub').textContent = D.auditAvg>=85 ? '↑ Đạt mục tiêu ≥85' : '↓ Dưới mục tiêu';
+  document.getElementById('kpi-audit-sub').className = D.auditAvg>=85 ? 'kc up' : 'kc dn';
+  document.getElementById('kpi-reaudit').textContent = D.reauditCount;
+  document.getElementById('kpi-reaudit-sub').textContent = D.reauditCount===0 ? 'Không có' : 'Dưới 85 điểm';
+  document.getElementById('kpi-reaudit-sub').className = D.reauditCount===0 ? 'kc up' : 'kc dn';
+
+  // Alerts
+  let alertHtml = '';
+  if(D.reauditCount>0) alertHtml += `<div class="alert ay">⚠️ <span><strong>${D.reauditCount} cửa hàng</strong> cần tái audit trong vòng 15 ngày. Deadline sắp tới!</span></div>`;
+  if(D.newStores/D.targetStores < 0.3) alertHtml += `<div class="alert ar">🔴 <span>Tiến độ mở mới <strong>${newPct}%</strong> so với mục tiêu năm – cần đẩy mạnh!</span></div>`;
+  document.getElementById('alerts-container').innerHTML = alertHtml;
+
+  // Setup progress
+  let spHtml = '';
+  D.setupStores.forEach(s => {
+    const c = s.progress>=70?'var(--gold)':s.progress>=40?'var(--blue)':'var(--gray)';
+    spHtml += `<div class="prog-item">
+      <div class="prog-hd"><span>${s.name}</span><span style="color:${c};font-weight:700">${s.progress}%</span></div>
+      <div class="prog-bg"><div class="prog-bar" style="width:${s.progress}%;background:${c}"></div></div>
+    </div>`;
   });
+  document.getElementById('setup-progress-dash').innerHTML = spHtml || '<div style="color:var(--gray);font-size:13px">Không có cửa hàng đang setup</div>';
 
-  function calcAudit() {
-    const inputs = document.querySelectorAll('.audit-input');
-    let total = 0;
-    inputs.forEach(i => total += parseInt(i.value) || 0);
-    document.getElementById('audit-total').textContent = total;
-    const status = document.getElementById('audit-status');
-    const el = document.getElementById('audit-total');
-    if (total >= 85) {
-      el.style.color = 'var(--green)'; status.style.color = 'var(--green)';
-      status.textContent = '✓ Đạt tiêu chuẩn';
-    } else if (total >= 70) {
-      el.style.color = 'var(--amber)'; status.style.color = 'var(--amber)';
-      status.textContent = '⚠ Cần tái audit trong 15 ngày';
-    } else {
-      el.style.color = 'var(--red)'; status.style.color = 'var(--red)';
-      status.textContent = '✗ Dưới tiêu chuẩn – Hành động ngay';
-    }
+  // Audit list
+  let alHtml = '';
+  D.auditList.forEach(a => {
+    const c = a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';
+    alHtml += `<div class="store-item">
+      <div class="store-dot" style="background:${c}"></div>
+      <div class="store-name">${a.name}</div>
+      <div class="store-score" style="color:${c}">${a.score}</div>
+    </div>`;
+  });
+  document.getElementById('audit-list-dash').innerHTML = alHtml;
+
+  // Timeline
+  let tlHtml = '';
+  D.timeline.forEach(t => {
+    tlHtml += `<div class="tl-item">
+      <div class="tl-dot" style="background:${t.color}"></div>
+      <div><div class="tl-txt">${t.text}</div><div class="tl-time">${t.time}</div></div>
+    </div>`;
+  });
+  document.getElementById('timeline-dash').innerHTML = tlHtml;
+
+  // OKR
+  let okrHtml = '';
+  D.okr.forEach(o => {
+    okrHtml += `<div class="prog-item">
+      <div class="prog-hd"><span style="font-size:12px">${o.label}</span><span style="color:${o.color};font-weight:700;font-size:12px">${o.pct}%</span></div>
+      <div class="prog-bg"><div class="prog-bar" style="width:${o.pct}%;background:${o.color}"></div></div>
+    </div>`;
+  });
+  document.getElementById('okr-dash').innerHTML = okrHtml;
+}
+
+// ========== AUDIT CALC ==========
+function calcAudit() {
+  const inputs = document.querySelectorAll('.audit-inp');
+  let total = 0;
+  inputs.forEach(i => total += parseInt(i.value)||0);
+  const el = document.getElementById('audit-total');
+  const st = document.getElementById('audit-status');
+  el.textContent = total;
+  if(total>=85){el.style.color='var(--green)';st.textContent='✓ Đạt tiêu chuẩn';st.style.color='var(--green)';}
+  else if(total>=70){el.style.color='var(--gold)';st.textContent='⚠ Cần tái audit trong 15 ngày';st.style.color='var(--gold)';}
+  else{el.style.color='var(--red)';st.textContent='✗ Dưới tiêu chuẩn – Hành động ngay';st.style.color='var(--red)';}
+}
+
+// ========== SYNC SHEETS ==========
+async function syncSheets() {
+  load('Đang kết nối Google Sheets...');
+  await new Promise(r => setTimeout(r, 1200));
+  // Simulate data from Sheets (demo mode)
+  // In production, fetch from APPS_SCRIPT_URL?action=getData
+  D.stores = 14;
+  D.newStores = 8;
+  D.auditAvg = 87;
+  D.reauditCount = 3;
+  connected = true;
+  document.getElementById('sync-dot').className = 'sync-dot';
+  document.getElementById('sync-label').innerHTML = '<span class="sync-dot"></span>Đã đồng bộ';
+  unload();
+  renderDashboard();
+  toast('✅ Đã đồng bộ dữ liệu từ Google Sheets!', 'tok');
+  
+  // Auto AI insight after sync
+  setTimeout(loadAIDashInsight, 500);
+}
+
+// ========== SAVE TO SHEETS ==========
+async function saveToSheets(type, data={}) {
+  if(!APPS_SCRIPT_URL){
+    toast('⚠️ Chưa cấu hình Apps Script URL. Dữ liệu lưu cục bộ.','twarn');
+    return;
   }
-
-  function saveAudit() {
-    const store = document.getElementById('audit-store').value;
-    const total = document.getElementById('audit-total').textContent;
-    alert(`✓ Đã lưu kết quả audit\n${store}: ${total} điểm\nAction plan đã ghi nhận.`);
+  load('Đang lưu lên Google Sheets...');
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({action:'save', type, data, timestamp: new Date().toISOString()})
+    });
+    unload();
+    toast('✅ Đã lưu lên Google Sheets!','tok');
+  } catch(e) {
+    unload();
+    toast('❌ Lỗi kết nối Sheets. Kiểm tra Apps Script URL.','terr');
   }
+}
 
-  function generateReport() {
-    const month = document.getElementById('report-month').value;
-    const stores = document.getElementById('rpt-stores').value;
-    const audit = document.getElementById('rpt-audit').value;
-    const nAudit = document.getElementById('rpt-n-audit').value;
-    const highlight = document.getElementById('rpt-highlight').value;
-    const challenge = document.getElementById('rpt-challenge').value;
-    const today = new Date().toLocaleDateString('vi-VN');
+function saveSetupNote(btn) {
+  const card = btn.closest('.setup-card');
+  const name = card.querySelector('div[style*="font-weight:700"]').textContent;
+  saveToSheets('setup', {store: name, timestamp: new Date().toISOString()});
+  toast('💾 Đã lưu tiến độ ' + name, 'tok');
+}
 
-    const report = `[Operations – Dương Thanh Liêm] – Báo cáo ${month}
+async function saveAudit() {
+  const store = document.getElementById('audit-store').value;
+  const total = document.getElementById('audit-total').textContent;
+  const date = document.getElementById('audit-date').value;
+  const type = document.getElementById('audit-type').value;
+  const plan = document.getElementById('action-plan').value;
+  const data = {store, score: parseInt(total), date, type, actionPlan: plan};
+  
+  // Update local data
+  const idx = D.auditList.findIndex(a => store.includes(a.name));
+  if(idx>=0) { D.auditList[idx].score = parseInt(total); D.auditList[idx].date = new Date().toLocaleDateString('vi-VN').split('/').slice(0,2).join('/'); }
+  D.auditAvg = Math.round(D.auditList.reduce((a,b)=>a+b.score,0)/D.auditList.length);
+  D.reauditCount = D.auditList.filter(a=>a.score<85).length;
 
-Kính gửi Anh Tài, Anh Vũ, Chị Yến và Bộ phận HR,
+  // Re-render
+  renderDashboard();
+  renderAuditTable();
+  await saveToSheets('audit', data);
+  toast(`✅ Đã lưu audit ${store}: ${total} điểm`, 'tok');
+}
 
-Em xin gửi báo cáo kết quả công việc ${month} của bộ phận Operations.
+function renderAuditTable() {
+  const body = document.getElementById('audit-table-body');
+  if(!body) return;
+  body.innerHTML = D.auditList.map(a => {
+    const c = a.score>=85?'var(--green)':a.score>=80?'var(--gold)':'var(--red)';
+    const bdg = a.score>=85?'<span class="bdg bg2">Đạt</span>':a.score>=80?'<span class="bdg by2">Theo dõi</span>':'<span class="bdg br2">Tái audit</span>';
+    return `<tr><td>${a.name}</td><td style="color:${c};font-weight:700">${a.score}</td><td>${a.date}</td><td>${bdg}</td></tr>`;
+  }).join('');
+  document.getElementById('audit-avg').textContent = D.auditAvg;
+  document.getElementById('audit-reaudit-cnt').textContent = D.reauditCount;
+  const alertEl = document.getElementById('audit-alert');
+  if(D.reauditCount>0) {
+    const names = D.auditList.filter(a=>a.score<85).map(a=>`${a.name} (${a.score}đ)`).join(', ');
+    alertEl.innerHTML = `⚠️ <span><strong>${D.reauditCount} cửa hàng</strong> dưới 85 điểm cần tái audit: ${names}</span>`;
+    alertEl.style.display='flex';
+  } else { alertEl.style.display='none'; }
+}
 
-📊 KẾT QUẢ THÁNG:
+// ========== REPORT ==========
+function generateReport() {
+  const month = document.getElementById('rpt-month').value;
+  const stores = document.getElementById('rpt-stores').value;
+  const audit = document.getElementById('rpt-audit').value;
+  const nAudit = document.getElementById('rpt-n-audit').value;
+  const reaudit = document.getElementById('rpt-reaudit').value;
+  const highlight = document.getElementById('rpt-highlight').value;
+  const challenge = document.getElementById('rpt-challenge').value;
+  const today = new Date().toLocaleDateString('vi-VN');
+
+  reportText = `[Operations – Dương Thanh Liêm] – Báo cáo thực hiện kế hoạch ${month}
+
+Kính gửi:
+• Anh Lý Tấn Tài (lytantai@phuctea.com.vn)
+CC:
+• Anh Trần Nhật Vũ (trannhatvu@phuctea.com.vn)
+• Chị Nguyễn Ngọc Phi Yến (phiyen@phuctea.com.vn)
+• Bộ phận HR (hr@phuctea.com.vn)
+
+Em xin gửi báo cáo kết quả thực hiện kế hoạch ${month} của bộ phận Operations.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 KẾT QUẢ THỰC HIỆN THÁNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 • Cửa hàng khai trương mới: ${stores} cửa hàng
+• Tổng cửa hàng đang hoạt động: ${D.stores} cửa hàng
+• Tiến độ mục tiêu 2026: ${D.newStores}/30 cửa hàng (${Math.round(D.newStores/30*100)}%)
 • Số lượt audit thực hiện: ${nAudit}/4 lượt
 • Điểm audit trung bình hệ thống: ${audit}/100 (Mục tiêu ≥85)
+• Cửa hàng cần tái audit: ${reaudit} cửa hàng
 
-✅ THÀNH TỰU NỔI BẬT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ THÀNH TỰU NỔI BẬT
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${highlight}
 
-⚠️ THÁCH THỨC & KẾ HOẠCH TIẾP THEO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ THÁCH THỨC & KẾ HOẠCH THÁNG SAU
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${challenge}
 
 Trân trọng,
 Dương Thanh Liêm
 Operations Leader – Phúc Tea
 📞 0357 636 539 | 📧 operations@phuctea.com.vn
-${today}`;
+Ngày: ${today}`;
 
-    const preview = document.getElementById('report-preview');
-    preview.innerHTML = report.replace(/\n/g, '<br>').replace(/📊|✅|⚠️|📞|📧/g, m => `<span>${m}</span>`);
-    preview.style.color = 'var(--text)';
+  const preview = document.getElementById('report-preview');
+  preview.innerHTML = reportText.replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border-color:var(--border);margin:8px 0">');
+  preview.style.color = 'var(--brown)';
+  document.getElementById('btn-copy').style.display='';
+  document.getElementById('btn-email').style.display='';
+  document.getElementById('email-body').value = reportText;
+  toast('📋 Đã tạo báo cáo!','tok');
+}
 
-    document.getElementById('report-actions').style.display = 'flex';
-    document.getElementById('email-preview-content').innerHTML = preview.innerHTML;
-
-    window._reportText = report;
+function copyReport() {
+  if(reportText) {
+    navigator.clipboard.writeText(reportText).then(()=>toast('✅ Đã copy nội dung!','tok'));
   }
+}
+function copyEmail() {
+  const body = document.getElementById('email-body').value;
+  navigator.clipboard.writeText(body).then(()=>toast('✅ Đã copy!','tok'));
+}
+function copyPlanEmail() {
+  const body = document.getElementById('plan-email-body').value;
+  navigator.clipboard.writeText(body).then(()=>toast('✅ Đã copy!','tok'));
+}
 
-  function copyReport() {
-    if (window._reportText) {
-      navigator.clipboard.writeText(window._reportText).then(() => alert('✓ Đã copy nội dung báo cáo!'));
-    }
+// ========== PLAN ==========
+function generatePlan() {
+  const month = document.getElementById('plan-month').value;
+  const targetStores = document.getElementById('plan-target-stores').value;
+  const targetAudit = document.getElementById('plan-target-audit').value;
+  const budget = document.getElementById('plan-budget').value;
+  const activities = document.getElementById('plan-activities').value;
+  const risks = document.getElementById('plan-risks').value;
+  const today = new Date().toLocaleDateString('vi-VN');
+
+  planText = `[Operations – Dương Thanh Liêm] – Kế hoạch ${month}
+
+Kính gửi:
+• Anh Lý Tấn Tài (lytantai@phuctea.com.vn)
+CC:
+• Anh Trần Nhật Vũ · Chị Nguyễn Ngọc Phi Yến · Bộ phận HR
+
+Em xin trình bày kế hoạch hoạt động ${month} của bộ phận Operations.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 MỤC TIÊU THÁNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Khai trương mới: ${targetStores} cửa hàng
+• Thực hiện audit: ${targetAudit} lượt
+• Duy trì điểm audit TB: ≥85/100
+• Ngân sách dự kiến: ${budget} triệu đồng
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 CÁC HOẠT ĐỘNG CHÍNH
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+${activities}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ RỦI RO & GIẢI PHÁP
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+${risks}
+
+Kính mong anh/chị phê duyệt kế hoạch.
+
+Trân trọng,
+Dương Thanh Liêm
+Operations Leader – Phúc Tea
+📞 0357 636 539 | 📧 operations@phuctea.com.vn
+Ngày: ${today}`;
+
+  const preview = document.getElementById('plan-preview');
+  preview.innerHTML = planText.replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border-color:var(--border);margin:8px 0">');
+  preview.style.color = 'var(--brown)';
+  document.getElementById('btn-send-plan').style.display='';
+  document.getElementById('plan-email-body').value = planText;
+  toast('📋 Đã tạo kế hoạch!','tok');
+}
+
+// ========== SEND EMAIL (Apps Script) ==========
+async function sendEmail(type) {
+  const subject = type==='report' ? document.getElementById('email-subject').value : document.getElementById('plan-email-subject').value;
+  const body = type==='report' ? document.getElementById('email-body').value : document.getElementById('plan-email-body').value;
+  
+  if(!APPS_SCRIPT_URL) {
+    toast('⚠️ Chưa cấu hình Apps Script. Hãy copy nội dung và gửi thủ công.','twarn');
+    return;
   }
+  load('Đang gửi email qua Apps Script...');
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        action:'sendEmail',
+        to:'lytantai@phuctea.com.vn',
+        cc:'trannhatvu@phuctea.com.vn,phiyen@phuctea.com.vn,hr@phuctea.com.vn',
+        subject, body
+      })
+    });
+    unload();
+    toast('✅ Email đã gửi!','tok');
+    closeModal('modal-email');
+    closeModal('modal-email-plan');
+  } catch(e) {
+    unload();
+    toast('❌ Lỗi gửi email. Kiểm tra Apps Script.','terr');
+  }
+}
+
+// ========== ADD NEW STORE ==========
+async function addNewStore() {
+  const name = document.getElementById('ns-name').value;
+  if(!name){toast('Nhập tên cửa hàng!','terr');return;}
+  const data = {
+    name: document.getElementById('ns-brand').value + ' – ' + name,
+    partner: document.getElementById('ns-partner').value,
+    startDate: document.getElementById('ns-start').value,
+    openDate: document.getElementById('ns-open').value,
+    address: document.getElementById('ns-address').value,
+    progress: 0, status: 'Mới bắt đầu'
+  };
+  D.setupStores.push({name, progress:0, openDate: data.openDate, partner: data.partner, status:'Mới bắt đầu'});
+  closeModal('modal-new-store');
+  await saveToSheets('newStore', data);
+  toast(`✅ Đã thêm ${data.name}!`,'tok');
+}
+
+// ========== AI FUNCTIONS ==========
+async function callAI(prompt, systemPrompt='') {
+  const context = `Bạn là AI Assistant của bộ phận Operations – Phúc Tea. Dữ liệu hiện tại:
+- Cửa hàng đang hoạt động: ${D.stores}
+- Mục tiêu mở mới 2026: ${D.newStores}/${D.targetStores} cửa hàng
+- Điểm audit TB: ${D.auditAvg}/100
+- Cần tái audit: ${D.reauditCount} cửa hàng (Hà Lam 74đ, Vĩnh Cửu 78đ, Thới Lai 81đ)
+- Đang setup: ${D.setupStores.map(s=>s.name+' ('+s.progress+'%)').join(', ')}
+Trả lời bằng tiếng Việt, ngắn gọn và thực tế.`;
+  
+  try {
+    const res = await fetch(ANTHROPIC_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: context + (systemPrompt ? '\n' + systemPrompt : ''),
+        messages:[{role:'user', content: prompt}]
+      })
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text || 'Không có phản hồi từ AI.';
+  } catch(e) {
+    return 'Lỗi kết nối AI: ' + e.message;
+  }
+}
+
+// AI: Dashboard insight
+async function loadAIDashInsight() {
+  const el = document.getElementById('ai-insight-dash');
+  el.querySelector('.ait').textContent = 'Đang phân tích dữ liệu vận hành...';
+  el.querySelector('.aii').style.color = 'rgba(255,255,255,.6)';
+  el.querySelector('.aii').textContent = 'Vui lòng chờ...';
+  
+  const result = await callAI('Phân tích nhanh tình hình vận hành tháng 3/2026 và đưa ra 3 điểm cần chú ý nhất cho tháng 4. Ngắn gọn, bullet points.');
+  el.querySelector('.ait').textContent = '📊 Phân tích tháng 3/2026 & Ưu tiên tháng 4';
+  el.querySelector('.aii').style.color = 'rgba(255,255,255,.9)';
+  el.querySelector('.aii').innerHTML = result.replace(/\n/g,'<br>');
+}
+
+// AI: Audit advice
+async function aiAuditAdvice() {
+  const store = document.getElementById('audit-store').value;
+  const total = document.getElementById('audit-total').textContent;
+  load('AI đang phân tích kết quả audit...');
+  const result = await callAI(`Cửa hàng ${store} vừa audit được ${total}/100 điểm. Đưa ra action plan cụ thể để cải thiện, đặc biệt nếu dưới 85 điểm. Ngắn gọn, thực tế.`);
+  unload();
+  document.getElementById('action-plan').value = result;
+  toast('🤖 AI đã đề xuất action plan!','tok');
+}
+
+// AI: Setup advice
+async function aiSetupAdvice(storeName, progress) {
+  load('AI đang phân tích tiến độ setup...');
+  const result = await callAI(`Cửa hàng ${storeName} đang setup, tiến độ ${progress}%. Đưa ra 3-5 điểm cần lưu ý và hành động ưu tiên để đảm bảo khai trương đúng hẹn. Ngắn gọn, bullet points.`);
+  unload();
+  document.getElementById('ai-advice-title').textContent = `💡 Gợi ý setup – ${storeName} (${progress}%)`;
+  document.getElementById('ai-advice-body').innerHTML = result.replace(/\n/g,'<br>');
+  openModal('modal-ai-advice');
+}
+
+// AI: Generate report
+async function aiGenerateReport() {
+  const month = document.getElementById('rpt-month').value;
+  load('AI đang soạn nội dung báo cáo...');
+  const result = await callAI(
+    `Soạn báo cáo thực hiện kế hoạch ${month} cho BOD Phúc Tea. Gửi đến anh Lý Tấn Tài. 
+    Số liệu: ${D.stores} cửa hàng, ${D.newStores}/30 mục tiêu, audit TB ${D.auditAvg}/100, ${D.reauditCount} cửa hàng cần tái audit.
+    Viết chuyên nghiệp, trang trọng, đầy đủ số liệu, có đề xuất tháng sau. Định dạng rõ ràng với tiêu đề từng phần.`,
+    'Soạn thảo văn bản chuyên nghiệp bằng tiếng Việt cho lãnh đạo doanh nghiệp.'
+  );
+  unload();
+  reportText = result;
+  document.getElementById('report-preview').innerHTML = result.replace(/\n/g,'<br>');
+  document.getElementById('report-preview').style.color = 'var(--brown)';
+  document.getElementById('email-body').value = result;
+  document.getElementById('btn-copy').style.display='';
+  document.getElementById('btn-email').style.display='';
+  toast('🤖 AI đã soạn nội dung báo cáo!','tok');
+}
+
+// AI: Generate plan
+async function aiGeneratePlan() {
+  const month = document.getElementById('plan-month').value;
+  const targetStores = document.getElementById('plan-target-stores').value;
+  load('AI đang lập kế hoạch...');
+  const result = await callAI(
+    `Soạn kế hoạch Operations ${month} cho BOD Phúc Tea. Mục tiêu: ${targetStores} cửa hàng mới.
+    Dựa trên bài học tháng 3 (audit ${D.auditAvg}/100, ${D.reauditCount} CH tái audit).
+    Bao gồm: mục tiêu, hoạt động ưu tiên, rủi ro, giải pháp, KPI. Chuyên nghiệp, có số liệu.`,
+    'Lập kế hoạch chiến lược cho bộ phận Operations.'
+  );
+  unload();
+  planText = result;
+  document.getElementById('plan-preview').innerHTML = result.replace(/\n/g,'<br>');
+  document.getElementById('plan-preview').style.color = 'var(--brown)';
+  document.getElementById('plan-email-body').value = result;
+  document.getElementById('btn-send-plan').style.display='';
+  toast('🤖 AI đã lập kế hoạch!','tok');
+}
+
+// AI: Full analysis
+async function aiFullAnalysis() {
+  load('AI đang phân tích toàn bộ hệ thống...');
+  const result = await callAI(
+    `Phân tích toàn bộ hiệu suất Operations Phúc Tea Q1/2026 và đề xuất chiến lược Q2.
+    Phân tích: (1) Điểm mạnh, (2) Điểm yếu cần cải thiện, (3) Cơ hội, (4) Rủi ro, 
+    (5) Đề xuất cụ thể cho tháng 4, 5, 6. Có số liệu, thực tế, chuyên nghiệp.`
+  );
+  unload();
+  document.getElementById('ai-main-insight').querySelector('.ait').textContent = '📊 Phân tích toàn diện Q1 & Chiến lược Q2/2026';
+  document.getElementById('ai-main-insight').querySelector('.aii').innerHTML = result.replace(/\n/g,'<br>');
+  
+  // Quick suggestions
+  const suggestions = await callAI('Liệt kê 5 đề xuất cải tiến ngắn gọn nhất cho bộ phận Operations trong tháng 4. Mỗi đề xuất 1-2 câu, có thể thực hiện ngay.');
+  document.getElementById('ai-quick-suggestions').innerHTML = 
+    suggestions.split('\n').filter(s=>s.trim()).map(s=>`<div class="alert ag">✨ ${s.replace(/^\d+\.\s*/,'')}</div>`).join('');
+  toast('🤖 Phân tích hoàn thành!','tok');
+}
+
+// AI: Rewrite email
+async function aiRewriteEmail() {
+  const current = document.getElementById('email-body').value;
+  load('AI đang viết lại email...');
+  const result = await callAI(
+    `Viết lại email báo cáo này theo phong cách chuyên nghiệp, súc tích, trang trọng hơn. Giữ nguyên số liệu. Thêm mở đầu và kết thúc lịch sự:\n\n${current}`,
+    'Viết email chuyên nghiệp bằng tiếng Việt.'
+  );
+  unload();
+  document.getElementById('email-body').value = result;
+  toast('🤖 AI đã viết lại email!','tok');
+}
+
+async function aiRewritePlanEmail() {
+  const current = document.getElementById('plan-email-body').value;
+  load('AI đang viết lại...');
+  const result = await callAI(`Viết lại kế hoạch này chuyên nghiệp hơn, thêm phân tích và luận điểm thuyết phục:\n\n${current}`);
+  unload();
+  document.getElementById('plan-email-body').value = result;
+  toast('🤖 Đã viết lại!','tok');
+}
+
+// AI Chat
+const chatHistory = [{role:'assistant',content:'Xin chào! Tôi là AI Ops Assistant của Phúc Tea 🍵'}];
+
+async function askAI() {
+  const q = document.getElementById('ai-question').value.trim();
+  if(!q) return;
+  document.getElementById('ai-question').value = '';
+  
+  const msgsEl = document.getElementById('ai-messages');
+  msgsEl.innerHTML += `<div class="ai-msg ai-msg-user"><div class="ai-msg-bubble">${q}</div></div>`;
+  msgsEl.innerHTML += `<div class="ai-msg ai-msg-ai" id="ai-typing"><div class="ai-msg-bubble" style="color:rgba(255,255,255,.5)">Đang suy nghĩ...</div></div>`;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  const result = await callAI(q);
+  
+  const typing = document.getElementById('ai-typing');
+  if(typing) typing.querySelector('.ai-msg-bubble').innerHTML = result.replace(/\n/g,'<br>');
+  typing?.removeAttribute('id');
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+function quickAsk(q) {
+  document.getElementById('ai-question').value = q;
+  goPage('ai', document.querySelectorAll('.ntab')[6]);
+  setTimeout(askAI, 100);
+}
+
+// ========== INIT ==========
+setGreeting();
+// Auto load demo data on start
+setTimeout(() => {
+  renderDashboard();
+  renderAuditTable();
+  calcAudit();
+}, 100);
+
+// Close modals on overlay click
+document.querySelectorAll('.overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target === m) m.classList.remove('on'); });
+});
 </script>
 </body>
 </html>

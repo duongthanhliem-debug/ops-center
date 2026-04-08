@@ -95,6 +95,12 @@
       }
     }
 
+    .t-task { white-space: normal !important; word-break: break-word; overflow-wrap: break-word; }
+    .t-ic, .t-support { white-space: normal !important; min-width: 90px; }
+    .t-row td { vertical-align: top; word-break: break-word; overflow-wrap: break-word; }
+    .t-row td input.fc, .t-row td select.fc { white-space: normal; overflow: visible; text-overflow: unset; min-width: 80px; }
+    .t-row td select.fc { height: auto !important; }
+    select.fc option { white-space: normal; word-break: break-word; }
     .load-msg {
       font-size: 13px;
       color: var(--gray);
@@ -1500,9 +1506,9 @@
         <div class="kc warn">Đang triển khai</div>
       </div>
       <div class="kpi">
-        <div class="kl">Khai trương tháng này</div>
+        <div class="kl">Khai trương tháng <span id="kt-month-label"></span></div>
         <div class="kv" style="color:var(--green)" id="kt-cnt">–</div>
-        <div class="kc info" id="kt-plan" style="font-size:10px">Theo kế hoạch quý</div>
+        <div class="kc info" id="kt-plan" style="font-size:10px">Cửa hàng mở trong tháng hiện tại</div>
       </div>
       <div class="kpi">
         <div class="kl">Mục tiêu 2026</div>
@@ -1867,12 +1873,6 @@
     </div>
     <div id="staff-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
     <!-- Training -->
-    <div class="card" style="margin-top:16px">
-      <div class="ch"><span class="ct">Phát triển nhân sự tháng này</span><span id="training-month-label"
-          style="font-size:12px;color:var(--gray)"></span></div>
-      <div class="cb" id="training-section">
-        <div class="empty-state">Đồng bộ để xem kế hoạch đào tạo</div>
-      </div>
     </div>
     <!-- Pending -->
     <div id="pending-section" style="display:none">
@@ -1910,7 +1910,7 @@
       <div class="cb">
         <div class="fr">
           <div class="fg"><label class="fl"><span id="plan-period-label">Tháng</span> kế hoạch *</label>
-            <input class="fc" id="plan-month" placeholder="VD: Tháng 5/2026 hoặc Quý 2/2026"></div>
+            <input class="fc" type="month" id="plan-month" placeholder="yyyy-mm" onchange="autoFillPlanTitle()"></div>
           <div class="fg"><label class="fl">Tiêu đề</label>
             <input class="fc" id="plan-title" placeholder="Kế hoạch tháng 5/2026"></div>
         </div>
@@ -2129,6 +2129,10 @@
         <select class="fc" id="mytask-user-select" style="min-width:200px" onchange="loadMyTasks()">
           <option value="">-- Chọn nhân sự --</option>
         </select>
+        <select class="fc bsm" id="mytask-done-filter" onchange="filterMyTasks()" style="min-width:150px">
+          <option value="active">Đang làm</option>
+          <option value="done">Đã hoàn thành</option>
+        </select>
         <button class="btn bo bsm" onclick="loadMyTasks()">🔄 Tải lại</button>
       </div>
     </div>
@@ -2328,7 +2332,18 @@
             placeholder="Mật khẩu đăng nhập"></div>
       </div>
       <div class="fg"><label class="fl">Ghi chú</label><textarea class="fc" id="sf-note" rows="2"></textarea></div>
-      <div style="display:flex;gap:7px">
+      <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
+      <div style="font-size:11px;font-weight:700;color:var(--brown-m);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Thông tin bổ sung</div>
+      <div class="fg"><label class="fl">Nơi thường trú</label><input class="fc" id="sf-permanent-addr" placeholder="Địa chỉ thường trú..."></div>
+      <div class="fg"><label class="fl">Nơi tạm trú</label><input class="fc" id="sf-temp-addr" placeholder="Địa chỉ tạm trú (nếu khác)..."></div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Số CCCD</label><input class="fc" id="sf-cccd" placeholder="0123456789xx"></div>
+        <div class="fg"><label class="fl">Ngân hàng</label><input class="fc" id="sf-bank-name" placeholder="Vietcombank / MB..."></div>
+      </div>
+      <div class="fg"><label class="fl">Số tài khoản ngân hàng</label><input class="fc" id="sf-bank-acct" placeholder="Số tài khoản..."></div>
+      <div class="fg"><label class="fl">Link ảnh CCCD mặt trước</label><input class="fc" id="sf-cccd-front" placeholder="URL ảnh Google Drive..."></div>
+      <div class="fg"><label class="fl">Link ảnh CCCD mặt sau</label><input class="fc" id="sf-cccd-back" placeholder="URL ảnh Google Drive..."></div>
+      <div style="display:flex;gap:7px;margin-top:8px">
         <button class="btn bp" style="flex:1" onclick="saveStaffForm()">💾 Lưu lên Sheets</button>
         <button class="btn bo" onclick="closeModal('modal-staff')">Hủy</button>
       </div>
@@ -2599,6 +2614,19 @@
       updateEl('kpi-stores', k.stores || 0);
       updateEl('kpi-new', `${k.newStores || 0}/${k.targetStores || 30}`);
 
+      // Khai trương tháng hiện tại — count allStores with launchDate in current month
+      const _now = new Date(); const _cm = _now.getMonth()+1; const _cy = _now.getFullYear();
+      const ktLabel = $('kt-month-label'); if (ktLabel) ktLabel.textContent = _cm + '/' + _cy;
+      const ktCount = (_allStores || []).filter(s => {
+        if (!s.launchDate) return false;
+        const p = String(s.launchDate).split('/');
+        if (p.length < 3) return false;
+        const d = new Date(+p[2], +p[1]-1, +p[0]);
+        return !isNaN(d.getTime()) && d.getMonth()+1 === _cm && d.getFullYear() === _cy;
+      }).length;
+      const ktEl = $('kt-cnt'); if (ktEl) { ktEl.textContent = ktCount; ktEl.style.color = ktCount>0?'var(--green)':'var(--gray)'; }
+      const ktPlanEl = $('kt-plan'); if (ktPlanEl) ktPlanEl.textContent = ktCount > 0 ? ktCount + ' cửa hàng mở tháng này' : 'Chưa có khai trương';
+
       const p = k.targetStores ? Math.round((k.newStores || 0) / k.targetStores * 100) : 0;
       const subNew = $('kpi-new-sub');
       if (subNew) {
@@ -2617,12 +2645,18 @@
       const reCount = parseInt(k.reauditCount) || 0;
       updateEl('kpi-reaudit', reCount, reCount > 0 ? 'var(--red)' : 'var(--green)');
 
-      // Alerts
+      // Alerts — CCP/RISK cannot be dismissed manually; reaudit can be dismissed
+      if (!D._dismissedDashAlerts) D._dismissedDashAlerts = new Set();
       let ah = '';
       if (reCount > 0) {
-        // New format: use pct; fallback to score for backward compat
         const names = (D.auditList || []).filter(a => (a.pct ?? a.score) < 85).map(a => `${a.store || a.name}(${a.pct ?? a.score}%)`).slice(0, 5).join(', ');
-        ah += `<div class="alert ay">⚠️ <span><strong>${reCount} cửa hàng</strong> cần tái audit: ${names}</span></div>`;
+        const key = 'reaudit_' + reCount;
+        if (!D._dismissedDashAlerts.has(key)) {
+          ah += `<div class="alert ay" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <span>⚠️ <strong>${reCount} cửa hàng</strong> cần tái audit: ${names}</span>
+            <button onclick="D._dismissedDashAlerts.add('${key}');this.closest('.alert').remove()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--gold);flex-shrink:0" title="Đã xử lý, bỏ thông báo">✕</button>
+          </div>`;
+        }
       }
       const alContainer = $('alerts-container');
       if (alContainer) alContainer.innerHTML = ah;
@@ -2660,17 +2694,43 @@
           : D.timeline.map(t => `<div class="tl-item"><div class="tl-dot" style="background:${t.color || 'var(--gray)'}"></div><div><div class="tl-txt">${t.text}</div><div class="tl-time">${t.time}</div></div></div>`).join('');
       }
 
-      // OKR
+      // OKR — filter plans by current month (e.g. "Tháng 4/2026"), show ALL matching plans
       const okrCon = $('okr-container');
-      if (okrCon && D.plans && D.plans.length > 0) {
-        const plan = D.plans[0];
-        const newP = k.newStores && plan.targetStores ? Math.round(k.newStores / plan.targetStores * 100) : 0;
-        const auditP = k.auditAvg && plan.targetAudit ? Math.round(k.auditAvg / plan.targetAudit * 100) : 0;
-        okrCon.innerHTML = `
-          <div style="font-size:11px;color:var(--gray);margin-bottom:10px">Kế hoạch: <strong>${plan.month || '–'}</strong></div>
-          <div class="prog-item"><div class="prog-hd"><span>Mở CH mới (Mục tiêu: ${plan.targetStores || '–'})</span><span style="color:var(--gold);font-weight:700">${k.newStores || 0}/${plan.targetStores || '–'}</span></div><div class="prog-bg"><div class="prog-bar" style="width:${Math.min(newP, 100)}%;background:var(--gold)"></div></div></div>
-          <div class="prog-item"><div class="prog-hd"><span>Audit TB (Mục tiêu: ≥${plan.targetAudit || 85}đ)</span><span style="color:var(--blue);font-weight:700">${k.auditAvg || 0}/100</span></div><div class="prog-bg"><div class="prog-bar" style="width:${Math.min(auditP, 100)}%;background:var(--blue)"></div></div></div>
-          <div style="margin-top:10px;font-size:12px;color:var(--gray)">Ngân sách dự kiến: <strong style="color:var(--brown)">${plan.budget || 0}tr</strong></div>`;
+      if (okrCon) {
+        const now = new Date();
+        const curM = now.getMonth() + 1; // 1-based
+        const curY = now.getFullYear();
+        // Match plans whose month field contains current month/year
+        const monthPlans = (D.plans || []).filter(p => {
+          const m = (p.month || '').toLowerCase();
+          // Match "tháng 4/2026", "4/2026", "04/2026", "yyyy-mm" formats
+          if (!m) return false;
+          // yyyy-mm format (from input[type=month])
+          const yyyymm = curY + '-' + String(curM).padStart(2,'0');
+          if (m === yyyymm) return true;
+          // "tháng M/YYYY" format (stored after fmtPlanMonth)
+          if (m.includes(String(curY))) {
+            if (m.includes('tháng ' + curM + '/') || m.includes('tháng ' + String(curM).padStart(2,'0') + '/')) return true;
+            if (m.includes(curM + '/' + curY) || m.includes(String(curM).padStart(2,'0') + '/' + curY)) return true;
+          }
+          return false;
+        });
+        const plansToShow = monthPlans.length > 0 ? monthPlans : [];
+        if (plansToShow.length === 0) {
+          okrCon.innerHTML = '<div style="font-size:12px;color:var(--gray);padding:8px 0">Chưa có kế hoạch tháng ' + curM + '/' + curY + '. Vào module Kế hoạch để tạo.</div>';
+        } else {
+          okrCon.innerHTML = plansToShow.map(plan => {
+            const newP = k.newStores && plan.targetStores ? Math.round(k.newStores / plan.targetStores * 100) : 0;
+            const auditP = k.auditAvg && plan.targetAudit ? Math.round(k.auditAvg / plan.targetAudit * 100) : 0;
+            const budgetFmt = plan.budget ? Number(plan.budget).toLocaleString('vi-VN') : '0';
+            return `<div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--gray);margin-bottom:8px">📋 <strong>${plan.title || plan.month || '–'}</strong></div>
+              <div class="prog-item"><div class="prog-hd"><span>Mở CH mới (Mục tiêu: ${plan.targetStores || '–'})</span><span style="color:var(--gold);font-weight:700">${k.newStores || 0}/${plan.targetStores || '–'}</span></div><div class="prog-bg"><div class="prog-bar" style="width:${Math.min(newP, 100)}%;background:var(--gold)"></div></div></div>
+              <div class="prog-item"><div class="prog-hd"><span>Audit TB (Mục tiêu: ≥${plan.targetAudit || 85}đ)</span><span style="color:var(--blue);font-weight:700">${k.auditAvg || 0}/100</span></div><div class="prog-bg"><div class="prog-bar" style="width:${Math.min(auditP, 100)}%;background:var(--blue)"></div></div></div>
+              <div style="margin-top:8px;font-size:12px;color:var(--gray)">Ngân sách tháng này: <strong style="color:var(--brown)">${budgetFmt} đồng</strong></div>
+            </div>`;
+          }).join('');
+        }
       }
 
       // Date update with safety
@@ -3533,10 +3593,24 @@
 
       const bar = $('a-alert-bar');
       if (bar) {
+        if (!D._dismissedAuditAlerts) D._dismissedAuditAlerts = new Set();
         let alerts = '';
-        if (riskStores > 0) alerts += `<div class="alert ar" style="margin-bottom:6px">🚨 <span><strong>${riskStores} cửa hàng vi phạm RISK</strong> – điểm bằng 0. Xử lý ngay!</span></div>`;
-        if (ccpStores  > 0) alerts += `<div class="alert ay" style="margin-bottom:6px">⛔ <span><strong>${ccpStores} cửa hàng vi phạm CCP</strong> – cần hành động trong 48h.</span></div>`;
-        if (reaudit > 0 && !riskStores && !ccpStores) alerts += `<div class="alert ay">⚠️ <span><strong>${reaudit} cửa hàng</strong> dưới 85% cần tái audit.</span></div>`;
+        // CCP/RISK: cannot manually dismiss — auto-cleared when tasks done
+        if (riskStores > 0) alerts += `<div class="alert ar" style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+          <span>🚨 <strong>${riskStores} cửa hàng vi phạm RISK</strong> – điểm bằng 0. Xử lý ngay!</span>
+          <small style="color:rgba(0,0,0,.4);margin-left:8px;font-size:10px">Tự động tắt khi hoàn thành task</small>
+        </div>`;
+        if (ccpStores > 0) alerts += `<div class="alert ay" style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+          <span>⛔ <strong>${ccpStores} cửa hàng vi phạm CCP</strong> – cần hành động trong 48h.</span>
+          <small style="color:rgba(0,0,0,.4);margin-left:8px;font-size:10px">Tự động tắt khi hoàn thành task</small>
+        </div>`;
+        // Reaudit: can manually dismiss
+        if (reaudit > 0 && !D._dismissedAuditAlerts.has('reaudit_' + reaudit)) {
+          alerts += `<div class="alert ay" style="display:flex;align-items:center;justify-content:space-between">
+            <span>⚠️ <strong>${reaudit} cửa hàng</strong> dưới 85% cần tái audit.</span>
+            <button onclick="D._dismissedAuditAlerts.add('reaudit_${reaudit}');this.closest('.alert').remove()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--gold);flex-shrink:0" title="Bỏ thông báo thủ công">✕</button>
+          </div>`;
+        }
         bar.innerHTML = alerts;
       }
     }
@@ -4298,7 +4372,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       if (D.plans.length > 0) {
         const plan = D.plans[0];
         const content = (plan.content && typeof plan.content === 'object') ? JSON.stringify(plan.content) : String(plan.content || '');
-        $('training-month-label').textContent = plan.month || '';
+        // training-month-label removed
         $('training-section').innerHTML = `
       <div class="alert ab" style="margin-bottom:10px">📚 <span>Đào tạo từ kế hoạch <strong>${plan.month || '–'}</strong>. Ngân sách: ${plan.budget || 0}tr</span></div>
       <div style="font-size:13px;color:var(--brown);line-height:1.8;white-space:pre-wrap">${content}</div>`;
@@ -4307,7 +4381,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
 
     function openStaffModal(data) {
       currentStaffEdit = null;
-      ['sf-id', 'sf-name', 'sf-phone', 'sf-email', 'sf-position', 'sf-store', 'sf-note'].forEach(id => { $(id).value = id === 'sf-store' ? 'Hệ Thống' : ''; });
+      ['sf-id', 'sf-name', 'sf-phone', 'sf-email', 'sf-position', 'sf-store', 'sf-note', 'sf-permanent-addr', 'sf-temp-addr', 'sf-cccd', 'sf-bank-name', 'sf-bank-acct', 'sf-cccd-front', 'sf-cccd-back'].forEach(id => { const el = $(id); if (el) el.value = id === 'sf-store' ? 'Hệ Thống' : ''; });
       ['sf-dob', 'sf-start'].forEach(id => { $(id).value = ''; });
       $('sf-gender').value = 'Nam'; $('sf-role').value = 'User'; $('sf-status').value = 'Đang cộng tác'; $('sf-pw').value = '';
       $('staff-modal-title').textContent = '+ Thêm nhân viên';
@@ -4321,6 +4395,13 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       $('sf-gender').value = s.gender || 'Nam'; $('sf-position').value = s.position || '';
       $('sf-store').value = s.store || 'Hệ Thống'; $('sf-role').value = s.role || 'User';
       $('sf-status').value = s.status || 'Đang cộng tác'; $('sf-note').value = s.note || '';
+      if ($('sf-permanent-addr')) $('sf-permanent-addr').value = s.permanentAddr || '';
+      if ($('sf-temp-addr'))      $('sf-temp-addr').value      = s.tempAddr || '';
+      if ($('sf-cccd'))           $('sf-cccd').value           = s.cccd || '';
+      if ($('sf-bank-name'))      $('sf-bank-name').value      = s.bankName || '';
+      if ($('sf-bank-acct'))      $('sf-bank-acct').value      = s.bankAcct || '';
+      if ($('sf-cccd-front'))     $('sf-cccd-front').value     = s.cccdFront || '';
+      if ($('sf-cccd-back'))      $('sf-cccd-back').value      = s.cccdBack  || '';
       $('sf-pw').value = '';
       if (s.dob) $('sf-dob').value = s.dob.split('/').reverse().join('-');
       if (s.startDate) $('sf-start').value = s.startDate.split('/').reverse().join('-');
@@ -4342,7 +4423,14 @@ Dương Thanh Liêm – Operations Phúc Tea`;
         startDate: $('sf-start').value, position: $('sf-position').value,
         store: $('sf-store').value || 'Hệ Thống', role: $('sf-role').value,
         status: $('sf-status').value, note: $('sf-note').value,
-        password: $('sf-pw').value || undefined, avatar: currentStaffEdit?.avatar || ''
+        password: $('sf-pw').value || undefined, avatar: currentStaffEdit?.avatar || '',
+        permanentAddr: ($('sf-permanent-addr')||{value:''}).value,
+        tempAddr:      ($('sf-temp-addr')||{value:''}).value,
+        cccd:          ($('sf-cccd')||{value:''}).value,
+        bankName:      ($('sf-bank-name')||{value:''}).value,
+        bankAcct:      ($('sf-bank-acct')||{value:''}).value,
+        cccdFront:     ($('sf-cccd-front')||{value:''}).value,
+        cccdBack:      ($('sf-cccd-back')||{value:''}).value,
       };
       const res = await api({ action: 'saveStaff', data: d });
       unload();
@@ -4384,6 +4472,37 @@ Dương Thanh Liêm – Operations Phúc Tea`;
     // ════════════════════════════════════════
     let _planGroups = [];
     let _currentPlanId = null;
+
+    function autoFillPlanTitle() {
+      const mv = ($('plan-month')||{}).value || '';
+      const titleEl = $('plan-title');
+      if (titleEl && !titleEl.value && mv) {
+        // mv format is "yyyy-mm", display as "Tháng M/YYYY"
+        const parts = mv.split('-');
+        if (parts.length === 2) {
+          titleEl.value = `Kế hoạch tháng ${parseInt(parts[1])}/${parts[0]}`;
+        }
+      }
+    }
+
+    // Format any month value → clean "Tháng M/YYYY" for display
+    function fmtPlanMonth(val) {
+      if (!val) return '–';
+      // Already clean: "Tháng 4/2026" or "Quý 2/2026"
+      if (val.includes('Tháng') || val.includes('Quý')) return val;
+      // yyyy-mm format from input[type=month]
+      const p = val.split('-');
+      if (p.length === 2 && p[0].length === 4) return 'Tháng ' + parseInt(p[1]) + '/' + p[0];
+      // Raw JS Date string like "Mon Jun 01 2026 00:00:00 GMT+0700 (Giờ Đông Dương)"
+      // or ISO "2026-06-01T00:00:00.000Z"
+      try {
+        const d = new Date(val);
+        if (!isNaN(d.getTime()) && d.getFullYear() > 2000) {
+          return 'Tháng ' + (d.getMonth()+1) + '/' + d.getFullYear();
+        }
+      } catch(_) {}
+      return val; // fallback: return as-is
+    }
 
     function updatePlanPeriodLabel() {
       const v = $('plan-period-type') ? $('plan-period-type').value : 'month';
@@ -4467,7 +4586,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
                   <td><input class="fc pt-kpi" value="${(t.kpi||'').replace(/"/g,'&quot;')}" placeholder="Số/%" style="padding:3px 6px;font-size:12px"></td>
                   <td><input class="fc pt-budget" value="${(t.budget||'').replace(/"/g,'&quot;')}" placeholder="tr đồng" style="padding:3px 6px;font-size:12px"></td>
                   <td><select class="fc pt-ic" style="padding:3px 6px;font-size:12px">${activeStaffOpt(t.ic)}</select></td>
-                  <td><input class="fc pt-time" value="${(t.time||'').replace(/"/g,'&quot;')}" placeholder="T5/2026" style="padding:3px 6px;font-size:12px"></td>
+                  <td><input class="fc pt-time" type="date" value="${(t.time||'')}" style="padding:3px 6px;font-size:12px"></td>
                   <td><input class="fc pt-note" value="${(t.note||'').replace(/"/g,'&quot;')}" placeholder="Ghi chú" style="padding:3px 6px;font-size:12px"></td>
                   <td><button class="btn bd bsm" onclick="collectPlanGroups();removePlanTask(${gi},${ti})" style="padding:2px 6px">✕</button></td>
                 </tr>`).join('')}
@@ -4488,19 +4607,20 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       const sel = $('plan-history-sel');
       if (sel) {
         sel.innerHTML = '<option value="">-- Xem kế hoạch cũ --</option>';
-        D.plans.forEach(p => sel.innerHTML += `<option value="${p.id}">${p.month || p.id} – ${p.title || ''}</option>`);
+        D.plans.forEach(p => sel.innerHTML += `<option value="${p.id}">${fmtPlanMonth(p.month)||p.title||p.id}</option>`);
       }
       const rptSel = $('rpt-plan-ref');
       if (rptSel) {
         rptSel.innerHTML = '<option value="">-- Chọn kế hoạch --</option>';
-        D.plans.forEach(p => rptSel.innerHTML += `<option value="${p.id}">${p.month||p.id} – ${p.title||''}</option>`);
+        D.plans.forEach(p => rptSel.innerHTML += `<option value="${p.id}">${fmtPlanMonth(p.month)||p.title||p.id}</option>`);
       }
       const hb = $('plan-history-body');
       if (hb) hb.innerHTML = D.plans.length ? D.plans.map(p => {
         const groups = Array.isArray(p.content) ? p.content : [];
+        const dispMonth = fmtPlanMonth(p.month || '');
         return `<tr>
-          <td>${p.month || '–'}</td>
-          <td>${p.title || '–'}</td>
+          <td style="font-weight:600">${dispMonth}</td>
+          <td>${p.title || dispMonth}</td>
           <td><span class="bdg bb2">${groups.length} nhóm</span></td>
           <td><span class="bdg bg2">${p.status || 'Đã lưu'}</span></td>
           <td style="font-size:11px">${p.timestamp || '–'}</td>
@@ -4513,7 +4633,12 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       if (!id) return;
       const plan = D.plans.find(p => p.id === id); if (!plan) return;
       _currentPlanId = plan.id;
-      $('plan-month').value = plan.month || '';
+      // Restore month: if stored as "Tháng M/YYYY", convert back to "yyyy-mm" for input[type=month]
+      const rawMonth = plan.month || '';
+      let monthInputVal = rawMonth;
+      const mMatch = rawMonth.match(/Tháng\s*(\d+)\/(\d+)/i);
+      if (mMatch) { monthInputVal = mMatch[2] + '-' + String(mMatch[1]).padStart(2,'0'); }
+      if ($('plan-month')) $('plan-month').value = monthInputVal;
       $('plan-title').value = plan.title || '';
       $('plan-note').value = plan.note || '';
       $('plan-id-label').textContent = 'ID: ' + plan.id;
@@ -4523,14 +4648,16 @@ Dương Thanh Liêm – Operations Phúc Tea`;
     }
 
     async function savePlan() {
-      const month = $('plan-month').value.trim();
-      if (!month) { toast('⚠️ Nhập tháng/quý kế hoạch', 'twarn'); return; }
+      const monthRaw = ($('plan-month')||{}).value || '';
+      if (!monthRaw) { toast('⚠️ Chọn tháng kế hoạch', 'twarn'); return; }
+      // Format yyyy-mm → "Tháng M/YYYY" for storage & display
+      const month = fmtPlanMonth(monthRaw);
       collectPlanGroups();
       load('Đang lưu kế hoạch...');
       const res = await api({
         action: 'savePlan', data: {
           id: _currentPlanId || undefined,
-          month, title: $('plan-title').value,
+          month, title: $('plan-title').value || month,
           content: _planGroups,
           note: $('plan-note').value, status: 'Đã lưu'
         }
@@ -4538,8 +4665,30 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       unload();
       if (res.ok) {
         _currentPlanId = res.planId;
-        $('plan-id-label').textContent = 'ID: ' + res.planId;
-        toast('✅ Đã lưu kế hoạch!');
+        if ($('plan-id-label')) $('plan-id-label').textContent = 'ID: ' + res.planId;
+        toast('✅ Đã lưu kế hoạch! Đang tạo việc cần làm...');
+        // Auto-create PLAN_TASKS from content immediately on save
+        const tasks = [];
+        _planGroups.forEach(g => {
+          (g.tasks || []).forEach(t => {
+            if (t.ic && t.task) {
+              tasks.push({
+                planId: res.planId,
+                month,
+                task: t.task,
+                ic: t.ic,
+                deadline: t.time || '',
+                note: t.note || '',
+                kpi: t.kpi || '',
+                budget: t.budget || ''
+              });
+            }
+          });
+        });
+        if (tasks.length > 0 && CFG.scriptUrl) {
+          await api({ action: 'createPlanTasks', planId: res.planId, month, tasks });
+          toast('✅ Đã lưu & tạo ' + tasks.length + ' việc cần làm!');
+        }
         await loadPlans();
       } else toast('❌ ' + (res.error || 'Lỗi'), 'terr');
     }
@@ -4782,11 +4931,20 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
 
     async function aiGenReport() {
       const month = $('rpt-month').value || 'tháng này';
+      const mode = $('rpt-mode') ? $('rpt-mode').value : 'free';
       load('AI đang soạn báo cáo...');
       const kpi = `Tháng: ${month}, CH hoạt động: ${D.kpi.stores}, audit TB: ${D.kpi.auditAvg}.`;
-      const r = await callAI(`${kpi}\nSoạn báo cáo kết quả Operations Phúc Tea dạng JSON array:
-[{"group":"TÊN NHÓM","tasks":[{"task":"Đầu việc","actualResult":"Kết quả","budgetUsed":"","link":"","note":""}]}]
-JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
+      let planCtx = '';
+      if (mode === 'plan') {
+        const planId = $('rpt-plan-ref') ? $('rpt-plan-ref').value : '';
+        const plan = planId ? (D.plans||[]).find(p => p.id === planId) : null;
+        if (plan) {
+          planCtx = `\nKẾ HOẠCH SO SÁNH: ${plan.title||plan.month||'–'} | Mục tiêu CH: ${plan.targetStores||'–'} | Audit ≥${plan.targetAudit||85}đ | NS đề xuất: ${plan.budget||0}tr`;
+          planCtx += `\nThực tế: CH mới: ${D.kpi.newStores||0} | Audit TB: ${D.kpi.auditAvg||0}đ`;
+          planCtx += `\nThành tựu: ${$('rpt-highlight').value||'–'} | Thách thức: ${$('rpt-challenge').value||'–'}`;
+        }
+      }
+      const r = await callAI(`${kpi}${planCtx}\nSoạn báo cáo kết quả Operations Phúc Tea${planCtx?' kèm so sánh kế hoạch':''} dạng JSON array:\n[{"group":"TÊN NHÓM","tasks":[{"task":"Đầu việc","actualResult":"Kết quả","budgetUsed":"","link":"","note":""}]}]\nJSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
       unload();
       try {
         const clean = r.replace(/```json|```/g, '').trim();
@@ -4846,9 +5004,53 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
         body = lines.join('\n');
       } else {
         const lines = [`BÁO CÁO KẾT QUẢ OPERATIONS – ${month.toUpperCase()}`, ''];
-        lines.push(`Thành tựu: ${$('rpt-highlight').value || '–'}`);
-        lines.push(`Thách thức: ${$('rpt-challenge').value || '–'}`);
-        lines.push('\nTrân trọng,\nDương Thanh Liêm');
+        lines.push(`Thành tựu nổi bật:\n${$('rpt-highlight').value || '–'}`);
+        lines.push('');
+        lines.push(`Thách thức & kế hoạch tiếp theo:\n${$('rpt-challenge').value || '–'}`);
+        // Mode 2: include plan comparison table
+        const planId = $('rpt-plan-ref') ? $('rpt-plan-ref').value : '';
+        const plan = planId ? D.plans.find(p => p.id === planId) : null;
+        if (plan) {
+          lines.push('');
+          lines.push(`━━ SO SÁNH VỚI KẾ HOẠCH: ${plan.title || plan.month || '–'} ━━`);
+          lines.push(`Mục tiêu: ${plan.targetStores || '–'} CH mới | Audit ≥${plan.targetAudit || 85}đ | NS đề xuất: ${plan.budget || 0}tr`);
+          lines.push(`Thực tế: ${D.kpi.newStores || 0} CH mới | Audit TB: ${D.kpi.auditAvg || 0}đ`);
+          // Budget comparison from compareData inputs
+          let totalActualBudget = 0;
+          document.querySelectorAll('#rpt-compare-body input[data-field="actualBudget"]').forEach(inp => {
+            totalActualBudget += parseFloat(inp.value.replace(/[^0-9.]/g,'')) || 0;
+          });
+          if (totalActualBudget > 0) lines.push(`Ngân sách thực tế: ${totalActualBudget}tr / ${plan.budget || '–'}tr đề xuất`);
+          // Per-task comparison
+          const groups = Array.isArray(plan.content) ? plan.content : [];
+          if (groups.length) {
+            lines.push('');
+            lines.push('CHI TIẾT THEO ĐẦU VIỆC:');
+            const inputs = document.querySelectorAll('#rpt-compare-body input');
+            const dataMap = {};
+            inputs.forEach(inp => {
+              const g = inp.dataset.g, t = inp.dataset.t, f = inp.dataset.field;
+              if (g && t && f && inp.value) {
+                if (!dataMap[g]) dataMap[g] = {};
+                if (!dataMap[g][t]) dataMap[g][t] = {};
+                dataMap[g][t][f] = inp.value;
+              }
+            });
+            groups.forEach((g, gi) => {
+              if (g.tasks && g.tasks.length) {
+                lines.push(`▌ ${g.group}`);
+                g.tasks.forEach((t, ti) => {
+                  const actual = (dataMap[gi] && dataMap[gi][ti]) || {};
+                  const kpiStatus = actual.actualKpi ? `KPI: ${t.kpi||'–'} → ${actual.actualKpi}` : `KPI: ${t.kpi||'–'}`;
+                  const budgetStatus = actual.actualBudget ? `NS: ${t.budget||'–'} → ${actual.actualBudget}tr` : '';
+                  const desc = actual.description ? `(${actual.description})` : '';
+                  lines.push(`  • ${t.task} | ${kpiStatus}${budgetStatus?' | '+budgetStatus:''} ${desc}`);
+                });
+              }
+            });
+          }
+        }
+        lines.push('\nTrân trọng,\nDương Thanh Liêm · Operations Leader\n0357 636 539');
         body = lines.join('\n');
       }
       $('em-body').value = body;
@@ -4883,7 +5085,42 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
       const body = $('em-body').value;
       if (!body) { toast('⚠️ Nhập nội dung email trước', 'twarn'); return; }
       load('AI đang viết lại...');
-      const r = await callAI(`Viết lại email sau chuyên nghiệp, súc tích, trang trọng hơn. Giữ nguyên số liệu:\n\n${body}`, 'Viết email chuyên nghiệp tiếng Việt cho lãnh đạo doanh nghiệp.');
+      // Build plan comparison context for AI if in report mode
+      let compCtx = '';
+      const rptMode = $('rpt-mode') ? $('rpt-mode').value : 'free';
+      if (rptMode === 'plan') {
+        const planId = $('rpt-plan-ref') ? $('rpt-plan-ref').value : '';
+        const plan = planId ? (D.plans||[]).find(p => p.id === planId) : null;
+        if (plan) {
+          compCtx += '\n\n[DỮ LIỆU SO SÁNH KẾ HOẠCH vs THỰC TẾ]\n';
+          compCtx += 'Kế hoạch: ' + (plan.title||fmtPlanMonth(plan.month)||'–') + '\n';
+          compCtx += 'Mục tiêu CH mới: ' + (plan.targetStores||'–') + ' | Thực tế: ' + (D.kpi.newStores||0) + '\n';
+          compCtx += 'Mục tiêu Audit: ≥' + (plan.targetAudit||85) + 'đ | Thực tế TB: ' + (D.kpi.auditAvg||0) + 'đ\n';
+          compCtx += 'Ngân sách đề xuất: ' + (plan.budget||0) + 'tr\n';
+          // Collect compare inputs
+          const compareRows = [];
+          const groups = Array.isArray(plan.content) ? plan.content : [];
+          document.querySelectorAll('#rpt-compare-body input').forEach(inp => {
+            const g = parseInt(inp.dataset.g), t = parseInt(inp.dataset.t), f = inp.dataset.field;
+            if (!isNaN(g) && !isNaN(t) && f && inp.value && groups[g] && (groups[g].tasks||[])[t]) {
+              const task = groups[g].tasks[t];
+              const existing = compareRows.find(r => r.g===g && r.t===t);
+              if (existing) { existing[f] = inp.value; }
+              else { compareRows.push({ g, t, task: task.task, kpi: task.kpi||'', budget: task.budget||'', [f]: inp.value }); }
+            }
+          });
+          compareRows.forEach(r => {
+            compCtx += `• ${r.task}: KPI đặt ra=${r.kpi||'–'} → Thực tế=${r.actualKpi||'chưa điền'} | NS=${r.budget||'–'}tr → TH=${r.actualBudget||'chưa điền'}tr\n`;
+            if (r.description) compCtx += '  Mô tả: ' + r.description + '\n';
+          });
+          compCtx += 'Thành tựu: ' + ($('rpt-highlight') ? $('rpt-highlight').value : '') + '\n';
+          compCtx += 'Thách thức: ' + ($('rpt-challenge') ? $('rpt-challenge').value : '') + '\n';
+        }
+      }
+      const r = await callAI(
+        'Viết lại email sau chuyên nghiệp, súc tích, trang trọng hơn. Giữ nguyên số liệu. Nếu có dữ liệu so sánh KH vs thực tế, phân tích và đưa ra nhận xét cụ thể:\n\n' + body + compCtx,
+        'Viết email báo cáo chuyên nghiệp tiếng Việt cho lãnh đạo doanh nghiệp Phúc Tea. Phân tích KPI thực tế so với kế hoạch nếu có dữ liệu.'
+      );
       unload(); $('em-body').value = r; toast('🤖 AI đã viết lại!');
     }
 
@@ -4943,14 +5180,68 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
       $('ai-suggestions').innerHTML = `<div class="ai-box"><span class="aitag">💡 GỢI Ý KẾ HOẠCH</span><div class="ait">Tháng tới</div><div class="aii">${r.replace(/\n/g, '<br>')}</div></div>`;
     }
 
+    // Build full DB context for AI (stores, staff, audit, plans, tasks)
+    function buildAIContext() {
+      const lines = [];
+      // Stores
+      const stores = _allStores || [];
+      if (stores.length) {
+        lines.push('=== CỬA HÀNG (' + stores.length + ') ===');
+        stores.slice(0, 60).forEach(s => {
+          lines.push(`${s.storeId} | ${s.name} | Chủ: ${s.owner||'–'} | SĐT: ${s.phone||'–'} | Email: ${s.email||'–'} | Tỉnh: ${s.province||'–'} | Trạng thái: ${s.status||'–'} | Khai trương: ${s.launchDate||'–'}`);
+        });
+      }
+      // Staff
+      const staff = _allStaff || D.employees || [];
+      if (staff.length) {
+        lines.push('\n=== NHÂN SỰ (' + staff.length + ') ===');
+        staff.slice(0, 40).forEach(s => {
+          lines.push(`${s.id} | ${s.name} | Chức danh: ${s.position||'–'} | Cửa hàng: ${s.store||'–'} | SĐT: ${s.phone||'–'} | Email: ${s.email||'–'}`);
+        });
+      }
+      // Audit
+      const audits = ((_auditDirectData && _auditDirectData.auditList) || D.auditList || []);
+      if (audits.length) {
+        lines.push('\n=== AUDIT MỚI NHẤT ===');
+        audits.slice(0, 20).forEach(a => {
+          lines.push(`${a.store} | Điểm: ${a.pct}% | ${a.status||''} | CCP: ${a.hasCCP?'CÓ':'Không'} | RISK: ${a.hasRISK?'CÓ':'Không'} | Ngày: ${a.date||a.timestamp||'–'}`);
+        });
+      }
+      // Plans
+      if (D.plans && D.plans.length) {
+        lines.push('\n=== KẾ HOẠCH ===');
+        D.plans.slice(0, 5).forEach(p => {
+          lines.push(`${p.month||'–'} | ${p.title||'–'} | Mục tiêu CH: ${p.targetStores||'–'} | Audit: ${p.targetAudit||'–'} | NS: ${p.budget||0}`);
+          if (Array.isArray(p.content)) {
+            p.content.forEach(g => {
+              (g.tasks||[]).forEach(t => {
+                if (t.task) lines.push(`  • ${g.group}: ${t.task} | IC: ${t.ic||'–'} | Thời gian: ${t.time||'–'}`);
+              });
+            });
+          }
+        });
+      }
+      // My tasks
+      if (D.myTasks && D.myTasks.length) {
+        lines.push('\n=== VIỆC CẦN LÀM ===');
+        D.myTasks.slice(0, 20).forEach(t => {
+          lines.push(`[${(t._source||'').toUpperCase()}] ${t.task} | Cửa hàng: ${t.storeName||'–'} | IC: ${t.ic||'–'} | Deadline: ${t.deadline||'–'}`);
+        });
+      }
+      return lines.join('\n');
+    }
+
     async function askAI() {
       const q = $('ai-q').value.trim(); if (!q) return;
       $('ai-q').value = '';
       const ms = $('ai-messages');
-      ms.innerHTML += `<div class="ai-msg ai-msg-user"><div class="ai-bbl">${q}</div></div>`;
-      ms.innerHTML += `<div class="ai-msg ai-msg-ai" id="ai-typing"><div class="ai-bbl" style="color:rgba(255,255,255,.4)">Đang suy nghĩ...</div></div>`;
+      ms.innerHTML += `<div class="ai-msg ai-msg-user"><div class="ai-bbl">${q.replace(/</g,'&lt;')}</div></div>`;
+      ms.innerHTML += `<div class="ai-msg ai-msg-ai" id="ai-typing"><div class="ai-bbl" style="color:rgba(255,255,255,.4)">Đang tra cứu database & suy nghĩ...</div></div>`;
       ms.scrollTop = ms.scrollHeight;
-      const r = await callAI(q);
+      // Build full DB context and prepend to question
+      const dbCtx = buildAIContext();
+      const fullPrompt = dbCtx ? `[DỮ LIỆU HỆ THỐNG PHÚC TEA]\n${dbCtx}\n\n[CÂU HỎI]\n${q}` : q;
+      const r = await callAI(fullPrompt, 'Bạn là trợ lý vận hành Phúc Tea. Dựa trên dữ liệu được cung cấp, trả lời chính xác câu hỏi. Nếu không tìm thấy trong data, nói rõ. Trả lời tiếng Việt, ngắn gọn và thực tế.');
       const t = $('ai-typing');
       if (t) { t.querySelector('.ai-bbl').innerHTML = r.replace(/\n/g, '<br>'); t.removeAttribute('id'); }
       ms.scrollTop = ms.scrollHeight;
@@ -4998,25 +5289,68 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
           }
         } catch(_) {}
 
-        // Audit tasks: CCP/RISK stores from audit data (if loaded)
+        // Audit tasks: CCP/RISK/NOK from audit data — with proper deadlines
         let auditTasks = [];
         if (_auditDirectData && _auditDirectData.auditList) {
           (_auditDirectData.auditList || []).forEach(a => {
-            if (a.hasCCP || a.hasRISK) {
-              (a.issues || []).filter(i => i.verdict === 'CCP' || i.verdict === 'RISK').forEach(issue => {
-                auditTasks.push({
-                  taskId: `AUDIT_${a.store}_${issue.id || issue.item}`,
-                  task: `[${issue.verdict}] ${issue.item}`,
-                  phase: issue.group || 'AUDIT',
-                  deadline: a.date || '',
-                  ic: safeAuditorName(a.auditor),
-                  storeName: a.store,
-                  storeId: '',
-                  _source: 'audit',
-                  _priority: issue.verdict === 'CCP' ? 0 : 1,
-                  _auditStore: a.store,
-                  _auditTs: a.timestamp,
-                });
+            if (!a.issues || !a.issues.length) return;
+            // Parse audit date to compute deadlines
+            const parseAuditDate = (ts) => {
+              if (!ts) return new Date();
+              try {
+                // "HH:mm dd/MM/yyyy" or "dd/MM/yyyy"
+                const parts = ts.split(' ');
+                const datePart = parts.length > 1 ? parts[1] : parts[0];
+                const dp = datePart.split('/');
+                if (dp.length === 3) return new Date(+dp[2], +dp[1]-1, +dp[0]);
+              } catch(_) {}
+              return new Date();
+            };
+            const auditDate = parseAuditDate(a.timestamp || a.date);
+            const addHours = (d, h) => { const r = new Date(d); r.setHours(r.getHours()+h); return r; };
+            const addDays  = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
+            const fmtDl = (d) => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+
+            // CCP/RISK issues → individual tasks; NOK issues → group per store
+            const ccpRisk = a.issues.filter(i => i.verdict === 'CCP' || i.verdict === 'RISK');
+            const nok     = a.issues.filter(i => i.verdict === 'NOK');
+
+            ccpRisk.forEach(issue => {
+              const hours = issue.verdict === 'CCP' ? 48 : 24; // CCP=48h, RISK=24h
+              const dl = fmtDl(addHours(auditDate, hours));
+              const safeItemId = (issue.id || issue.item || '').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+              auditTasks.push({
+                taskId: 'AUDIT_' + a.store.replace(/[^a-zA-Z0-9]/g,'_').slice(0,15) + '_' + safeItemId,
+                task: '[' + issue.verdict + '] ' + issue.item,
+                phase: issue.group || 'AUDIT',
+                deadline: dl,
+                ic: safeAuditorName(a.auditor),
+                storeName: a.store,
+                storeId: '',
+                _source: 'audit',
+                _priority: issue.verdict === 'CCP' ? 0 : 1,
+                _auditStore: a.store,
+                _auditTs: a.timestamp,
+                _verdict: issue.verdict,
+              });
+            });
+
+            // NOK: one grouped task per store, deadline 5 days
+            if (nok.length > 0) {
+              const dl5 = fmtDl(addDays(auditDate, 5));
+              auditTasks.push({
+                taskId: 'AUDIT_NOK_' + a.store.replace(/[^a-zA-Z0-9]/g,'_').slice(0,20),
+                task: '[NOK] ' + nok.length + ' vi phạm cần khắc phục: ' + nok.slice(0,3).map(i=>i.item).join(', ') + (nok.length>3?' ...':''),
+                phase: 'AUDIT',
+                deadline: dl5,
+                ic: safeAuditorName(a.auditor),
+                storeName: a.store,
+                storeId: '',
+                _source: 'audit',
+                _priority: 2,
+                _auditStore: a.store,
+                _auditTs: a.timestamp,
+                _verdict: 'NOK',
               });
             }
           });
@@ -5079,7 +5413,13 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
     function filterMyTasks() {
       const storeFilter = ($('mytask-filter-store') || { value: 'all' }).value;
       const phaseFilter = ($('mytask-filter-phase') || { value: 'all' }).value;
-      let tasks = [...D.myTasks];
+      const doneFilter  = ($('mytask-done-filter')  || { value: 'active' }).value;
+      let tasks;
+      if (doneFilter === 'done') {
+        tasks = [...(D._completedTasks || [])];
+      } else {
+        tasks = [...D.myTasks];
+      }
       if (_myTaskSourceFilter && _myTaskSourceFilter !== 'all') tasks = tasks.filter(t => t._source === _myTaskSourceFilter);
       if (storeFilter !== 'all') tasks = tasks.filter(t => t.storeName === storeFilter);
       if (phaseFilter !== 'all') tasks = tasks.filter(t => t.phase === phaseFilter);
@@ -5169,7 +5509,10 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
             <td style="color:${isOD ? 'var(--red)' : isTD ? 'var(--gold)' : 'var(--gray)'};font-weight:${isOD || isTD ? '700' : '400'}">
               ${isOD ? '⚠️ ' : isTD ? '🔔 ' : ''}${t.deadline || '–'}
             </td>
-            <td>${t._source === 'audit' ? '<span style="font-size:11px;color:var(--gray)">Xử lý trực tiếp</span>' : `<button class="btn bp bsm" onclick="quickMarkDone('${t.storeId}','${t.taskId}','${t._source||'setup'}',this)">✓ Xong</button>`}</td>
+            <td>${t._doneAt
+              ? `<span class="bdg bg2" style="font-size:10px">✓ ${t._doneAt}</span>`
+              : `<button class="btn bp bsm" onclick="quickMarkDone('${t.storeId||''}','${t.taskId}','${t._source||'setup'}',this)">✓ Xong</button>`
+            }</td>
           </tr>`;
         }).join('');
 
@@ -5191,20 +5534,103 @@ JSON thuần, 3-4 nhóm: Setup&KT, Audit, Đào tạo, Vận hành.`);
     async function quickMarkDone(storeId, taskId, source, btn) {
       if (!taskId) return;
       btn.disabled = true; btn.textContent = '...';
+
+      // Find the task first (by taskId, since storeId may be empty for audit)
+      const doneTask = D.myTasks.find(t => t.taskId === taskId);
+
+      if (source === 'audit') {
+        // Audit tasks are client-side only — no GS call, just mark locally
+        if (!D._completedTasks) D._completedTasks = [];
+        if (doneTask) D._completedTasks.unshift({ ...doneTask, _doneAt: new Date().toLocaleString('vi-VN') });
+        D.myTasks = D.myTasks.filter(t => t.taskId !== taskId);
+
+        // Check if all audit tasks for this store are now done
+        const auditStore = doneTask ? (doneTask._auditStore || doneTask.storeName) : '';
+        if (auditStore) {
+          const remaining = D.myTasks.filter(t => t._source === 'audit' && (t._auditStore === auditStore || t.storeName === auditStore));
+          if (remaining.length === 0) {
+            _markAuditStoreRecovered(auditStore);
+          }
+          // Auto-dismiss CCP/RISK for this verdict if done
+          if (doneTask && _auditDirectData && _auditDirectData.auditList) {
+            const rec = (_auditDirectData.auditList || []).find(a => a.store === auditStore);
+            if (rec) {
+              const verdict = doneTask._verdict || '';
+              if (verdict === 'CCP') {
+                const ccpLeft = D.myTasks.filter(t => t._source==='audit' && t._auditStore===auditStore && t._verdict==='CCP');
+                if (ccpLeft.length === 0) rec.hasCCP = false;
+              }
+              if (verdict === 'RISK') {
+                const riskLeft = D.myTasks.filter(t => t._source==='audit' && t._auditStore===auditStore && t._verdict==='RISK');
+                if (riskLeft.length === 0) rec.hasRISK = false;
+              }
+            }
+          }
+        }
+        // Re-render audit KPI counts
+        const auditRemaining = D.myTasks.filter(t => t._source === 'audit');
+        if (_auditDirectData) {
+          const ccpStores = (_auditDirectData.auditList||[]).filter(a=>a.hasCCP).length;
+          const riskStores = (_auditDirectData.auditList||[]).filter(a=>a.hasRISK).length;
+          renderAuditDirectKPI({ avg: _auditDirectData.avg||0, reauditCount: _auditDirectData.reauditCount||0, auditList: _auditDirectData.auditList||[] });
+          renderDashboard();
+        }
+        toast('✅ Đã đánh dấu hoàn thành!');
+        renderMyTasks(D.myTasks);
+        return;
+      }
+
+      // Setup / Plan tasks — need GS call
       let res;
       if (source === 'plan') {
         res = await api({ action: 'updatePlanTaskStatus', taskId, done: true });
       } else {
-        if (!storeId) { btn.disabled = false; btn.textContent = '✓ Xong'; return; }
+        if (!storeId) { btn.disabled = false; btn.textContent = '✓ Xong'; toast('❌ Thiếu storeId', 'terr'); return; }
         res = await api({ action: 'updateTaskStatus', storeId, taskId, done: true });
       }
       if (res && res.ok) {
         toast('✅ Đã đánh dấu hoàn thành!');
-        D.myTasks = D.myTasks.filter(t => !(t.storeId === storeId && t.taskId === taskId));
+        if (!D._completedTasks) D._completedTasks = [];
+        if (doneTask) D._completedTasks.unshift({ ...doneTask, _doneAt: new Date().toLocaleString('vi-VN') });
+        D.myTasks = D.myTasks.filter(t => t.taskId !== taskId);
         renderMyTasks(D.myTasks);
       } else {
         toast('❌ ' + ((res && res.error) || 'Lỗi'), 'terr');
         btn.disabled = false; btn.textContent = '✓ Xong';
+      }
+    }
+
+    // Mark a store as "Đã khắc phục" in the audit table row
+    function _markAuditStoreRecovered(storeOrStoreName) {
+      // Find rows in a-direct-body for this store and update status badge
+      const tbody = $('a-direct-body');
+      if (!tbody) return;
+      tbody.querySelectorAll('tr').forEach(tr => {
+        const cells = tr.querySelectorAll('td');
+        if (cells[0] && cells[0].textContent.includes(storeOrStoreName)) {
+          const statusCell = cells[6]; // Trạng thái column
+          if (statusCell && !statusCell.innerHTML.includes('Đã khắc phục')) {
+            statusCell.innerHTML += ' <span class="bdg bg2" style="font-size:9px;margin-left:4px">✅ Đã khắc phục</span>';
+          }
+          // Auto-dismiss CCP/RISK: remove from _auditDirectData
+          if (_auditDirectData && _auditDirectData.auditList) {
+            const rec = _auditDirectData.auditList.find(a => a.store && a.store.includes(storeOrStoreName.split(' ')[0]));
+            if (rec) { rec.hasCCP = false; rec.hasRISK = false; }
+          }
+        }
+      });
+      // Also update history table
+      const hbody = $('a-history-body');
+      if (hbody) {
+        hbody.querySelectorAll('tr').forEach(tr => {
+          const cells = tr.querySelectorAll('td');
+          if (cells[1] && cells[1].textContent.includes(storeOrStoreName)) {
+            const statusCell = cells[4];
+            if (statusCell && !statusCell.innerHTML.includes('Đã khắc phục')) {
+              statusCell.innerHTML += ' <span class="bdg bg2" style="font-size:9px">✅ KP</span>';
+            }
+          }
+        });
       }
     }
 

@@ -3644,7 +3644,7 @@
 
     function renderAuditDirectKPI(res) {
       const avg       = res.avg || 0;
-      const reaudit   = res.reauditCount || 0;
+      const reaudit   = (res.auditList || []).filter(function(a){ return !a.pass && !a._reauditDone; }).length || res.reauditCount || 0;
       const ccpStores = (res.auditList || []).filter(a => a.hasCCP).length;
       const riskStores= (res.auditList || []).filter(a => a.hasRISK).length;
 
@@ -3698,9 +3698,9 @@
           <td style="font-weight:600">${a.store}</td>
           <td style="font-size:12px">${fmtViDate(a.date) !== '–' ? fmtViDate(a.date) : fmtViDate(a.timestamp)}</td>
           <td style="color:${pctColor};font-weight:700;font-size:15px">${a.pct}%</td>
-          <td style="font-size:12px;color:var(--gray)">${a.achieved}/${a.effectiveMax}${a.naTotal > 0 ? ` <span title="NA loại ra" style="color:var(--gray)">(-${a.naTotal}đ NA)</span>` : ''}</td>
-          <td>${Number(ccpNum) > 0 ? `<span class="bdg br2" style="font-size:10px">${ccpNum} CCP</span>` : '<span style="color:var(--gray);font-size:12px">–</span>'}</td>
-          <td>${Number(riskNum) > 0 ? `<span class="bdg br2" style="font-size:10px">${riskNum} RISK</span>` : '<span style="color:var(--gray);font-size:12px">–</span>'}</td>
+          <td style="font-size:12px;color:var(--gray)">${a.achieved}/${a.effectiveMax}${a.naTotal > 0 ? '(-' + a.naTotal + 'đ NA)' : ''}</td>
+          <td>${Number(ccpNum) > 0 ? '<b style="color:#DC2626">' + ccpNum + ' CCP</b>' : '–'}</td>
+          <td>${Number(riskNum) > 0 ? '<b style="color:#DC2626">' + riskNum + ' RISK</b>' : '–'}</td>
           <td>${badge}</td>
           <td style="font-size:12px">${safeAuditorName(a.auditor)}</td>
           <td style="white-space:nowrap">
@@ -3867,7 +3867,7 @@
           <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--gray);letter-spacing:.5px;margin-bottom:6px">Nhận xét của khách</div>
           <div style="font-size:13px;line-height:1.6;color:var(--brown)">${rec.comment || '(Không có nhận xét)'}</div>
         </div>
-        ${(rec.ratings||[]).length ? `<div style="display:flex;gap:8px;flex-wrap:wrap">${rec.ratings.map((r,i)=>`<div style="background:var(--gold-l);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--brown)"><span style="color:var(--gray)">Câu ${i+1}:</span> ${r}/5 ⭐</div>`).join('')}</div>` : ''}`;
+        ${(rec.ratings||[]).length ? '<div style="display:flex;gap:8px;flex-wrap:wrap">'+rec.ratings.map(function(r,i){ return '<div style="background:var(--gold-l);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--brown)"><span style="color:var(--gray)">Câu '+(i+1)+':</span> '+r+'/5 ⭐</div>'; }).join('')+'</div>' : ''}`;
     }
 
     function _buildDirectDetailHtml(rec) {
@@ -3888,7 +3888,7 @@
           <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
             <div style="text-align:center">
               <div style="font-size:32px;font-weight:800;color:${pctColor}">${rec.pct}%</div>
-              <div style="font-size:11px;color:var(--gray)">${rec.achieved}/${rec.effectiveMax}đ${rec.naTotal>0?` (-${rec.naTotal} NA)`:''}</div>
+              <div style="font-size:11px;color:var(--gray)">${rec.achieved}/${rec.effectiveMax}đ${rec.naTotal>0?' (-'+rec.naTotal+' NA)':''}</div>
             </div>
             <div>${rec.pass ? '<span class="bdg bg2" style="font-size:13px">ĐẠT</span>' : '<span class="bdg br2" style="font-size:13px">KHÔNG ĐẠT</span>'}</div>
           </div>
@@ -3952,11 +3952,46 @@
         html += '</tbody></table></div>';
       }
 
+      // Photo evidence — safe string concatenation only
+      var photos = rec.photos || [];
+      if (photos.length > 0) {
+        var photoHtml = photos.map(function(url, idx) {
+          var m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+          var fid = m ? m[1] : null;
+          var thumb = fid ? 'https://drive.google.com/thumbnail?id=' + fid + '&sz=w200' : '';
+          var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(url);
+          var _photoContainer = document.createElement('div');
+          _photoContainer.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px';
+          photos.forEach(function(purl) {
+            var pm = purl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || purl.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+            var pfid = pm ? pm[1] : null;
+            var pthumb = pfid ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w200' : '';
+            var pqr = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(purl);
+            var wrap = document.createElement('div');
+            wrap.style.textAlign = 'center';
+            var img = document.createElement('img');
+            img.src = pthumb || pqr;
+            img.style.cssText = (pthumb ? 'width:100px;height:100px;object-fit:cover;' : 'width:80px;height:80px;') + 'cursor:pointer;border-radius:6px;';
+            if (pthumb) img.onerror = function(){ this.src = pqr; };
+            img.addEventListener('click', (function(u){ return function(){ window.open(u,'_blank'); }; })(purl));
+            wrap.appendChild(img);
+            var lbl = document.createElement('div');
+            lbl.style.cssText = 'font-size:10px;color:var(--gray);margin-top:3px';
+            lbl.textContent = 'Ảnh ' + (_photoContainer.children.length + 1);
+            wrap.appendChild(lbl);
+            _photoContainer.appendChild(wrap);
+          });
+          photoHtml = _photoContainer.innerHTML;
+        }).join('');
+        html += '<div style="margin-top:12px;background:var(--gray-l);border-radius:var(--rs);padding:10px 12px">'
+          + '<div style="font-size:10px;color:var(--gray);font-weight:600;margin-bottom:8px">📷 HÌNH ẢNH BẰNG CHỨNG (' + photos.length + ' ảnh)</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:8px">' + photoHtml + '</div></div>';
+      }
       if (rec.note || rec.actionPlan) {
-        html += `<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">`;
-        if (rec.note)       html += `<div style="background:var(--gray-l);border-radius:var(--rs);padding:10px 12px"><div style="font-size:10px;color:var(--gray);font-weight:600;margin-bottom:3px">NHẬN XÉT</div><div style="font-size:12px">${rec.note}</div></div>`;
-        if (rec.actionPlan) html += `<div style="background:var(--blue-l);border-radius:var(--rs);padding:10px 12px"><div style="font-size:10px;color:var(--blue);font-weight:600;margin-bottom:3px">ACTION PLAN</div><div style="font-size:12px">${rec.actionPlan}</div></div>`;
-        html += `</div>`;
+        html += '<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">';
+        if (rec.note)       html += '<div style="background:var(--gray-l);border-radius:var(--rs);padding:10px 12px"><div style="font-size:10px;color:var(--gray);font-weight:600;margin-bottom:3px">NHẬN XÉT</div><div style="font-size:12px">' + rec.note + '</div></div>';
+        if (rec.actionPlan) html += '<div style="background:var(--blue-l);border-radius:var(--rs);padding:10px 12px"><div style="font-size:10px;color:var(--blue);font-weight:600;margin-bottom:3px">ACTION PLAN</div><div style="font-size:12px">' + rec.actionPlan + '</div></div>';
+        html += '</div>';
       }
 
       html += `<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
@@ -3977,9 +4012,9 @@
       let aiText = '';
       if (CFG.scriptUrl) {
         const res = await api({ action:'aiAuditAnalysis', data:{ store, pct:rec.pct, issues:rec.issues||[], note:rec.note||'' } });
-        aiText = res.ok ? res.analysis : await callAI(`Audit ${store}: ${rec.pct}%. Vi phạm: ${(rec.issues||[]).map(i=>`[${i.verdict}] ${i.item}`).join(', ')||'Không có'}. Phân tích ngắn.`);
+        aiText = res.ok ? res.analysis : await callAI(`Audit ${store}: ${rec.pct}%. Vi phạm: ${(rec.issues||[]).map(function(i){return "["+i.verdict+"] "+i.item;}).join(', ')||'Không có'}. Phân tích ngắn.`);
       } else {
-        aiText = await callAI(`Audit ${store}: ${rec.pct}%. Vi phạm: ${(rec.issues||[]).map(i=>`[${i.verdict}] ${i.item}`).join(', ')||'Không có'}. Phân tích ngắn.`);
+        aiText = await callAI(`Audit ${store}: ${rec.pct}%. Vi phạm: ${(rec.issues||[]).map(function(i){return "["+i.verdict+"] "+i.item;}).join(', ')||'Không có'}. Phân tích ngắn.`);
       }
       unload();
       // Append AI result inside modal detail body
@@ -4336,10 +4371,10 @@ Dương Thanh Liêm – Operations Phúc Tea`;
           <div class="kpi-b"><div style="font-size:10px;color:#888">NA</div><div class="kv" style="color:#888">${rec.naTotal}đ</div></div>
           <div class="kpi-b"><div style="font-size:10px;color:#888">TRẠNG THÁI</div><div class="kv ${rec.pass?'pass':'fail'}">${rec.status||'–'}</div></div>
         </div>
-        ${issues.length?`<div style="background:#FEF2F2;border:1px solid #FCA5A5;padding:8px 12px;border-radius:6px;margin:10px 0;font-size:12px">⚠️ <strong>${issues.length} vi phạm</strong> | CCP: ${issues.filter(i=>i.verdict==='CCP').length} | RISK: ${issues.filter(i=>i.verdict==='RISK').length} | NOK: ${issues.filter(i=>i.verdict==='NOK').length}</div>`:''}
+        ${issues.length ? '<div style="background:#FEF2F2;border:1px solid #FCA5A5;padding:8px 12px;border-radius:6px;margin:10px 0;font-size:12px">⚠️ <strong>' + issues.length + ' vi phạm</strong> | CCP: ' + issues.filter(function(x){return x.verdict==='CCP';}).length + ' | RISK: ' + issues.filter(function(x){return x.verdict==='RISK';}).length + ' | NOK: ' + issues.filter(function(x){return x.verdict==='NOK';}).length + '</div>' : ''}
         <table><thead><tr><th>Nhóm</th><th>Hạng mục</th><th>Loại</th><th>Kết quả</th><th>Điểm</th></tr></thead><tbody>${rows}</tbody></table>
-        ${rec.note?`<div style="margin-top:10px;font-size:12px"><strong>Nhận xét:</strong> ${rec.note}</div>`:''}
-        ${rec.actionPlan?`<div style="margin-top:6px;font-size:12px"><strong>Action plan:</strong> ${rec.actionPlan}</div>`:''}
+        ${rec.note ? '<div style="margin-top:10px;font-size:12px"><strong>Nhận xét:</strong> ' + rec.note + '</div>' : ''}
+        ${rec.actionPlan ? '<div style="margin-top:6px;font-size:12px"><strong>Action plan:</strong> ' + rec.actionPlan + '</div>' : ''}
         <div style="margin-top:28px;display:flex;justify-content:space-between">
           <div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Người audit</div>
           <div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Đại diện cửa hàng</div>
@@ -4421,27 +4456,25 @@ Dương Thanh Liêm – Operations Phúc Tea`;
     function renderStaffGrid(list) {
       const grid = $('staff-grid');
       if (!list.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="ei">👥</div>Không có nhân viên phù hợp</div>'; return; }
-      grid.innerHTML = list.map(s => {
-        const initials = (s.name || '').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
-        return `<div class="staff-card" onclick="editStaff('${s.id}')">
-      <div class="staff-av">${s.avatar ? `<img src="${s.avatar}" alt="">` : `<span>${initials}</span>`}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
-        <div style="font-size:11px;color:var(--gray);margin-top:2px">${s.position || '–'} · <code style="font-size:10px">${s.id || '–'}</code></div>
-        <div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap">${roleBadge(s.role)} <span class="bdg ${s.status === 'Đang cộng tác' ? 'bg2' : s.status === 'Tạm ngưng' ? 'by2' : 'br2'}">${s.status || '–'}</span></div>
-      </div>
-    </div>`;
-      }).join('');
+      // Build staff cards using DOM to avoid quote-in-attribute syntax errors
+      grid.innerHTML = '';
+      list.forEach(function(s) {
+        const initials = (s.name || '').split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().slice(0, 2) || '?';
+        const avatarHtml = s.avatar ? '<img src="' + s.avatar + '" alt="">' : '<span>' + initials + '</span>';
+        const statusCls = s.status === 'Đang cộng tác' ? 'bg2' : s.status === 'Tạm ngưng' ? 'by2' : 'br2';
+        const card = document.createElement('div');
+        card.className = 'staff-card';
+        card.innerHTML = '<div class="staff-av">' + avatarHtml + '</div>'
+          + '<div style="flex:1;min-width:0">'
+          + '<div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (s.name||'') + '</div>'
+          + '<div style="font-size:11px;color:var(--gray);margin-top:2px">' + (s.position||'–') + ' · <code style="font-size:10px">' + (s.id||'–') + '</code></div>'
+          + '<div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap">' + roleBadge(s.role) + ' <span class="bdg ' + statusCls + '">' + (s.status||'–') + '</span></div>'
+          + '</div>';
+        card.addEventListener('click', (function(sid){ return function(){ editStaff(sid); }; })(s.id));
+        grid.appendChild(card);
+      });
 
-      // Training section from latest plan
-      if (D.plans.length > 0) {
-        const plan = D.plans[0];
-        const content = (plan.content && typeof plan.content === 'object') ? JSON.stringify(plan.content) : String(plan.content || '');
-        // training-month-label removed
-        $('training-section').innerHTML = `
-      <div class="alert ab" style="margin-bottom:10px">📚 <span>Đào tạo từ kế hoạch <strong>${plan.month || '–'}</strong>. Ngân sách: ${plan.budget || 0}tr</span></div>
-      <div style="font-size:13px;color:var(--brown);line-height:1.8;white-space:pre-wrap">${content}</div>`;
-      }
+      // Training section removed — element no longer in DOM
     }
 
     function openStaffModal(data) {
@@ -4506,7 +4539,9 @@ Dương Thanh Liêm – Operations Phúc Tea`;
     async function loadPendingStaff() {
       const data = await api({ action: 'getPendingStaff' });
       if (data.ok && data.pending && data.pending.length) {
-        $('pending-section').style.display = 'block';
+        const activePage = document.querySelector('.page.on');
+        const isAllowed = activePage && (activePage.id === 'pg-nhansu' || activePage.id === 'pg-mytasks');
+        $('pending-section').style.display = isAllowed ? 'block' : 'none';
         $('pending-list').innerHTML = data.pending.map(p => `
       <div class="card" style="margin-bottom:10px">
         <div class="ch" style="background:var(--gold-l)">
@@ -5413,7 +5448,10 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
         try {
           const planRes = await api({ action: 'getPlanTasks', userName });
           if (planRes.ok) {
-            planTasks = (planRes.tasks || []).map(t => ({ ...t, _source: 'plan', _priority: 3 }));
+            planTasks = (planRes.tasks || []).map(t => ({
+              ...t, _source: 'plan', _priority: 3,
+              storeName: fmtPlanMonth(t.month || t.storeName || '') || t.storeName || 'Kế hoạch',
+            }));
           }
         } catch(_) {}
 
@@ -5743,6 +5781,10 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
               if (verdict === 'RISK') {
                 const riskLeft = D.myTasks.filter(t => t._source==='audit' && t._auditStore===auditStore && t._verdict==='RISK');
                 if (riskLeft.length === 0) rec.hasRISK = false;
+              }
+              if (verdict === 'REAUDIT') {
+                const reauditLeft = D.myTasks.filter(t => t._source==='audit' && t._auditStore===auditStore && t._verdict==='REAUDIT');
+                if (reauditLeft.length === 0 && rec.pct < 85) rec._reauditDone = true;
               }
             }
           }

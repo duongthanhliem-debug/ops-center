@@ -1344,11 +1344,11 @@
     </div>
     <div class="ntabs">
       <button class="ntab on" onclick="goPage('dashboard',this)"><i data-lucide="bar-chart-2" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Dashboard</button>
-      <button class="ntab" onclick="goPage('stores',this)">🏬 Cửa hàng</button>
-      <button class="ntab" onclick="goPage('setup',this);loadSetupPage()">🏪 Setup & KT</button>
+      <button class="ntab" onclick="goPage('stores',this);if(!_storesLoaded)loadStores()"><i data-lucide="store" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Cửa hàng</button>
+      <button class="ntab" onclick="goPage('setup',this);loadSetupPage()"><i data-lucide="rocket" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Setup & KT</button>
       <button class="ntab" onclick="goPage('audit',this)"><i data-lucide="shield-check" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Audit</button>
       <button class="ntab" onclick="goPage('nhansu',this)"><i data-lucide="users" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Nhân sự</button>
-      <button class="ntab" onclick="goPage('kehoach',this)"><i data-lucide="target" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Kế hoạch</button>
+      <button class="ntab" onclick="goPage('kehoach',this);loadPlans()"><i data-lucide="target" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Kế hoạch</button>
       <button class="ntab" onclick="goPage('baocao',this)"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Báo cáo</button>
       <button class="ntab" onclick="goPage('ai',this)"><i data-lucide="bot" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>AI</button>
       <button class="ntab" onclick="goPage('mytasks',this);loadMyTasks()"><i data-lucide="pin" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i>Việc Cần Làm</button>
@@ -1914,11 +1914,9 @@
       <select class="fc" id="fns-status" onchange="filterStaff()" style="min-width:140px">
         <option value="Đang cộng tác">Đang cộng tác</option>
         <option value="Tạm ngưng">Tạm ngưng</option>
-        <option value="Đã ngưng cộng tác">Đã ngưng</option>
-        <option value="all">Tất cả</option>
-        <option value="Đang cộng tác">Đang cộng tác</option>
-        <option value="Đã ngưng cộng tác">Đã ngưng</option>
+        <option value="Đã ngưng cộng tác">Đã ngưng cộng tác</option>
         <option value="Chờ xác nhận">Chờ duyệt</option>
+        <option value="all">Tất cả</option>
       </select>
       <input class="fc" id="fns-search" placeholder="🔍 Tìm kiếm..." style="min-width:150px" oninput="filterStaff()">
     </div>
@@ -2812,8 +2810,10 @@
     //  STORES
     // ════════════════════════════════════════
     let _allStores = [];
+    let _storesLoaded = false;
     async function loadStores() {
       if (!CFG.scriptUrl) return;
+      _storesLoaded = true;
       const data = await api({ action: 'getStores' });
       if (data.ok) {
         _allStores = data.stores || [];
@@ -4576,29 +4576,66 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       }
     }
 
-    // Format any month value → clean "Tháng M/YYYY" for display
+    // Format any month/quarter value → clean display label
     function fmtPlanMonth(val) {
       if (!val) return '–';
+      const s = String(val).trim();
       // Already clean: "Tháng 4/2026" or "Quý 2/2026"
-      if (val.includes('Tháng') || val.includes('Quý')) return val;
+      if (s.startsWith('Tháng') || s.startsWith('Quý')) return s;
+      // Quarter format "Q1/2026" → "Quý 1/2026"
+      if (/^Q[1-4]\/\d{4}$/.test(s)) return 'Quý ' + s[1] + '/' + s.slice(3);
       // yyyy-mm format from input[type=month]
-      const p = val.split('-');
+      const p = s.split('-');
       if (p.length === 2 && p[0].length === 4) return 'Tháng ' + parseInt(p[1]) + '/' + p[0];
-      // Raw JS Date string like "Mon Jun 01 2026 00:00:00 GMT+0700 (Giờ Đông Dương)"
-      // or ISO "2026-06-01T00:00:00.000Z"
+      // Raw JS Date string (old data stored raw Date.toString())
       try {
-        const d = new Date(val);
+        const d = new Date(s);
         if (!isNaN(d.getTime()) && d.getFullYear() > 2000) {
           return 'Tháng ' + (d.getMonth()+1) + '/' + d.getFullYear();
         }
       } catch(_) {}
-      return val; // fallback: return as-is
+      return s; // fallback: return as-is
     }
 
     function updatePlanPeriodLabel() {
       const v = $('plan-period-type') ? $('plan-period-type').value : 'month';
       const el = $('plan-period-label');
       if (el) el.textContent = v === 'quarter' ? 'Quý' : 'Tháng';
+      // Swap input: month uses type=month picker, quarter uses a select Q1-Q4
+      const inp = $('plan-month');
+      if (!inp) return;
+      if (v === 'quarter') {
+        // Replace with quarter select if not already
+        if (inp.tagName === 'INPUT') {
+          const now = new Date();
+          const yr = now.getFullYear();
+          const sel = document.createElement('select');
+          sel.className = inp.className; sel.id = inp.id; sel.onchange = inp.onchange;
+          ['Q1','Q2','Q3','Q4'].forEach((q,i) => {
+            const opt = document.createElement('option');
+            opt.value = q + '/' + yr;
+            opt.textContent = q + ' năm ' + yr;
+            sel.appendChild(opt);
+          });
+          // Also add next year options
+          ['Q1','Q2','Q3','Q4'].forEach((q) => {
+            const opt = document.createElement('option');
+            opt.value = q + '/' + (yr+1);
+            opt.textContent = q + ' năm ' + (yr+1);
+            sel.appendChild(opt);
+          });
+          inp.parentNode.replaceChild(sel, inp);
+        }
+      } else {
+        // Restore to month input if currently a select
+        if (inp && inp.tagName === 'SELECT') {
+          const monthInp = document.createElement('input');
+          monthInp.type = 'month'; monthInp.className = inp.className;
+          monthInp.id = inp.id; monthInp.placeholder = 'yyyy-mm';
+          monthInp.onchange = autoFillPlanTitle;
+          inp.parentNode.replaceChild(monthInp, inp);
+        }
+      }
     }
 
     function newPlan() {
@@ -5332,7 +5369,7 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
       // Build full DB context and prepend to question
       const dbCtx = buildAIContext();
       const fullPrompt = dbCtx ? `[DỮ LIỆU HỆ THỐNG PHÚC TEA]\n${dbCtx}\n\n[CÂU HỎI]\n${q}` : q;
-      const r = await callAI(fullPrompt, 'Bạn là trợ lý vận hành Phúc Tea. Dựa trên dữ liệu được cung cấp, trả lời chính xác câu hỏi. Nếu không tìm thấy trong data, nói rõ. Trả lời tiếng Việt, ngắn gọn và thực tế.');
+      const r = await callAI(fullPrompt, 'Bạn là Ops Coach nội bộ Phúc Tea – mô hình take-away F&B Việt Nam. Dựa vào dữ liệu nội bộ trước, nếu câu hỏi không liên quan đến dữ liệu nội bộ hoặc dữ liệu chưa đủ thì dùng kiến thức chuyên môn ngành F&B để trả lời. Format: Kết luận → Nguyên nhân → 2-3 hành động cụ thể. Ngắn gọn, thực tế.');
       const t = $('ai-typing');
       if (t) { t.querySelector('.ai-bbl').innerHTML = r.replace(/\n/g, '<br>'); t.removeAttribute('id'); }
       ms.scrollTop = ms.scrollHeight;
@@ -5381,6 +5418,17 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
         } catch(_) {}
 
         // Audit tasks: CCP/RISK/NOK from audit data — with proper deadlines
+        // Auto-fetch audit data if not yet loaded (so re-audit tasks always appear)
+        if ((!_auditDirectData || !_auditDirectData.auditList || !_auditDirectData.auditList.length) && CFG.scriptUrl) {
+          try {
+            const auditRes = await api({ action: 'getAuditData' });
+            if (auditRes.ok) {
+              _auditDirectData = auditRes;
+              D.kpi.auditAvg     = auditRes.avg || 0;
+              D.kpi.reauditCount = auditRes.reauditCount || 0;
+            }
+          } catch(_) {}
+        }
         let auditTasks = [];
         if (_auditDirectData && _auditDirectData.auditList) {
           (_auditDirectData.auditList || []).forEach(a => {

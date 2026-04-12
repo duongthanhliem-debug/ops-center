@@ -1759,7 +1759,9 @@
             <span class="ct">Xem trước biên bản</span>
             <button class="btn bo bsm" id="ar-copy-btn" style="display:none" onclick="copyText(_auditReportText)">📋 Copy</button>
           </div>
-          <div class="cb" id="ar-preview" style="font-size:12px;line-height:1.75;color:var(--brown);white-space:pre-wrap;max-height:560px;overflow-y:auto;background:var(--gray-l);border-radius:var(--rs);padding:12px">← Chọn cửa hàng và lần audit, nhấn "Tạo biên bản"</div>
+          <div class="cb" style="padding:0">
+            <textarea id="ar-preview" style="font-size:12px;line-height:1.75;color:var(--brown);white-space:pre-wrap;height:560px;width:100%;border:none;background:var(--gray-l);border-radius:var(--rs);padding:12px;resize:vertical;font-family:inherit;box-sizing:border-box;outline:none" oninput="_auditReportText=this.value">← Chọn cửa hàng và lần audit, nhấn "Tạo biên bản"</textarea>
+          </div>
         </div>
       </div>
 
@@ -3644,7 +3646,7 @@
 
     function renderAuditDirectKPI(res) {
       const avg       = res.avg || 0;
-      const reaudit   = (res.auditList || []).filter(function(a){ return !a.pass && !a._reauditDone; }).length || res.reauditCount || 0;
+      const reaudit   = (res.auditList || []).filter(function(a){ return !a.pass && !a._reauditDone && !a._recovered; }).length || res.reauditCount || 0;
       const ccpStores = (res.auditList || []).filter(a => a.hasCCP).length;
       const riskStores= (res.auditList || []).filter(a => a.hasRISK).length;
 
@@ -3962,22 +3964,30 @@
           var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(url);
           var _photoContainer = document.createElement('div');
           _photoContainer.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px';
-          photos.forEach(function(purl) {
+          photos.forEach(function(purl, pidx) {
             var pm = purl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || purl.match(/\/d\/([a-zA-Z0-9_-]+)\//);
             var pfid = pm ? pm[1] : null;
-            var pthumb = pfid ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w200' : '';
-            var pqr = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(purl);
+            // Try sz=w400 for better quality, fallback to direct Drive embed
+            var pthumb = pfid ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w400' : purl;
             var wrap = document.createElement('div');
-            wrap.style.textAlign = 'center';
+            wrap.style.cssText = 'text-align:center;flex:0 0 auto';
             var img = document.createElement('img');
-            img.src = pthumb || pqr;
-            img.style.cssText = (pthumb ? 'width:100px;height:100px;object-fit:cover;' : 'width:80px;height:80px;') + 'cursor:pointer;border-radius:6px;';
-            if (pthumb) img.onerror = function(){ this.src = pqr; };
+            img.src = pthumb;
+            img.style.cssText = 'width:140px;height:140px;object-fit:cover;cursor:pointer;border-radius:8px;border:1px solid var(--border);display:block;margin-bottom:4px';
+            img.title = 'Click để xem ảnh gốc';
+            img.onerror = function() {
+              // On error: show a clickable link placeholder instead
+              var lnk = document.createElement('a');
+              lnk.href = purl; lnk.target = '_blank';
+              lnk.style.cssText = 'display:flex;width:140px;height:140px;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:8px;font-size:11px;color:var(--blue);text-decoration:none;background:var(--gray-l)';
+              lnk.textContent = '🔗 Xem ảnh ' + (pidx+1);
+              wrap.replaceChild(lnk, img);
+            };
             img.addEventListener('click', (function(u){ return function(){ window.open(u,'_blank'); }; })(purl));
-            wrap.appendChild(img);
             var lbl = document.createElement('div');
-            lbl.style.cssText = 'font-size:10px;color:var(--gray);margin-top:3px';
-            lbl.textContent = 'Ảnh ' + (_photoContainer.children.length + 1);
+            lbl.style.cssText = 'font-size:10px;color:var(--gray);margin-top:2px';
+            lbl.textContent = 'Ảnh ' + (pidx+1);
+            wrap.appendChild(img);
             wrap.appendChild(lbl);
             _photoContainer.appendChild(wrap);
           });
@@ -3985,7 +3995,7 @@
         }).join('');
         html += '<div style="margin-top:12px;background:var(--gray-l);border-radius:var(--rs);padding:10px 12px">'
           + '<div style="font-size:10px;color:var(--gray);font-weight:600;margin-bottom:8px">📷 HÌNH ẢNH BẰNG CHỨNG (' + photos.length + ' ảnh)</div>'
-          + '<div style="display:flex;flex-wrap:wrap;gap:8px">' + photoHtml + '</div></div>';
+          + '<div style="display:flex;flex-wrap:wrap;gap:10px;overflow-x:auto">' + photoHtml + '</div></div>';
       }
       if (rec.note || rec.actionPlan) {
         html += '<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">';
@@ -4206,6 +4216,12 @@ Dương Thanh Liêm – Operations Phúc Tea`;
           sessions.map(s => `<option value="${s.timestamp||''}" data-src="${s._src||'direct'}">${fmtViDate(s.timestamp)} – ${s.auditType||'Audit'} – ${s.pct}%</option>`).join('');
         if (sessions.length) { sessSel.selectedIndex = 1; onAuditSessionChange(); }
       }
+      // Auto-fill email immediately when store is selected
+      const emailEl = $('ar-email');
+      if (emailEl && !emailEl.dataset.userEdited) {
+        const storeObj = (_allStores||[]).find(function(s){ return s.name === store; });
+        emailEl.value = (storeObj && storeObj.email) ? storeObj.email : '';
+      }
     }
 
     // ── openAuditReportForStore ───────────────────────────
@@ -4276,7 +4292,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       }
       const txt = buildAuditReportText(reportData);
       _auditReportText = txt;
-      const pre=$('ar-preview'); if(pre) pre.textContent=txt;
+      const pre=$('ar-preview'); if(pre) { pre.value=txt; pre.style.height='auto'; pre.style.height=Math.min(pre.scrollHeight,560)+'px'; }
       const cb=$('ar-copy-btn'); if(cb) cb.style.display='';
       toast('✅ Đã tạo biên bản cho '+store);
     }
@@ -4334,13 +4350,35 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       const store=($('ar-store')||{}).value;
       let to = ($('ar-email')||{}).value || '';
       if (!to) {
-        const storeObj=(_allStores||[]).find(s=>s.name===store);
+        const storeObj=(_allStores||[]).find(function(s){ return s.name===store; });
         to = (storeObj&&storeObj.email) ? storeObj.email : '';
         to = prompt('Email cửa hàng/chủ chi nhánh:',to) || '';
       }
       if (!to) return;
       load('Đang gửi biên bản...');
-      const res=await api({action:'sendEmail',to,subject:`Biên bản Audit – ${store} – ${new Date().toLocaleDateString('vi-VN')}`,body:_auditReportText});
+      // Read attached files as base64
+      var attachments = [];
+      var attachInp = $('ar-attach-file');
+      if (attachInp && attachInp.files && attachInp.files.length) {
+        var fileReadPromises = Array.from(attachInp.files).map(function(file) {
+          return new Promise(function(resolve) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              var b64 = e.target.result.split(',')[1];
+              resolve({ name: file.name, mimeType: file.type, data: b64 });
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+        try { attachments = await Promise.all(fileReadPromises); } catch(_) {}
+      }
+      const res=await api({
+        action:'sendEmail',
+        to,
+        subject:'Biên bản Audit – '+store+' – '+new Date().toLocaleDateString('vi-VN'),
+        body:_auditReportText,
+        attachments: attachments
+      });
       unload();
       if(res.ok) toast('✅ Đã gửi biên bản đến '+to);
       else toast('❌ '+(res.error||'Lỗi gửi email'),'terr');
@@ -5823,32 +5861,38 @@ Trả về JSON thuần, không markdown. 4 nhóm: Setup&KT, Audit, Đào tạo,
       }
     }
 
-    // Mark a store as "Đã khắc phục" in the audit table row
+    // Mark a store as "Đã khắc phục" in the audit table row + update auditList data
     function _markAuditStoreRecovered(storeOrStoreName) {
-      // Find rows in a-direct-body for this store and update status badge
-      const tbody = $('a-direct-body');
-      if (!tbody) return;
-      tbody.querySelectorAll('tr').forEach(tr => {
-        const cells = tr.querySelectorAll('td');
-        if (cells[0] && cells[0].textContent.includes(storeOrStoreName)) {
-          const statusCell = cells[6]; // Trạng thái column
-          if (statusCell && !statusCell.innerHTML.includes('Đã khắc phục')) {
-            statusCell.innerHTML += ' <span class="bdg bg2" style="font-size:9px;margin-left:4px">✅ Đã khắc phục</span>';
-          }
-          // Auto-dismiss CCP/RISK: remove from _auditDirectData
-          if (_auditDirectData && _auditDirectData.auditList) {
-            const rec = _auditDirectData.auditList.find(a => a.store && a.store.includes(storeOrStoreName.split(' ')[0]));
-            if (rec) { rec.hasCCP = false; rec.hasRISK = false; }
-          }
+      // Update auditList data first (exact match + partial match fallback)
+      if (_auditDirectData && _auditDirectData.auditList) {
+        const rec = _auditDirectData.auditList.find(a => a.store === storeOrStoreName)
+               || _auditDirectData.auditList.find(a => a.store && a.store.includes(storeOrStoreName.split(' – ')[0]));
+        if (rec) {
+          rec.hasCCP = false;
+          rec.hasRISK = false;
+          rec._recovered = true;
         }
-      });
-      // Also update history table
-      const hbody = $('a-history-body');
+      }
+      // Update direct results table
+      const tbody = $('a-direct-body');
+      if (tbody) {
+        tbody.querySelectorAll('tr').forEach(function(tr) {
+          var cells = tr.querySelectorAll('td');
+          if (cells[0] && cells[0].textContent.includes(storeOrStoreName.split(' – ')[0])) {
+            var statusCell = cells[6];
+            if (statusCell && !statusCell.innerHTML.includes('Đã khắc phục')) {
+              statusCell.innerHTML += ' <span class="bdg bg2" style="font-size:9px;margin-left:4px">✅ Đã khắc phục</span>';
+            }
+          }
+        });
+      }
+      // Update history table
+      var hbody = $('a-history-body');
       if (hbody) {
-        hbody.querySelectorAll('tr').forEach(tr => {
-          const cells = tr.querySelectorAll('td');
-          if (cells[1] && cells[1].textContent.includes(storeOrStoreName)) {
-            const statusCell = cells[4];
+        hbody.querySelectorAll('tr').forEach(function(tr) {
+          var cells = tr.querySelectorAll('td');
+          if (cells[1] && cells[1].textContent.includes(storeOrStoreName.split(' – ')[0])) {
+            var statusCell = cells[4];
             if (statusCell && !statusCell.innerHTML.includes('Đã khắc phục')) {
               statusCell.innerHTML += ' <span class="bdg bg2" style="font-size:9px">✅ KP</span>';
             }

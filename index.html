@@ -3954,48 +3954,60 @@
         html += '</tbody></table></div>';
       }
 
-      // Photo evidence — safe string concatenation only
+      // Photo evidence — build DOM correctly (one loop, no nesting)
       var photos = rec.photos || [];
       if (photos.length > 0) {
-        var photoHtml = photos.map(function(url, idx) {
-          var m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
-          var fid = m ? m[1] : null;
-          var thumb = fid ? 'https://drive.google.com/thumbnail?id=' + fid + '&sz=w200' : '';
-          var qr = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(url);
-          var _photoContainer = document.createElement('div');
-          _photoContainer.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px';
-          photos.forEach(function(purl, pidx) {
-            var pm = purl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || purl.match(/\/d\/([a-zA-Z0-9_-]+)\//);
-            var pfid = pm ? pm[1] : null;
-            // Try sz=w400 for better quality, fallback to direct Drive embed
-            var pthumb = pfid ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w400' : purl;
-            var wrap = document.createElement('div');
-            wrap.style.cssText = 'text-align:center;flex:0 0 auto';
+        var photoWrap = document.createElement('div');
+        photoWrap.style.cssText = 'margin-top:12px;background:var(--gray-l);border-radius:var(--rs);padding:10px 12px';
+        var photoTitle = document.createElement('div');
+        photoTitle.style.cssText = 'font-size:10px;color:var(--gray);font-weight:600;margin-bottom:8px';
+        photoTitle.textContent = '📷 HÌNH ẢNH BẰNG CHỨNG (' + photos.length + ' ảnh)';
+        photoWrap.appendChild(photoTitle);
+        var photoGrid = document.createElement('div');
+        photoGrid.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px';
+        photos.forEach(function(purl, pidx) {
+          var pm = purl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || purl.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+          var pfid = pm ? pm[1] : null;
+          var pthumb = pfid
+            ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w400'
+            : (purl.startsWith('http') ? purl : '');
+          var cell = document.createElement('div');
+          cell.style.cssText = 'text-align:center;flex:0 0 auto';
+          if (pthumb) {
             var img = document.createElement('img');
             img.src = pthumb;
-            img.style.cssText = 'width:140px;height:140px;object-fit:cover;cursor:pointer;border-radius:8px;border:1px solid var(--border);display:block;margin-bottom:4px';
+            img.style.cssText = 'width:140px;height:140px;object-fit:cover;cursor:pointer;border-radius:8px;border:1px solid var(--border);display:block';
             img.title = 'Click để xem ảnh gốc';
-            img.onerror = function() {
-              // On error: show a clickable link placeholder instead
-              var lnk = document.createElement('a');
-              lnk.href = purl; lnk.target = '_blank';
-              lnk.style.cssText = 'display:flex;width:140px;height:140px;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:8px;font-size:11px;color:var(--blue);text-decoration:none;background:var(--gray-l)';
-              lnk.textContent = '🔗 Xem ảnh ' + (pidx+1);
-              wrap.replaceChild(lnk, img);
-            };
             img.addEventListener('click', (function(u){ return function(){ window.open(u,'_blank'); }; })(purl));
-            var lbl = document.createElement('div');
-            lbl.style.cssText = 'font-size:10px;color:var(--gray);margin-top:2px';
-            lbl.textContent = 'Ảnh ' + (pidx+1);
-            wrap.appendChild(img);
-            wrap.appendChild(lbl);
-            _photoContainer.appendChild(wrap);
-          });
-          photoHtml = _photoContainer.innerHTML;
-        }).join('');
-        html += '<div style="margin-top:12px;background:var(--gray-l);border-radius:var(--rs);padding:10px 12px">'
-          + '<div style="font-size:10px;color:var(--gray);font-weight:600;margin-bottom:8px">📷 HÌNH ẢNH BẰNG CHỨNG (' + photos.length + ' ảnh)</div>'
-          + '<div style="display:flex;flex-wrap:wrap;gap:10px;overflow-x:auto">' + photoHtml + '</div></div>';
+            img.onerror = (function(u, c, i2){
+              return function(){
+                c.removeChild(i2);
+                var lnk = document.createElement('a');
+                lnk.href = u; lnk.target = '_blank';
+                lnk.style.cssText = 'display:flex;width:140px;height:140px;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;font-size:11px;color:var(--blue);text-decoration:none;background:var(--white);flex-direction:column;gap:4px';
+                lnk.innerHTML = '<span style="font-size:24px">🖼</span><span>Xem ảnh</span>';
+                c.insertBefore(lnk, c.firstChild);
+              };
+            })(purl, cell, img);
+            cell.appendChild(img);
+          } else {
+            var lnk2 = document.createElement('a');
+            lnk2.href = purl; lnk2.target = '_blank';
+            lnk2.style.cssText = 'display:flex;width:140px;height:140px;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;font-size:11px;color:var(--blue);text-decoration:none;background:var(--white);flex-direction:column;gap:4px';
+            lnk2.innerHTML = '<span style="font-size:24px">🔗</span><span>Ảnh ' + (pidx+1) + '</span>';
+            cell.appendChild(lnk2);
+          }
+          var lbl = document.createElement('div');
+          lbl.style.cssText = 'font-size:10px;color:var(--gray);margin-top:4px';
+          lbl.textContent = 'Ảnh ' + (pidx+1);
+          cell.appendChild(lbl);
+          photoGrid.appendChild(cell);
+        });
+        photoWrap.appendChild(photoGrid);
+        // Convert DOM to HTML string for injection
+        var tmpDiv = document.createElement('div');
+        tmpDiv.appendChild(photoWrap);
+        html += tmpDiv.innerHTML;
       }
       if (rec.note || rec.actionPlan) {
         html += '<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">';
@@ -4413,10 +4425,27 @@ Dương Thanh Liêm – Operations Phúc Tea`;
         <table><thead><tr><th>Nhóm</th><th>Hạng mục</th><th>Loại</th><th>Kết quả</th><th>Điểm</th></tr></thead><tbody>${rows}</tbody></table>
         ${rec.note ? '<div style="margin-top:10px;font-size:12px"><strong>Nhận xét:</strong> ' + rec.note + '</div>' : ''}
         ${rec.actionPlan ? '<div style="margin-top:6px;font-size:12px"><strong>Action plan:</strong> ' + rec.actionPlan + '</div>' : ''}
-        <div style="margin-top:28px;display:flex;justify-content:space-between">
-          <div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Người audit</div>
-          <div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Đại diện cửa hàng</div>
-        </div></body></html>`);
+        `);
+      // Photo evidence section
+      var pdfPhotos = rec.photos || [];
+      if (pdfPhotos.length > 0) {
+        pWin.document.write('<div style="margin-top:14px;padding-top:10px;border-top:1px solid #E8E0D4">');
+        pWin.document.write('<div style="font-size:12px;font-weight:700;margin-bottom:8px">HINH ANH BANG CHUNG (' + pdfPhotos.length + ' anh):</div>');
+        pWin.document.write('<div style="display:flex;flex-wrap:wrap;gap:8px">');
+        pdfPhotos.forEach(function(purl) {
+          var pm = purl.match(/[?&]id=([a-zA-Z0-9_-]+)/) || purl.match(/[/]d[/]([a-zA-Z0-9_-]+)[/]/);
+          var pfid = pm ? pm[1] : null;
+          var src = pfid ? 'https://drive.google.com/thumbnail?id=' + pfid + '&sz=w300' : (purl.startsWith('http') ? purl : '');
+          if (src) {
+            pWin.document.write('<img src="' + src + '" style="width:120px;height:120px;object-fit:cover;border-radius:6px;border:1px solid #E8E0D4">');
+          }
+        });
+        pWin.document.write('</div></div>');
+      }
+      pWin.document.write('<div style="margin-top:28px;display:flex;justify-content:space-between">');
+      pWin.document.write('<div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Nguoi audit</div>');
+      pWin.document.write('<div style="width:200px;border-top:1px solid #333;padding-top:8px;text-align:center;font-size:12px">Dai dien cua hang</div>');
+      pWin.document.write('</div></body></html>');
       pWin.document.close();
       setTimeout(()=>pWin.print(),500);
     }

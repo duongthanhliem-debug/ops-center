@@ -1848,7 +1848,7 @@
 
             <!-- Email preview toggle -->
             <div style="margin-bottom:10px">
-              <button class="btn bo bsm" onclick="toggleSchedEmailPreview()">👁️ Xem trước nội dung email</button>
+              <button class="btn bo bsm" onclick="toggleSchedEmailPreview()">🔍️ Xem trước nội dung email</button>
             </div>
             <div id="sched-email-preview" style="display:none;background:var(--gray-l);border-radius:var(--rs);padding:12px;margin-bottom:10px">
               <div style="font-size:11px;font-weight:600;color:var(--gray);margin-bottom:6px">NỘI DUNG EMAIL SẼ GỬI:</div>
@@ -2485,14 +2485,14 @@
           <label class="fl">Mật khẩu mới</label>
           <div style="position:relative">
             <input class="fc" type="password" id="p-newpw" placeholder="••••••••" style="padding-right:38px">
-            <button type="button" id="eye-newpw" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">👁</button>
+            <button type="button" id="eye-newpw" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">🐵</button>
           </div>
         </div>
         <div class="fg">
           <label class="fl">Xác nhận mật khẩu mới</label>
           <div style="position:relative">
             <input class="fc" type="password" id="p-confirmpw" placeholder="••••••••" style="padding-right:38px">
-            <button type="button" id="eye-confirmpw" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">👁</button>
+            <button type="button" id="eye-confirmpw" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">🐵</button>
           </div>
         </div>
         <div id="pw-match-err" style="display:none;color:var(--red);font-size:12px;margin-bottom:8px">⚠️ Mật khẩu xác nhận không khớp</div>
@@ -2592,7 +2592,7 @@
             <input id="login-pass" type="password" placeholder="Nhập mật khẩu"
               style="width:100%;padding:10px 40px 10px 12px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface-d);color:var(--text);font-family:inherit;font-size:14px;outline:none;box-sizing:border-box;transition:border-color .15s"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-            <button id="login-eye" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px">👁</button>
+            <button id="login-eye" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px">🐵</button>
           </div>
         </div>
         <button id="login-btn" style="width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s">
@@ -5123,7 +5123,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
       });
     }
 
-    // ── Nút 👁 hiện/ẩn mật khẩu – wire trực tiếp trong DOMContentLoaded ──
+    // ── Nút 🐵 hiện/ẩn mật khẩu – wire trực tiếp trong DOMContentLoaded ──
     // (delegated click không hoạt động với input[type=password] trên một số browser)
     function wireEyeBtn(btnId, inputId) {
       const btn = document.getElementById(btnId);
@@ -5135,7 +5135,7 @@ Dương Thanh Liêm – Operations Phúc Tea`;
         // Toggle bằng setAttribute để tránh browser cache type
         const isHidden = inp.getAttribute('type') === 'password';
         inp.setAttribute('type', isHidden ? 'text' : 'password');
-        btn.textContent = isHidden ? '🙈' : '👁';
+        btn.textContent = isHidden ? '🙈' : '🐵';
         inp.focus();
       });
     }
@@ -6574,7 +6574,7 @@ Operations Leader`;
       if (loginEye && loginPass) {
         loginEye.addEventListener('click', function() {
           loginPass.type = loginPass.type === 'password' ? 'text' : 'password';
-          loginEye.textContent = loginPass.type === 'password' ? '👁' : '🙈';
+          loginEye.textContent = loginPass.type === 'password' ? '🐵' : '🙈';
         });
       }
 
@@ -6619,7 +6619,7 @@ Operations Leader`;
         showLoginScreen();
       }
 
-      // Wire 👁 eye buttons cho profile modal (static DOM)
+      // Wire 🐵 monkey buttons cho profile modal (static DOM)
       wireEyeBtn('eye-newpw',     'p-newpw');
       wireEyeBtn('eye-confirmpw', 'p-confirmpw');
 

@@ -1515,7 +1515,7 @@
       <div class="kpi">
         <div class="kl">Cửa hàng hoạt động</div>
         <div class="kv" id="kpi-stores" style="color:var(--brown)">–</div>
-        <div class="kc up" id="kpi-stores-sub">Từ sheet CuaHang</div>
+        <div class="kc up" id="kpi-stores-sub">Từ Database</div>
       </div>
       <div class="kpi">
         <div class="kl">Tiến độ mở mới 2026</div>
@@ -3110,7 +3110,7 @@
       }
       if (!CFG.scriptUrl) { $('cfg-alert').style.display = 'flex'; setSyncStatus(false, 'Chưa cấu hình'); return; }
       $('cfg-alert').style.display = 'none';
-      load('Đang đồng bộ Google Sheets...');
+      load('Đang đồng bộ Database...');
       try {
         const data = await api({ action: 'getData' });
         if (data.ok) {
@@ -3994,7 +3994,7 @@
         const cnt = $('setup-cnt');
         if (cnt) cnt.textContent = D.setupStores.length;
       } else {
-        toast('❌ Lỗi: ' + (res.error || 'Kiểm tra lại Google Sheets'), 'terr');
+        toast('❌ Lỗi: ' + (res.error || 'Kiểm tra lại Database'), 'terr');
       }
     }
 

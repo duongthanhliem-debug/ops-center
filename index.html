@@ -2808,7 +2808,7 @@
           const rowPass   = (cols[14] || '').trim();
           const rowStore  = (cols[8]  || '').trim();
           if (rowEmail !== email.toLowerCase()) continue;
-          const allowedRoles = ['System', 'Admin', 'User'];
+          const allowedRoles = ['System', 'Admin', 'User', 'Owner'];
           if (!allowedRoles.includes(rowRole)) return { ok: false, msg: 'Tài khoản không có quyền truy cập hệ thống' };
           if (rowStore !== 'Hệ Thống') return { ok: false, msg: 'Tài khoản không thuộc bộ phận Hệ Thống' };
           if (rowStatus !== 'Đang cộng tác') return { ok: false, msg: 'Tài khoản không hoạt động' };

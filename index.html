@@ -2800,7 +2800,7 @@
         if (!text.trim().startsWith('"')) throw new Error('not csv');
         const lines = text.split('\n').filter(l => l.trim());
         for (let i = 1; i < lines.length; i++) {
-          const cols = _parseCSVLine(lines[i]);
+          const cols = parseCSVLine(lines[i]);
           if (!cols || cols.length < 15) continue;
           const rowEmail  = (cols[4]  || '').trim().toLowerCase();
           const rowRole   = (cols[9]  || '').trim();
